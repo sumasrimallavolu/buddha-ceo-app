@@ -3,6 +3,11 @@ import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
+  // Skip middleware if NEXTAUTH_SECRET is not set (edge compatibility)
+  if (!process.env.NEXTAUTH_SECRET) {
+    return NextResponse.next();
+  }
+
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const path = req.nextUrl.pathname;
 
