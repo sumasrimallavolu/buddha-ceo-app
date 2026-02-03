@@ -35,30 +35,6 @@ export function HeroSection() {
 
         {/* Soft Overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-purple-200/30 via-pink-200/20 to-blue-200/40" />
-
-        {/* Animated Orbs - Pastel */}
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-300/20 rounded-full blur-3xl"
-          style={{
-            transform: `translate(-50%, -50%) translateY(${scrollY * 0.3}px)`,
-          }}
-        ></div>
-
-        {/* Floating Particles */}
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-purple-400/40 rounded-full animate-float"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 5}s`,
-            }}
-          />
-        ))}
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20 lg:py-24">
@@ -66,7 +42,7 @@ export function HeroSection() {
           {/* Left Content */}
           <div className="space-y-6 sm:space-y-8 text-gray-800" style={{ opacity: 1 - scrollY / 500 }}>
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/70 backdrop-blur-sm text-purple-700 text-sm font-medium border border-purple-200/50 hover:bg-white/80 transition-all">
+            <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/90 text-purple-700 text-sm font-medium border border-purple-200/50 hover:bg-white transition-all">
               <Sparkles className="w-4 h-4 text-pink-500" />
               <span>Transform Your Life Through Meditation</span>
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
@@ -121,7 +97,7 @@ export function HeroSection() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto border-2 border-purple-400 text-purple-700 hover:bg-purple-100 backdrop-blur-sm hover:border-purple-500 transition-all text-base sm:text-lg px-6 sm:px-8 hover:scale-105 bg-white/60"
+                  className="w-full sm:w-auto border-2 border-purple-400 text-purple-700 hover:bg-purple-100 hover:border-purple-500 transition-all text-base sm:text-lg px-6 sm:px-8 hover:scale-105 bg-white"
                 >
                   Learn More
                 </Button>
@@ -184,7 +160,7 @@ export function HeroSection() {
           {/* Right Side - Enrollment Card */}
           <div className="relative order-first lg:order-last">
             <div
-              className="aspect-[4/3] w-full max-w-lg mx-auto lg:max-w-xl rounded-3xl bg-gradient-to-br from-purple-300/50 via-pink-300/40 to-blue-300/50 backdrop-blur-md p-[10px] shadow-xl border border-white/60 hover:scale-105 transition-transform duration-700"
+              className="aspect-[4/3] w-full max-w-lg mx-auto lg:max-w-xl rounded-3xl bg-gradient-to-br from-purple-300/50 via-pink-300/40 to-blue-300/50 p-[10px] shadow-xl border border-white/60 hover:scale-105 transition-transform duration-700"
               style={{ transform: `translateY(${scrollY * 0.1}px)` }}
             >
               <div className="w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100">
@@ -195,13 +171,10 @@ export function HeroSection() {
                 />
                 {/* Color wash over image */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-purple-300/60 via-pink-300/50 to-blue-300/60 mix-blend-multiply" />
-                {/* Soft light highlight */}
-                <div className="pointer-events-none absolute -top-24 right-0 w-72 h-72 bg-pink-300/40 rounded-full blur-3xl" />
-                <div className="pointer-events-none absolute bottom-0 -left-16 w-64 h-64 bg-purple-300/40 rounded-full blur-3xl" />
 
                 {/* Content Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 text-gray-800">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 backdrop-blur-sm text-xs font-bold mb-3 shadow-lg text-white">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-xs font-bold mb-3 shadow-lg text-white">
                     <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                     NOW ENROLLING
                   </div>
@@ -212,10 +185,10 @@ export function HeroSection() {
                     40-Day Online Program for Youth & Students
                   </p>
                   <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-700 mb-6">
-                    <span className="bg-white/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-purple-200">
+                    <span className="bg-white/90 px-2.5 py-1 rounded-full border border-purple-200">
                       📅 Feb 15 - Mar 28, 2025
                     </span>
-                    <span className="bg-white/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-purple-200">
+                    <span className="bg-white/90 px-2.5 py-1 rounded-full border border-purple-200">
                       ⏰ 7-8 AM IST
                     </span>
                   </div>
@@ -231,64 +204,13 @@ export function HeroSection() {
                 </div>
               </div>
             </div>
-
-            {/* Floating Testimonial Cards */}
-            <div
-              className="absolute -top-6 -left-4 sm:-left-6 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl max-w-[240px] hidden lg:block hover:scale-105 transition-all duration-300 border border-purple-200"
-              style={{ transform: `translateY(${scrollY * 0.15}px)` }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <img
-                  src="https://i.ytimg.com/vi/9QSKyMf98uY/default.jpg"
-                  alt="Indrani"
-                  className="w-8 h-8 rounded-full object-cover ring-2 ring-purple-300"
-                />
-                <div>
-                  <p className="font-semibold text-xs text-gray-900">Indrani K. Mohan</p>
-                  <p className="text-xs text-purple-600 font-medium">10/10 in Boards</p>
-                </div>
-              </div>
-              <p className="text-xs text-gray-700 italic leading-relaxed">
-                "Achieved perfect scores through meditation! The program transformed my focus and clarity."
-              </p>
-              <div className="flex gap-0.5 mt-2">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-pink-400 text-xs">⭐</span>
-                ))}
-              </div>
-            </div>
-
-            <div
-              className="absolute -bottom-6 -right-4 sm:-right-6 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl max-w-[240px] hidden lg:block hover:scale-105 transition-all duration-300 border border-pink-200"
-              style={{ transform: `translateY(${scrollY * 0.2}px)` }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <img
-                  src="https://i.ytimg.com/vi/_5NTRAnF-Ic/default.jpg"
-                  alt="Raji"
-                  className="w-8 h-8 rounded-full object-cover ring-2 ring-pink-300"
-                />
-                <div>
-                  <p className="font-semibold text-xs text-gray-900">Raji Iyengar</p>
-                  <p className="text-xs text-pink-600 font-medium">Senior Leader</p>
-                </div>
-              </div>
-              <p className="text-xs text-gray-700 italic leading-relaxed">
-                "From vertigo to victory through meditation! Completely healed in 40 days."
-              </p>
-              <div className="flex gap-0.5 mt-2">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-purple-400 text-xs">⭐</span>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-purple-400/50 rounded-full flex items-start justify-center p-2 bg-white/20 backdrop-blur-sm">
+        <div className="w-6 h-10 border-2 border-purple-400/50 rounded-full flex items-start justify-center p-2 bg-white/40">
           <div className="w-1 h-3 bg-purple-500/70 rounded-full animate-pulse"></div>
         </div>
       </div>
