@@ -16,8 +16,9 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "Buddha-CEO Quantum Foundation - Transform Through Meditation",
-  description: "Empowering leaders, professionals, and seekers with transformative meditation wisdom & techniques. Join our global community and discover inner peace, radiant health, and infinite possibilities.",
+  title: "Buddha CEO",
+  description:
+    "Buddha CEO - Empowering leaders, professionals, and seekers with transformative meditation wisdom & techniques. Join our global community and discover inner peace, radiant health, and infinite possibilities.",
 };
 
 export default function RootLayout({

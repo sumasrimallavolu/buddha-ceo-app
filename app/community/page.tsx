@@ -1,0 +1,437 @@
+'use client';
+
+import { useState } from 'react';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Users, MessageCircle, Calendar, Heart, Share2, Send, Star } from 'lucide-react';
+
+const testimonials = [
+  {
+    id: 1,
+    name: 'Priya Sharma',
+    role: 'Software Engineer',
+    image: 'https://i.ytimg.com/vi/9QSKyMf98uY/default.jpg',
+    content: 'The meditation program transformed my life. I feel more focused, calm, and productive at work. The community support has been incredible!',
+    rating: 5,
+    date: '2 days ago',
+  },
+  {
+    id: 2,
+    name: 'Rajesh Kumar',
+    role: 'Business Owner',
+    image: 'https://i.ytimg.com/vi/s4vH34O7rOs/default.jpg',
+    content: 'Being part of this community has helped me grow not just personally but also professionally. The wisdom shared here is priceless.',
+    rating: 5,
+    date: '1 week ago',
+  },
+  {
+    id: 3,
+    name: 'Ananya Reddy',
+    role: 'Student',
+    image: 'https://i.ytimg.com/vi/MSUXw7Dxle8/default.jpg',
+    content: 'I scored 10/10 in my board exams after joining the 40-day meditation program. The techniques are simple yet powerful!',
+    rating: 5,
+    date: '2 weeks ago',
+  },
+];
+
+const upcomingEvents = [
+  {
+    id: 1,
+    title: 'Full Moon Meditation',
+    date: 'Feb 24, 2025',
+    time: '6:00 PM IST',
+    attendees: 234,
+    type: 'online',
+  },
+  {
+    id: 2,
+    title: 'Sunday Group Meditation',
+    date: 'Every Sunday',
+    time: '7:00 AM IST',
+    attendees: 156,
+    type: 'online',
+  },
+  {
+    id: 3,
+    title: 'Community Meet - Bangalore',
+    date: 'Mar 1, 2025',
+    time: '10:00 AM IST',
+    attendees: 45,
+    type: 'offline',
+  },
+];
+
+const forumPosts = [
+  {
+    id: 1,
+    title: 'How to maintain consistency in daily practice?',
+    author: 'MeditationBeginner',
+    replies: 24,
+    views: 456,
+    category: 'Practice Tips',
+  },
+  {
+    id: 2,
+    title: 'My experience with the 40-day program - Life changing!',
+    author: 'NewPractitioner',
+    replies: 18,
+    views: 789,
+    category: 'Success Stories',
+  },
+  {
+    id: 3,
+    title: 'Best time for meditation - Morning vs Evening',
+    author: 'CuriousMind',
+    replies: 31,
+    views: 623,
+    category: 'Discussion',
+  },
+];
+
+export default function CommunityPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setFormData({ name: '', email: '', message: '' });
+    setTimeout(() => setSubmitted(false), 3000);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800/30 to-purple-800/20">
+          <div className="absolute inset-0 overflow-hidden">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+              poster="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920"
+            >
+              <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-sitting-on-the-grass-4382-large.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-indigo-900/15 to-purple-900/20" />
+            <div className="absolute top-20 right-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
+              <Users className="w-4 h-4 text-indigo-300" />
+              <span>Join Our Family</span>
+            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+              Our{' '}
+              <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+                Community
+              </span>
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto border-l-4 border-indigo-400/50 pl-6">
+              Connect with fellow meditators, share experiences, and grow together on this transformative journey
+            </p>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">
+                  50,000+
+                </div>
+                <div className="text-white/80 text-sm mt-1">Members</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                  500+
+                </div>
+                <div className="text-white/80 text-sm mt-1">Events</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold bg-gradient-to-r from-pink-300 to-indigo-300 bg-clip-text text-transparent">
+                  25+
+                </div>
+                <div className="text-white/80 text-sm mt-1">Countries</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                Community Stories
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Hear from our members about their transformational journeys
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial) => (
+                <Card
+                  key={testimonial.id}
+                  className="group hover:shadow-2xl transition-all duration-500 border-2 border-indigo-100 hover:border-indigo-300 bg-white/50 backdrop-blur-sm hover:scale-105"
+                >
+                  <CardHeader className="text-center pb-4">
+                    <div className="relative inline-block mb-4">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-indigo-200 group-hover:ring-indigo-400 transition-all"
+                      />
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs px-3 py-1 rounded-full">
+                        {testimonial.role}
+                      </div>
+                    </div>
+                    <CardTitle className="text-xl">{testimonial.name}</CardTitle>
+                    <div className="flex justify-center gap-0.5 mt-2">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                      "{testimonial.content}"
+                    </p>
+                    <p className="text-xs text-gray-500 text-center">{testimonial.date}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Upcoming Events */}
+        <section className="py-20 bg-gradient-to-b from-indigo-50 to-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+                Upcoming Community Events
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Join us for group meditations and community gatherings
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {upcomingEvents.map((event) => (
+                <Card
+                  key={event.id}
+                  className="group hover:shadow-2xl transition-all duration-500 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105"
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between mb-4">
+                      <Badge
+                        className={
+                          event.type === 'online'
+                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0'
+                            : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0'
+                        }
+                      >
+                        {event.type === 'online' ? '🌐 Online' : '📍 Offline'}
+                      </Badge>
+                    </div>
+                    <CardTitle className="text-xl mb-2 group-hover:text-purple-600 transition-colors">
+                      {event.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center text-sm text-gray-700">
+                        <Calendar className="mr-2 h-4 w-4 text-purple-600" />
+                        <span>{event.date}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-700">
+                        <MessageCircle className="mr-2 h-4 w-4 text-purple-600" />
+                        <span>{event.time}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-700">
+                        <Users className="mr-2 h-4 w-4 text-purple-600" />
+                        <span>{event.attendees} attending</span>
+                      </div>
+                    </div>
+                    <Button className="w-full mt-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                      <Heart className="mr-2 h-4 w-4" />
+                      Join Event
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Community Forum */}
+        <section className="py-20 bg-gradient-to-b from-white to-purple-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                Community Discussions
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Join the conversation, ask questions, and share your experiences
+              </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto space-y-4">
+              {forumPosts.map((post) => (
+                <Card
+                  key={post.id}
+                  className="hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm cursor-pointer hover:scale-[1.02]"
+                >
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <Badge className="mb-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0">
+                          {post.category}
+                        </Badge>
+                        <h3 className="text-lg font-semibold mb-2 group-hover:text-purple-600 transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-sm text-gray-600">by {post.author}</p>
+                      </div>
+                      <div className="flex gap-4 text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <MessageCircle className="h-4 w-4" />
+                          <span>{post.replies}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Share2 className="h-4 w-4" />
+                          <span>{post.views}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-xl hover:shadow-2xl transition-all hover:scale-105"
+              >
+                View All Discussions
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Share Your Story Section */}
+        <section className="py-20 bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 relative overflow-hidden">
+          <div className="absolute inset-0">
+            <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-3xl mx-auto">
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
+                  <Heart className="w-4 h-4 text-pink-300" />
+                  <span>Share Your Journey</span>
+                </div>
+                <h2 className="text-4xl font-bold text-white mb-4">
+                  Inspire Others with Your Story
+                </h2>
+                <p className="text-purple-100">
+                  Your experience can motivate and guide others on their meditation journey
+                </p>
+              </div>
+
+              <Card className="bg-white/10 backdrop-blur-md border border-white/20">
+                <CardContent className="p-8">
+                  {submitted ? (
+                    <div className="text-center py-8">
+                      <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
+                        <Heart className="h-10 w-10 text-white" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-2">
+                        Thank You for Sharing! ✨
+                      </h3>
+                      <p className="text-purple-100">
+                        Your story has been submitted and will inspire our community.
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="name" className="text-white">Name *</Label>
+                          <Input
+                            id="name"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            required
+                            placeholder="Your name"
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-purple-400"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email" className="text-white">Email *</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            required
+                            placeholder="your@email.com"
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-purple-400"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="message" className="text-white">Your Story *</Label>
+                        <Textarea
+                          id="message"
+                          value={formData.message}
+                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                          required
+                          placeholder="Share your meditation journey and experiences..."
+                          rows={6}
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-purple-400"
+                        />
+                      </div>
+
+                      <Button
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-[1.02]"
+                      >
+                        <Send className="mr-2 h-5 w-5" />
+                        Share Your Story
+                      </Button>
+                    </form>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

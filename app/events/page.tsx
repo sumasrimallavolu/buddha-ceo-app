@@ -98,45 +98,71 @@ export default function EventsPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-purple-600 to-blue-600 py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-              Events & Programs
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-purple-800/30 to-indigo-800/20">
+          {/* Video Background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+              poster="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1920"
+            >
+              <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-purple-900/15 to-indigo-900/20" />
+            <div className="absolute top-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute bottom-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
+              <Calendar className="w-4 h-4 text-purple-300" />
+              <span>Upcoming Programs</span>
+            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+              Events &{' '}
+              <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+                Programs
+              </span>
             </h1>
-            <p className="text-xl text-purple-100 max-w-3xl mx-auto">
+            <p className="text-xl text-white/90 max-w-3xl mx-auto border-l-4 border-purple-400/50 pl-6">
               Discover our upcoming meditation programs and register for
-              transformative experiences
+              transformative experiences that will change your life
             </p>
           </div>
         </section>
 
         <section className="py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-              <h2 className="text-2xl font-bold">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-12 gap-6">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                 {filterType === 'all' ? 'All Events' : getEventTypeLabel(filterType)}
               </h2>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <div className="flex gap-2">
+              <div className="flex items-center gap-3 flex-wrap bg-white/50 backdrop-blur-sm p-2 rounded-xl border border-purple-200">
+                <Filter className="h-4 w-4 text-purple-600" />
+                <div className="flex gap-2 flex-wrap">
                   {['all', 'beginner_online', 'advanced_online', 'beginner_physical', 'conference'].map((type) => (
                     <Button
                       key={type}
-                      variant={filterType === type ? 'default' : 'outline'}
+                      variant={filterType === type ? 'default' : 'ghost'}
                       size="sm"
                       onClick={() => setFilterType(type)}
-                      className={filterType === type ? 'bg-purple-600' : ''}
+                      className={
+                        filterType === type
+                          ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all'
+                          : 'hover:bg-purple-100 transition-all'
+                      }
                     >
                       {type === 'all' ? 'All' : getEventTypeLabel(type)}
                     </Button>
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* Nearby Events Map */}
-            <div className="mb-8">
-              <NearbyEventsMap />
             </div>
 
             {loading ? (
@@ -153,7 +179,7 @@ export default function EventsPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredEvents.map((event) => {
+                {filteredEvents.map((event, index) => {
                   const availableSlots = event.maxParticipants
                     ? event.maxParticipants - event.currentRegistrations
                     : null;
@@ -162,83 +188,84 @@ export default function EventsPage() {
                   return (
                     <Card
                       key={event._id}
-                      className="group overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
+                      className="group overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col border-2 border-purple-100 hover:border-purple-300 hover:scale-105 bg-white/50 backdrop-blur-sm"
+                      style={{ animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both` }}
                     >
-                      <div className="relative aspect-video bg-gradient-to-br from-purple-100 to-blue-100">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-6xl">{getEventTypeIcon(event.type)}</div>
+                      <div className="relative aspect-video bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-100 overflow-hidden">
+                        <div className="absolute inset-0 flex items-center justify-center text-7xl group-hover:scale-110 transition-transform duration-500">
+                          {getEventTypeIcon(event.type)}
                         </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <Badge
-                          className="absolute top-4 right-4"
-                          variant={event.status === 'completed' ? 'secondary' : 'default'}
+                          className="absolute top-4 right-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 shadow-lg"
                         >
                           {getEventTypeLabel(event.type)}
                         </Badge>
                         {event.status === 'ongoing' && (
-                          <Badge className="absolute top-4 left-4 bg-green-600">
+                          <Badge className="absolute top-4 left-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg animate-pulse">
                             Ongoing
                           </Badge>
                         )}
                       </div>
-                      <CardHeader className="flex-1">
-                        <h3 className="font-bold text-xl mb-2 group-hover:text-purple-600 transition-colors">
+                      <CardHeader className="flex-1 pb-4">
+                        <h3 className="font-bold text-xl mb-3 group-hover:text-purple-600 transition-colors">
                           {event.title}
                         </h3>
                         <div className="space-y-2 text-sm text-muted-foreground">
-                          <div className="flex items-center">
-                            <Calendar className="mr-2 h-4 w-4" />
+                          <div className="flex items-center text-gray-700">
+                            <Calendar className="mr-2 h-4 w-4 text-purple-600" />
                             {formatDate(event.startDate)} - {formatDate(event.endDate)}
                           </div>
-                          <div>{event.timings}</div>
+                          <div className="text-gray-700">{event.timings}</div>
                           <div className="flex items-center">
-                            <Users className="mr-2 h-4 w-4" />
+                            <Users className="mr-2 h-4 w-4 text-blue-600" />
                             {event.maxParticipants ? (
                               <span
                                 className={
                                   isFullyBooked
-                                    ? 'text-red-600 font-medium'
+                                    ? 'text-red-600 font-semibold'
                                     : availableSlots !== null && availableSlots < 20
-                                    ? 'text-orange-600 font-medium'
-                                    : ''
+                                    ? 'text-orange-600 font-semibold'
+                                    : 'text-green-600 font-semibold'
                                 }
                               >
                                 {event.currentRegistrations} / {event.maxParticipants} registered
                                 {availableSlots !== null && (
-                                  <span className="ml-1">
+                                  <span className="ml-1 text-gray-600">
                                     ({availableSlots} slots left)
                                   </span>
                                 )}
                               </span>
                             ) : (
-                              <span>{event.currentRegistrations} registered</span>
+                              <span className="text-green-600 font-semibold">{event.currentRegistrations} registered</span>
                             )}
                           </div>
                         </div>
                       </CardHeader>
-                      <CardContent className="flex-1">
-                        <p className="text-sm text-muted-foreground line-clamp-3">
+                      <CardContent className="flex-1 pb-4">
+                        <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed">
                           {event.description}
                         </p>
                       </CardContent>
-                      <CardFooter>
+                      <CardFooter className="pt-4 border-t border-purple-100">
                         {event.status === 'completed' ? (
                           <Button variant="outline" className="w-full" disabled>
-                            Completed
+                            ✨ Completed
                           </Button>
                         ) : event.status === 'cancelled' ? (
                           <Button variant="outline" className="w-full" disabled>
                             Cancelled
                           </Button>
                         ) : isFullyBooked ? (
-                          <Button variant="outline" className="w-full" disabled>
-                            Fully Booked
+                          <Button variant="outline" className="w-full border-red-300 text-red-600" disabled>
+                            🔥 Fully Booked
                           </Button>
                         ) : (
                           <Button
-                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
+                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
                             onClick={() => handleRegisterClick(event)}
                           >
-                            Register Now
+                            ✨ Register Now
                           </Button>
                         )}
                       </CardFooter>
@@ -250,21 +277,10 @@ export default function EventsPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-br from-purple-50 to-blue-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-              Can't Find What You're Looking For?
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              Contact us to learn about upcoming programs or to request a custom meditation workshop
-            </p>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-colors"
-            >
-              Contact Us
-            </a>
+        {/* Nearby Events Map */}
+        <section className="py-8 bg-gradient-to-b from-white to-purple-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <NearbyEventsMap />
           </div>
         </section>
       </main>

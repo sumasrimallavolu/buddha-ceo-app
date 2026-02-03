@@ -1,7 +1,11 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/home/HeroSection';
-import { Testimonials } from '@/components/home/Testimonials';
+import { VideoSection } from '@/components/home/VideoSection';
 import { RecentEvents } from '@/components/home/RecentEvents';
 
 export default function HomePage() {
@@ -10,7 +14,7 @@ export default function HomePage() {
       <Header />
       <main className="flex-1">
         <HeroSection />
-        <Testimonials />
+        <VideoSection />
         <RecentEvents />
       </main>
       <Footer />

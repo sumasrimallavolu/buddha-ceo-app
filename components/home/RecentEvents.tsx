@@ -63,19 +63,19 @@ const formatDate = (date: Date) => {
 
 export function RecentEvents() {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-12">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent">
               Upcoming Events
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-gray-600">
               Join our transformative meditation programs
             </p>
           </div>
           <Link href="/events">
-            <Button variant="outline">View All Events</Button>
+            <Button variant="outline" className="border-purple-300 text-purple-700 hover:bg-purple-100">View All Events</Button>
           </Link>
         </div>
 
@@ -83,31 +83,31 @@ export function RecentEvents() {
           {recentEvents.map((event) => (
             <Card
               key={event.id}
-              className="group overflow-hidden hover:shadow-xl transition-shadow"
+              className="group overflow-hidden hover:shadow-xl transition-shadow border-purple-100 bg-white/60 backdrop-blur-sm"
             >
-              <div className="relative aspect-video bg-gradient-to-br from-purple-100 to-blue-100">
+              <div className="relative aspect-video bg-gradient-to-br from-purple-200/50 to-pink-200/50">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-6xl">🧘</div>
                 </div>
                 <Badge
-                  className="absolute top-4 right-4"
+                  className="absolute top-4 right-4 bg-purple-500/80 hover:bg-purple-600 text-white"
                   variant={event.status === 'completed' ? 'secondary' : 'default'}
                 >
                   {getEventTypeLabel(event.type)}
                 </Badge>
               </div>
               <CardHeader>
-                <h3 className="font-bold text-xl mb-2 group-hover:text-purple-600 transition-colors">
+                <h3 className="font-bold text-xl mb-2 group-hover:text-purple-600 transition-colors text-gray-800">
                   {event.title}
                 </h3>
-                <div className="space-y-2 text-sm text-muted-foreground">
+                <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-center">
-                    <Calendar className="mr-2 h-4 w-4" />
+                    <Calendar className="mr-2 h-4 w-4 text-purple-500" />
                     {formatDate(event.startDate)} - {formatDate(event.endDate)}
                   </div>
                   <div>{event.timings}</div>
                   <div className="flex items-center">
-                    <Users className="mr-2 h-4 w-4" />
+                    <Users className="mr-2 h-4 w-4 text-pink-500" />
                     {event.currentRegistrations} / {event.maxParticipants}{' '}
                     registered
                   </div>
@@ -116,7 +116,7 @@ export function RecentEvents() {
               <CardFooter>
                 {event.status !== 'completed' && (
                   <Link href={`/events/${event.id}`} className="w-full">
-                    <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600">
+                    <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
                       Register Now
                     </Button>
                   </Link>

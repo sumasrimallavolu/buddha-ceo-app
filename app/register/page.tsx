@@ -11,7 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, CheckCircle2, Calendar, User, Mail, Phone, MapPin, Briefcase } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Loader2, CheckCircle2, Calendar, User, Mail, Phone, MapPin, Briefcase, GraduationCap } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -34,16 +35,35 @@ const registrationSchema = z.object({
   expectations: z.string().optional(),
 });
 
+const teacherEnrollmentSchema = z.object({
+  firstName: z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+  city: z.string().min(2, 'City is required'),
+  state: z.string().min(2, 'State is required'),
+  country: z.string().min(2, 'Country is required'),
+  profession: z.string().min(2, 'Profession is required'),
+  meditationExperience: z.string().min(10, 'Please describe your meditation experience (min 10 characters)'),
+  teachingExperience: z.string().optional(),
+  whyTeach: z.string().min(20, 'Please tell us why you want to become a teacher (min 20 characters)'),
+  availability: z.string().min(5, 'Please describe your availability'),
+  age: z.number().min(18, 'Must be at least 18 years old').max(100, 'Invalid age'),
+  education: z.string().min(2, 'Education is required'),
+});
+
 type RegistrationFormValues = z.infer<typeof registrationSchema>;
+type TeacherEnrollmentFormValues = z.infer<typeof teacherEnrollmentSchema>;
 
 export default function RegisterPage() {
+  const [activeTab, setActiveTab] = useState('participant');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
 
-  const form = useForm<RegistrationFormValues>({
+  const participantForm = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       firstName: '',
@@ -58,7 +78,27 @@ export default function RegisterPage() {
     },
   });
 
-  const onSubmit = async (data: RegistrationFormValues) => {
+  const teacherForm = useForm<TeacherEnrollmentFormValues>({
+    resolver: zodResolver(teacherEnrollmentSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      city: '',
+      state: '',
+      country: '',
+      profession: '',
+      meditationExperience: '',
+      teachingExperience: '',
+      whyTeach: '',
+      availability: '',
+      age: 0,
+      education: '',
+    },
+  });
+
+  const onParticipantSubmit = async (data: RegistrationFormValues) => {
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
@@ -82,10 +122,10 @@ export default function RegisterPage() {
 
       setSubmitStatus({
         type: 'success',
-        message: `Thank you ${data.firstName}! Your ${data.eventType} registration has been submitted successfully. We'll send you more details shortly.`,
+        message: `Thank you ${data.firstName}! Your registration has been submitted successfully. We'll send you more details shortly.`,
       });
 
-      form.reset();
+      participantForm.reset();
     } catch (error) {
       setSubmitStatus({
         type: 'error',
@@ -96,262 +136,600 @@ export default function RegisterPage() {
     }
   };
 
+  const onTeacherSubmit = async (data: TeacherEnrollmentFormValues) => {
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const response = await fetch('/api/teacher-enrollment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          name: `${data.firstName} ${data.lastName}`,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Enrollment failed');
+      }
+
+      setSubmitStatus({
+        type: 'success',
+        message: `Thank you ${data.firstName}! Your teacher enrollment application has been submitted successfully. Our team will review your application and contact you within 5-7 business days.`,
+      });
+
+      teacherForm.reset();
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Enrollment failed. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 bg-gradient-to-br from-purple-50 to-blue-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="max-w-3xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full mb-4">
-                <Calendar className="h-8 w-8 text-white" />
-              </div>
-              <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                Event Registration
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                Register for our upcoming events, conferences, and programs
-              </p>
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800/30 to-purple-800/20">
+          <div className="absolute inset-0 overflow-hidden">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+              poster="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=1920"
+            >
+              <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-small-plant-3188-large.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-indigo-900/15 to-purple-900/20" />
+            <div className="absolute top-20 right-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
+              <User className="w-4 h-4 text-indigo-300" />
+              <span>Join Us</span>
             </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+              Register &{' '}
+              <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+                Get Involved
+              </span>
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto border-l-4 border-indigo-400/50 pl-6">
+              Register for our programs or become a certified meditation teacher
+            </p>
+          </div>
+        </section>
 
-            <Card className="shadow-xl">
-              <CardHeader>
-                <CardTitle>Registration Form</CardTitle>
-                <CardDescription>
-                  Fill in your details to complete your registration
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {submitStatus.type && (
-                  <Alert
-                    variant={submitStatus.type === 'error' ? 'destructive' : 'default'}
-                    className={`mb-6 ${submitStatus.type === 'success' ? 'border-green-500 bg-green-50 text-green-700' : ''}`}
+        {/* Registration Forms Section */}
+        <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              {/* Status Alert */}
+              {submitStatus.type && (
+                <Alert
+                  className={`mb-6 ${
+                    submitStatus.type === 'success'
+                      ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
+                      : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'
+                  }`}
+                >
+                  <CheckCircle2 className={`h-4 w-4 ${submitStatus.type === 'success' ? 'text-green-600' : 'text-red-600'}`} />
+                  <AlertDescription
+                    className={submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}
                   >
-                    {submitStatus.type === 'success' && <CheckCircle2 className="h-4 w-4" />}
-                    <AlertDescription>{submitStatus.message}</AlertDescription>
-                  </Alert>
-                )}
+                    {submitStatus.message}
+                  </AlertDescription>
+                </Alert>
+              )}
 
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  {/* Registration Type */}
-                  <div className="space-y-2">
-                    <Label htmlFor="eventType">Registration Type *</Label>
-                    <div className="grid grid-cols-2 gap-4">
-                      <button
-                        type="button"
-                        onClick={() => form.setValue('eventType', 'event')}
-                        className={`p-4 border-2 rounded-lg text-left transition-all ${
-                          form.watch('eventType') === 'event'
-                            ? 'border-purple-600 bg-purple-50'
-                            : 'border-gray-200 hover:border-purple-300'
-                        }`}
+              {/* Tabs Card */}
+              <Card className="border-2 border-indigo-200 shadow-xl bg-white/50 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 text-center">
+                  <CardTitle className="text-3xl">Choose Your Path</CardTitle>
+                  <CardDescription className="text-base">
+                    Select an option below to begin your journey
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 bg-white/80 backdrop-blur-md p-2 rounded-xl border-2 border-indigo-200 shadow-lg">
+                      <TabsTrigger
+                        value="participant"
+                        className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white hover:bg-indigo-100 transition-all"
                       >
-                        <div className="font-semibold">Event</div>
-                        <div className="text-sm text-muted-foreground">Regular events & programs</div>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => form.setValue('eventType', 'conference')}
-                        className={`p-4 border-2 rounded-lg text-left transition-all ${
-                          form.watch('eventType') === 'conference'
-                            ? 'border-purple-600 bg-purple-50'
-                            : 'border-gray-200 hover:border-purple-300'
-                        }`}
+                        <User className="h-4 w-4" />
+                        Participant Registration
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="teacher"
+                        className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white hover:bg-indigo-100 transition-all"
                       >
-                        <div className="font-semibold">Conference</div>
-                        <div className="text-sm text-muted-foreground">Global conferences</div>
-                      </button>
-                    </div>
-                    {form.formState.errors.eventType && (
-                      <p className="text-sm text-red-600">{form.formState.errors.eventType.message}</p>
-                    )}
-                  </div>
+                        <GraduationCap className="h-4 w-4" />
+                        Teacher Enrollment
+                      </TabsTrigger>
+                    </TabsList>
 
-                  {/* Personal Information */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold flex items-center">
-                      <User className="mr-2 h-5 w-5 text-purple-600" />
-                      Personal Information
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name *</Label>
-                        <Input
-                          id="firstName"
-                          {...form.register('firstName')}
-                          placeholder="John"
-                        />
-                        {form.formState.errors.firstName && (
-                          <p className="text-sm text-red-600">{form.formState.errors.firstName.message}</p>
-                        )}
+                    {/* Participant Registration Form */}
+                    <TabsContent value="participant" className="mt-6">
+                      <div className="space-y-6">
+                        <div className="text-center mb-6">
+                          <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                            Register for Programs
+                          </h3>
+                          <p className="text-gray-600">
+                            Join our transformative meditation programs
+                          </p>
+                        </div>
+
+                        <form onSubmit={participantForm.handleSubmit(onParticipantSubmit)} className="space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="p-firstName">First Name *</Label>
+                              <Input
+                                id="p-firstName"
+                                {...participantForm.register('firstName')}
+                                placeholder="John"
+                                disabled={isSubmitting}
+                                className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                              />
+                              {participantForm.formState.errors.firstName && (
+                                <p className="text-sm text-red-600">{participantForm.formState.errors.firstName.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="p-lastName">Last Name *</Label>
+                              <Input
+                                id="p-lastName"
+                                {...participantForm.register('lastName')}
+                                placeholder="Doe"
+                                disabled={isSubmitting}
+                                className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                              />
+                              {participantForm.formState.errors.lastName && (
+                                <p className="text-sm text-red-600">{participantForm.formState.errors.lastName.message}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="p-email">Email *</Label>
+                              <Input
+                                id="p-email"
+                                type="email"
+                                {...participantForm.register('email')}
+                                placeholder="john.doe@example.com"
+                                disabled={isSubmitting}
+                                className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                              />
+                              {participantForm.formState.errors.email && (
+                                <p className="text-sm text-red-600">{participantForm.formState.errors.email.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="p-phone">Phone *</Label>
+                              <Input
+                                id="p-phone"
+                                {...participantForm.register('phone')}
+                                placeholder="+91 98765 43210"
+                                disabled={isSubmitting}
+                                className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                              />
+                              {participantForm.formState.errors.phone && (
+                                <p className="text-sm text-red-600">{participantForm.formState.errors.phone.message}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="p-city">City *</Label>
+                              <Input
+                                id="p-city"
+                                {...participantForm.register('city')}
+                                placeholder="Bangalore"
+                                disabled={isSubmitting}
+                                className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                              />
+                              {participantForm.formState.errors.city && (
+                                <p className="text-sm text-red-600">{participantForm.formState.errors.city.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="p-profession">Profession</Label>
+                              <Input
+                                id="p-profession"
+                                {...participantForm.register('profession')}
+                                placeholder="Software Engineer"
+                                disabled={isSubmitting}
+                                className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="p-eventType">Registration Type *</Label>
+                            <Select
+                              value={participantForm.watch('eventType')}
+                              onValueChange={(value) => participantForm.setValue('eventType', value as 'event' | 'conference')}
+                            >
+                              <SelectTrigger className="border-2 border-indigo-200 focus:border-indigo-500">
+                                <SelectValue placeholder="Select registration type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="event">Event Program</SelectItem>
+                                <SelectItem value="conference">Conference</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="p-experience">Meditation Experience (Optional)</Label>
+                            <Textarea
+                              id="p-experience"
+                              {...participantForm.register('experience')}
+                              placeholder="Tell us about your meditation background..."
+                              rows={3}
+                              disabled={isSubmitting}
+                              className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="p-expectations">Expectations (Optional)</Label>
+                            <Textarea
+                              id="p-expectations"
+                              {...participantForm.register('expectations')}
+                              placeholder="What do you hope to gain from this program?"
+                              rows={3}
+                              disabled={isSubmitting}
+                              className="border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
+                            />
+                          </div>
+
+                          <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+                          >
+                            {isSubmitting ? (
+                              <>
+                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                Submitting...
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle2 className="mr-2 h-5 w-5" />
+                                Submit Registration
+                              </>
+                            )}
+                          </Button>
+                        </form>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name *</Label>
-                        <Input
-                          id="lastName"
-                          {...form.register('lastName')}
-                          placeholder="Doe"
-                        />
-                        {form.formState.errors.lastName && (
-                          <p className="text-sm text-red-600">{form.formState.errors.lastName.message}</p>
-                        )}
+                    </TabsContent>
+
+                    {/* Teacher Enrollment Form */}
+                    <TabsContent value="teacher" className="mt-6">
+                      <div className="space-y-6">
+                        <div className="text-center mb-6">
+                          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                            Become a Certified Teacher
+                          </h3>
+                          <p className="text-gray-600">
+                            Join our teacher training program and spread meditation wisdom
+                          </p>
+                        </div>
+
+                        <form onSubmit={teacherForm.handleSubmit(onTeacherSubmit)} className="space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="t-firstName">First Name *</Label>
+                              <Input
+                                id="t-firstName"
+                                {...teacherForm.register('firstName')}
+                                placeholder="John"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.firstName && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.firstName.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="t-lastName">Last Name *</Label>
+                              <Input
+                                id="t-lastName"
+                                {...teacherForm.register('lastName')}
+                                placeholder="Doe"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.lastName && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.lastName.message}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="t-email">Email *</Label>
+                              <Input
+                                id="t-email"
+                                type="email"
+                                {...teacherForm.register('email')}
+                                placeholder="john.doe@example.com"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.email && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.email.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="t-phone">Phone *</Label>
+                              <Input
+                                id="t-phone"
+                                {...teacherForm.register('phone')}
+                                placeholder="+91 98765 43210"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.phone && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.phone.message}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="t-city">City *</Label>
+                              <Input
+                                id="t-city"
+                                {...teacherForm.register('city')}
+                                placeholder="Bangalore"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.city && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.city.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="t-state">State *</Label>
+                              <Input
+                                id="t-state"
+                                {...teacherForm.register('state')}
+                                placeholder="Karnataka"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.state && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.state.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="t-country">Country *</Label>
+                              <Input
+                                id="t-country"
+                                {...teacherForm.register('country')}
+                                placeholder="India"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.country && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.country.message}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="t-profession">Profession *</Label>
+                              <Input
+                                id="t-profession"
+                                {...teacherForm.register('profession')}
+                                placeholder="Software Engineer"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.profession && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.profession.message}</p>
+                              )}
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="t-age">Age *</Label>
+                              <Input
+                                id="t-age"
+                                type="number"
+                                {...teacherForm.register('age', { valueAsNumber: true })}
+                                placeholder="25"
+                                disabled={isSubmitting}
+                                className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                              />
+                              {teacherForm.formState.errors.age && (
+                                <p className="text-sm text-red-600">{teacherForm.formState.errors.age.message}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="t-education">Education *</Label>
+                            <Input
+                              id="t-education"
+                              {...teacherForm.register('education')}
+                              placeholder="Bachelor's Degree"
+                              disabled={isSubmitting}
+                              className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                            />
+                            {teacherForm.formState.errors.education && (
+                              <p className="text-sm text-red-600">{teacherForm.formState.errors.education.message}</p>
+                            )}
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="t-meditationExperience">Meditation Experience *</Label>
+                            <Textarea
+                              id="t-meditationExperience"
+                              {...teacherForm.register('meditationExperience')}
+                              placeholder="Describe your meditation journey and practice..."
+                              rows={4}
+                              disabled={isSubmitting}
+                              className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                            />
+                            {teacherForm.formState.errors.meditationExperience && (
+                              <p className="text-sm text-red-600">{teacherForm.formState.errors.meditationExperience.message}</p>
+                            )}
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="t-teachingExperience">Teaching Experience (Optional)</Label>
+                            <Textarea
+                              id="t-teachingExperience"
+                              {...teacherForm.register('teachingExperience')}
+                              placeholder="Any prior teaching experience..."
+                              rows={3}
+                              disabled={isSubmitting}
+                              className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="t-whyTeach">Why do you want to become a teacher? *</Label>
+                            <Textarea
+                              id="t-whyTeach"
+                              {...teacherForm.register('whyTeach')}
+                              placeholder="Share your motivation for teaching meditation..."
+                              rows={4}
+                              disabled={isSubmitting}
+                              className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                            />
+                            {teacherForm.formState.errors.whyTeach && (
+                              <p className="text-sm text-red-600">{teacherForm.formState.errors.whyTeach.message}</p>
+                            )}
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="t-availability">Availability *</Label>
+                            <Textarea
+                              id="t-availability"
+                              {...teacherForm.register('availability')}
+                              placeholder="Weekends, Evenings, etc..."
+                              rows={2}
+                              disabled={isSubmitting}
+                              className="border-2 border-purple-200 focus:border-purple-500 transition-colors"
+                            />
+                            {teacherForm.formState.errors.availability && (
+                              <p className="text-sm text-red-600">{teacherForm.formState.errors.availability.message}</p>
+                            )}
+                          </div>
+
+                          <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+                          >
+                            {isSubmitting ? (
+                              <>
+                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                Submitting...
+                              </>
+                            ) : (
+                              <>
+                                <GraduationCap className="mr-2 h-5 w-5" />
+                                Submit Enrollment Application
+                              </>
+                            )}
+                          </Button>
+                        </form>
                       </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="flex items-center">
-                          <Mail className="mr-2 h-4 w-4" />
-                          Email Address *
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          {...form.register('email')}
-                          placeholder="john.doe@example.com"
-                        />
-                        {form.formState.errors.email && (
-                          <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone" className="flex items-center">
-                          <Phone className="mr-2 h-4 w-4" />
-                          Phone Number *
-                        </Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          {...form.register('phone')}
-                          placeholder="+91 98765 43210"
-                        />
-                        {form.formState.errors.phone && (
-                          <p className="text-sm text-red-600">{form.formState.errors.phone.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="city" className="flex items-center">
-                          <MapPin className="mr-2 h-4 w-4" />
-                          City *
-                        </Label>
-                        <Input
-                          id="city"
-                          {...form.register('city')}
-                          placeholder="Bangalore"
-                        />
-                        {form.formState.errors.city && (
-                          <p className="text-sm text-red-600">{form.formState.errors.city.message}</p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="profession" className="flex items-center">
-                          <Briefcase className="mr-2 h-4 w-4" />
-                          Profession
-                        </Label>
-                        <Input
-                          id="profession"
-                          {...form.register('profession')}
-                          placeholder="Software Engineer"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Additional Information */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold">Additional Information</h3>
-                    <div className="space-y-2">
-                      <Label htmlFor="experience">Meditation Experience (Optional)</Label>
-                      <Textarea
-                        id="experience"
-                        {...form.register('experience')}
-                        placeholder="Tell us about your prior meditation experience..."
-                        rows={3}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="expectations">What do you hope to gain? (Optional)</Label>
-                      <Textarea
-                        id="expectations"
-                        {...form.register('expectations')}
-                        placeholder="Share your expectations from this program..."
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Submitting Registration...
-                      </>
-                    ) : (
-                      'Complete Registration'
-                    )}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-
-            {/* Info Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-              <Card className="text-center">
-                <CardContent className="pt-6">
-                  <div className="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <h3 className="font-semibold mb-2">Upcoming Events</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Check our events page for the latest programs and schedules
-                  </p>
-                  <a href="/events" className="text-purple-600 text-sm font-medium hover:underline mt-2 inline-block">
-                    View Events →
-                  </a>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center">
-                <CardContent className="pt-6">
-                  <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <User className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <h3 className="font-semibold mb-2">Become a Teacher</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Join our teacher training program and share meditation with others
-                  </p>
-                  <a href="/teach" className="text-purple-600 text-sm font-medium hover:underline mt-2 inline-block">
-                    Learn More →
-                  </a>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center">
-                <CardContent className="pt-6">
-                  <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Mail className="h-6 w-6 text-green-600" />
-                  </div>
-                  <h3 className="font-semibold mb-2">Need Help?</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Contact us if you have any questions about registration
-                  </p>
-                  <a href="/contact" className="text-purple-600 text-sm font-medium hover:underline mt-2 inline-block">
-                    Contact Us →
-                  </a>
+                    </TabsContent>
+                  </Tabs>
                 </CardContent>
               </Card>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Info Cards */}
+        <section className="py-20 bg-gradient-to-b from-indigo-50 to-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-indigo-100 hover:border-indigo-300 bg-white/50 backdrop-blur-sm hover:scale-105">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <User className="h-8 w-8 text-white" />
+                  </div>
+                  <CardTitle className="text-center text-xl">Participant Benefits</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {[
+                      'Scientifically designed meditation programs',
+                      'Expert guidance from experienced teachers',
+                      'Certificate upon completion',
+                      'Lifetime access to community resources',
+                    ].map((benefit, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105">
+                <CardHeader>
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <GraduationCap className="h-8 w-8 text-white" />
+                  </div>
+                  <CardTitle className="text-center text-xl">Teacher Training</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {[
+                      'Comprehensive meditation teacher certification',
+                      'Teach globally recognized techniques',
+                      'Ongoing support and mentorship',
+                      'Join a network of 500+ certified teachers',
+                    ].map((benefit, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
       </main>
+
       <Footer />
     </div>
   );

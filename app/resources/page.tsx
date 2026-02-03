@@ -138,39 +138,99 @@ export default function ResourcesPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <section className="bg-gradient-to-br from-purple-600 to-blue-600 py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-              Resources
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800/30 to-purple-800/20">
+          {/* Video Background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+              poster="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920"
+            >
+              <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-indigo-900/15 to-purple-900/20" />
+            <div className="absolute top-20 right-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute bottom-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
+              <Book className="w-4 h-4 text-purple-300" />
+              <span>Learning Library</span>
+            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+              {'Resources'.split('').map((char, i) => (
+                <span
+                  key={i}
+                  className="inline-block hover:text-purple-300 transition-colors cursor-default animate-gradient"
+                  style={{ animationDelay: `${i * 50}ms` }}
+                >
+                  {char}
+                </span>
+              ))}
             </h1>
-            <p className="text-xl text-purple-100 max-w-3xl mx-auto">
+            <p className="text-xl text-white/90 max-w-3xl mx-auto border-l-4 border-purple-400/50 pl-6">
               Access our collection of books, videos, magazines, and curated
               links to support your meditation journey
             </p>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto mt-12">
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                  {books.length}
+                </div>
+                <div className="text-white/80 text-sm mt-1">Books</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
+                  {videos.length}
+                </div>
+                <div className="text-white/80 text-sm mt-1">Videos</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent">
+                  {blogs.length}
+                </div>
+                <div className="text-white/80 text-sm mt-1">Articles</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
+                  {links.length}
+                </div>
+                <div className="text-white/80 text-sm mt-1">Links</div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="py-16">
+        <section className="py-16 bg-gradient-to-b from-white to-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
-                <TabsTrigger value="books" className="flex items-center gap-2">
+              <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid bg-white/80 backdrop-blur-md p-2 rounded-xl border-2 border-purple-200 shadow-lg">
+                <TabsTrigger value="books" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <Book className="h-4 w-4" />
                   Books
                 </TabsTrigger>
-                <TabsTrigger value="videos" className="flex items-center gap-2">
+                <TabsTrigger value="videos" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <Video className="h-4 w-4" />
                   Videos
                 </TabsTrigger>
-                <TabsTrigger value="magazines" className="flex items-center gap-2">
+                <TabsTrigger value="magazines" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <FileText className="h-4 w-4" />
                   Magazines
                 </TabsTrigger>
-                <TabsTrigger value="blogs" className="flex items-center gap-2">
+                <TabsTrigger value="blogs" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <PenTool className="h-4 w-4" />
                   Blogs
                 </TabsTrigger>
-                <TabsTrigger value="links" className="flex items-center gap-2">
+                <TabsTrigger value="links" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <ExternalLink className="h-4 w-4" />
                   Links
                 </TabsTrigger>
@@ -202,34 +262,37 @@ export default function ResourcesPage() {
               </TabsContent>
 
               <TabsContent value="videos" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {videos.map((video) => (
-                    <Card key={video.id} className="hover:shadow-xl transition-shadow overflow-hidden">
-                      <div className="relative aspect-video bg-gray-100">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {videos.map((video, index) => (
+                    <Card key={video.id} className="group overflow-hidden hover:shadow-2xl transition-all duration-500 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105" style={{ animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both` }}>
+                      <div className="relative aspect-video bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-100 overflow-hidden">
                         <img
                           src={video.thumbnail}
                           alt={video.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <a
                           href={video.videoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity"
+                          className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black/50"
                         >
-                          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/90 hover:bg-white transition-colors">
-                            <Video className="w-6 h-6 text-purple-600 ml-1" />
+                          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-white/90 hover:bg-white hover:scale-110 transition-all shadow-xl">
+                            <Video className="w-8 h-8 text-purple-600 ml-1" />
                           </div>
                         </a>
-                        <Badge className="absolute top-2 right-2" variant="secondary">
+                        <Badge className="absolute top-3 right-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 shadow-lg">
                           {video.category}
                         </Badge>
                       </div>
-                      <CardHeader>
-                        <CardTitle className="text-lg">{video.title}</CardTitle>
+                      <CardHeader className="pb-4">
+                        <CardTitle className="text-xl group-hover:text-purple-600 transition-colors line-clamp-2">
+                          {video.title}
+                        </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-gray-700 text-sm line-clamp-2 leading-relaxed">
                           {video.description}
                         </p>
                       </CardContent>
