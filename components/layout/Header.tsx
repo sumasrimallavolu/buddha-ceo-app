@@ -34,7 +34,7 @@ export function Header() {
     { name: 'Community', href: '/community' },
     { name: 'Contact', href: '/contact' },
   ];
-
+//comment
   return (
     <header className="sticky top-0 z-50 w-full border-b border-purple-200/60 bg-purple-50/90 backdrop-blur supports-[backdrop-filter]:bg-purple-50/80">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
