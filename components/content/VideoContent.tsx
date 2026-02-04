@@ -45,19 +45,6 @@ export default function VideoContent({
     } else {
       setEmbedUrl(videoUrl);
     }
-
-    // Auto-fetch YouTube thumbnail if not provided
-    if (!thumbnail && videoUrl.includes('youtube.com')) {
-      let videoId = '';
-      if (videoUrl.includes('v=')) {
-        videoId = videoUrl.split('v=')[1]?.split('&')[0] || '';
-      }
-      if (videoId) {
-        // We'll use the YouTube thumbnail
-        const img = new Image();
-        img.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
-      }
-    }
   }, [videoUrl, thumbnail]);
 
   const getYoutubeThumbnail = () => {
