@@ -179,7 +179,7 @@ export default function RegisterPage() {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800/30 to-purple-800/20">
+        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-slate-800">
           <div className="absolute inset-0 overflow-hidden">
             <video
               autoPlay
@@ -194,7 +194,7 @@ export default function RegisterPage() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-indigo-900/15 to-purple-900/20" />
+            <div className="absolute inset-0 bg-slate-900/20" />
             <div className="absolute top-20 right-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
           </div>
@@ -206,7 +206,7 @@ export default function RegisterPage() {
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
               Register &{' '}
-              <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+              <span className="text-indigo-300 drop-shadow-lg">
                 Get Involved
               </span>
             </h1>
@@ -217,7 +217,7 @@ export default function RegisterPage() {
         </section>
 
         {/* Registration Forms Section */}
-        <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
+        <section className="py-20 bg-indigo-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
               {/* Status Alert */}
@@ -225,8 +225,8 @@ export default function RegisterPage() {
                 <Alert
                   className={`mb-6 ${
                     submitStatus.type === 'success'
-                      ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
-                      : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200'
+                      ? 'bg-green-50 border-green-200'
+                      : 'bg-red-50 border-red-200'
                   }`}
                 >
                   <CheckCircle2 className={`h-4 w-4 ${submitStatus.type === 'success' ? 'text-green-600' : 'text-red-600'}`} />
@@ -240,7 +240,7 @@ export default function RegisterPage() {
 
               {/* Tabs Card */}
               <Card className="border-2 border-indigo-200 shadow-xl bg-white/50 backdrop-blur-sm">
-                <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 text-center">
+                <CardHeader className="bg-indigo-50 text-center">
                   <CardTitle className="text-3xl">Choose Your Path</CardTitle>
                   <CardDescription className="text-base">
                     Select an option below to begin your journey
@@ -251,14 +251,14 @@ export default function RegisterPage() {
                     <TabsList className="grid w-full grid-cols-2 bg-white/80 backdrop-blur-md p-2 rounded-xl border-2 border-indigo-200 shadow-lg">
                       <TabsTrigger
                         value="participant"
-                        className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white hover:bg-indigo-100 transition-all"
+                        className="flex items-center gap-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white hover:bg-indigo-100 transition-all"
                       >
                         <User className="h-4 w-4" />
                         Participant Registration
                       </TabsTrigger>
                       <TabsTrigger
                         value="teacher"
-                        className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-600 data-[state=active]:text-white hover:bg-indigo-100 transition-all"
+                        className="flex items-center gap-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white hover:bg-indigo-100 transition-all"
                       >
                         <GraduationCap className="h-4 w-4" />
                         Teacher Enrollment
@@ -431,7 +431,7 @@ export default function RegisterPage() {
                     <TabsContent value="teacher" className="mt-6">
                       <div className="space-y-6">
                         <div className="text-center mb-6">
-                          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                          <h3 className="text-2xl font-bold text-purple-600 mb-2">
                             Become a Certified Teacher
                           </h3>
                           <p className="text-gray-600">
@@ -650,7 +650,7 @@ export default function RegisterPage() {
                           <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+                            className="w-full bg-purple-600 hover:bg-purple-700 text-white py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
                           >
                             {isSubmitting ? (
                               <>
@@ -704,7 +704,7 @@ export default function RegisterPage() {
 
               <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <GraduationCap className="h-8 w-8 text-white" />
                   </div>
                   <CardTitle className="text-center text-xl">Teacher Training</CardTitle>

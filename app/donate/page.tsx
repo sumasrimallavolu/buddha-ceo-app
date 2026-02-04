@@ -12,7 +12,7 @@ export default function DonatePage() {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-pink-800/30 to-purple-800/20">
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-800">
           <div className="absolute inset-0 overflow-hidden">
             <video
               autoPlay
@@ -27,7 +27,7 @@ export default function DonatePage() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-pink-900/15 to-purple-900/20" />
+            <div className="absolute inset-0 bg-slate-900/20" />
             <div className="absolute top-20 right-20 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
           </div>
@@ -39,7 +39,7 @@ export default function DonatePage() {
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
               Donate &{' '}
-              <span className="bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+              <span className="text-pink-300 drop-shadow-lg">
                 Transform Lives
               </span>
             </h1>
@@ -50,10 +50,10 @@ export default function DonatePage() {
         </section>
 
         {/* Impact Section */}
-        <section className="py-20 bg-gradient-to-b from-white to-purple-50">
+        <section className="py-20 bg-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-4xl font-bold text-purple-600 mb-4">
                 Your Impact
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -64,7 +64,7 @@ export default function DonatePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
               <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Users className="h-8 w-8 text-white" />
                   </div>
                   <CardTitle className="text-center text-xl">₹1,000</CardTitle>
@@ -76,7 +76,7 @@ export default function DonatePage() {
 
               <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-pink-100 hover:border-pink-300 bg-white/50 backdrop-blur-sm hover:scale-105">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Gift className="h-8 w-8 text-white" />
                   </div>
                   <CardTitle className="text-center text-xl">₹5,000</CardTitle>
@@ -88,7 +88,7 @@ export default function DonatePage() {
 
               <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105">
                 <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Sparkles className="h-8 w-8 text-white" />
                   </div>
                   <CardTitle className="text-center text-xl">₹25,000+</CardTitle>
@@ -102,10 +102,10 @@ export default function DonatePage() {
         </section>
 
         {/* Donation Options */}
-        <section className="py-20 bg-gradient-to-b from-purple-50 to-white">
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-4xl font-bold text-purple-600 mb-4">
                 Choose Your Contribution
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -124,12 +124,12 @@ export default function DonatePage() {
                   key={option.amount}
                   className={`relative group hover:shadow-2xl transition-all duration-300 cursor-pointer ${
                     option.popular
-                      ? 'border-2 border-purple-400 bg-gradient-to-br from-purple-50 to-pink-50 scale-105'
+                      ? 'border-2 border-purple-400 bg-purple-50 scale-105'
                       : 'border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105'
                   }`}
                 >
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    <CardTitle className="text-3xl font-bold text-purple-600">
                       {option.amount}
                     </CardTitle>
                     <p className="text-sm text-gray-600 font-medium">{option.label}</p>
@@ -138,8 +138,8 @@ export default function DonatePage() {
                     <Button
                       className={`w-full ${
                         option.popular
-                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg'
-                          : 'bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white'
+                          ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg'
+                          : 'bg-purple-500 hover:bg-purple-600 text-white'
                       } transition-all hover:scale-105`}
                     >
                       Donate Now

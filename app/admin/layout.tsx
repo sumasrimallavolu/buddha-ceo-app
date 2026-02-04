@@ -71,7 +71,7 @@ export default function AdminLayout({
     <>
       <div className="px-3 py-4">
         <div className="flex items-center space-x-2 px-3 mb-6">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600">
             <span className="text-sm font-bold text-white">MI</span>
           </div>
           <span className="font-bold">Admin Panel</span>
@@ -101,7 +101,7 @@ export default function AdminLayout({
 
       <div className="border-t p-3">
         <div className="flex items-center space-x-3 px-3 mb-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-100 to-blue-100">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
             <span className="text-sm font-semibold text-purple-700">
               {session.user.name?.charAt(0).toUpperCase()}
             </span>
@@ -136,7 +136,7 @@ export default function AdminLayout({
       <div className="lg:hidden fixed top-0 z-50 w-full bg-white border-b">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600">
               <span className="text-sm font-bold text-white">MI</span>
             </div>
             <span className="font-bold">Admin</span>

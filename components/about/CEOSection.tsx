@@ -7,7 +7,7 @@ export function CEOSection() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-purple-200 to-blue-200 flex items-center justify-center overflow-hidden">
+              <div className="aspect-square rounded-2xl bg-purple-200 flex items-center justify-center overflow-hidden">
                 <div className="text-center">
                   <div className="text-9xl mb-4">👨‍💼</div>
                   <p className="text-purple-900 font-semibold">Founder & CEO</p>

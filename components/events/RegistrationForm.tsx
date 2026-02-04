@@ -264,7 +264,7 @@ export function RegistrationForm({
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600"
+                className="flex-1 bg-purple-600"
                 disabled={isSubmitting || availableSlots === 0}
               >
                 {isSubmitting ? (

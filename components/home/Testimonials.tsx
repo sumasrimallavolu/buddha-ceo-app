@@ -46,13 +46,13 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-purple-50">
+    <section className="py-20 bg-purple-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-100 mb-4">
             <Quote className="w-8 h-8 text-purple-600" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-purple-600">
             Transformations Through Meditation
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -128,7 +128,7 @@ export function Testimonials() {
             href="https://www.youtube.com/@BuddhaCEOQuantumFoundation"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 shadow-lg hover:shadow-xl transition-all"
           >
             <Play className="w-5 h-5" />
             Watch More on YouTube

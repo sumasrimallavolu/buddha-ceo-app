@@ -35,13 +35,13 @@ const coreValues = [
 
 export function CoreValues() {
   return (
-    <section className="py-20 bg-gradient-to-b from-purple-50/60 via-white to-blue-50/60">
+    <section className="py-20 bg-purple-50/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <Badge variant="secondary" className="mb-4 px-4 py-1 rounded-full">
             Core Values
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-purple-700 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-purple-700">
             What Guides Our Work
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -59,10 +59,10 @@ export function CoreValues() {
                 className="relative overflow-hidden border border-slate-100 bg-white shadow-sm hover:shadow-xl transition-all duration-300"
               >
                 <div
-                  className={`pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${value.accent}`}
+                  className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-purple-600"
                 />
                 <CardContent className="pt-8 pb-7">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-50 to-blue-50 mb-4 shadow-sm">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50 mb-4 shadow-sm">
                     <Icon className="h-7 w-7 text-purple-600" />
                   </div>
                   <h3 className="text-lg font-semibold mb-2">{value.label}</h3>

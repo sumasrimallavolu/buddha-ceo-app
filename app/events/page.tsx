@@ -98,7 +98,7 @@ export default function EventsPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-purple-800/30 to-indigo-800/20">
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-800">
           {/* Video Background */}
           <div className="absolute inset-0 overflow-hidden">
             <video
@@ -114,7 +114,7 @@ export default function EventsPage() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-purple-900/15 to-indigo-900/20" />
+            <div className="absolute inset-0 bg-slate-900/20" />
             <div className="absolute top-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
           </div>
@@ -126,7 +126,7 @@ export default function EventsPage() {
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
               Events &{' '}
-              <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+              <span className="text-purple-300 drop-shadow-lg">
                 Programs
               </span>
             </h1>
@@ -140,7 +140,7 @@ export default function EventsPage() {
         <section className="py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-12 gap-6">
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <h2 className="text-3xl font-bold text-purple-600">
                 {filterType === 'all' ? 'All Events' : getEventTypeLabel(filterType)}
               </h2>
               <div className="flex items-center gap-3 flex-wrap bg-white/50 backdrop-blur-sm p-2 rounded-xl border border-purple-200">
@@ -154,7 +154,7 @@ export default function EventsPage() {
                       onClick={() => setFilterType(type)}
                       className={
                         filterType === type
-                          ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all'
+                          ? 'bg-purple-600 text-white shadow-lg hover:shadow-xl transition-all'
                           : 'hover:bg-purple-100 transition-all'
                       }
                     >
@@ -191,18 +191,18 @@ export default function EventsPage() {
                       className="group overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col border-2 border-purple-100 hover:border-purple-300 hover:scale-105 bg-white/50 backdrop-blur-sm"
                       style={{ animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both` }}
                     >
-                      <div className="relative aspect-video bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-100 overflow-hidden">
+                      <div className="relative aspect-video bg-purple-100 overflow-hidden">
                         <div className="absolute inset-0 flex items-center justify-center text-7xl group-hover:scale-110 transition-transform duration-500">
                           {getEventTypeIcon(event.type)}
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <Badge
-                          className="absolute top-4 right-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 shadow-lg"
+                          className="absolute top-4 right-4 bg-purple-600 text-white border-0 shadow-lg"
                         >
                           {getEventTypeLabel(event.type)}
                         </Badge>
                         {event.status === 'ongoing' && (
-                          <Badge className="absolute top-4 left-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg animate-pulse">
+                          <Badge className="absolute top-4 left-4 bg-green-500 text-white border-0 shadow-lg animate-pulse">
                             Ongoing
                           </Badge>
                         )}
@@ -262,7 +262,7 @@ export default function EventsPage() {
                           </Button>
                         ) : (
                           <Button
-                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all"
+                            className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl transition-all"
                             onClick={() => handleRegisterClick(event)}
                           >
                             ✨ Register Now
@@ -278,7 +278,7 @@ export default function EventsPage() {
         </section>
 
         {/* Nearby Events Map */}
-        <section className="py-8 bg-gradient-to-b from-white to-purple-50">
+        <section className="py-8 bg-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <NearbyEventsMap />
           </div>

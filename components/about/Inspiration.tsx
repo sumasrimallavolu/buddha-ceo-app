@@ -29,7 +29,7 @@ const inspirationPeople = [
 
 export function Inspiration() {
   return (
-    <section className="py-20 bg-gradient-to-b from-white via-purple-50/60 to-white">
+    <section className="py-20 bg-purple-50/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center mb-12">
           <Badge variant="secondary" className="mb-4 px-4 py-1 rounded-full">

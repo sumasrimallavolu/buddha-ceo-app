@@ -43,10 +43,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <CardTitle className="text-3xl font-bold text-purple-600">
             Meditation Institute
           </CardTitle>
           <CardDescription>Enter your credentials to access the admin panel</CardDescription>
@@ -84,7 +84,7 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full bg-gradient-to-r from-purple-600 to-blue-600" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-purple-600" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
             <Link href="/" className="text-sm text-center text-muted-foreground hover:text-foreground">

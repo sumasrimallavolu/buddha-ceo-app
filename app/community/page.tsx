@@ -115,7 +115,7 @@ export default function CommunityPage() {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800/30 to-purple-800/20">
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-800">
           <div className="absolute inset-0 overflow-hidden">
             <video
               autoPlay
@@ -130,19 +130,19 @@ export default function CommunityPage() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-indigo-900/15 to-purple-900/20" />
+            <div className="absolute inset-0 bg-slate-900/20" />
             <div className="absolute top-20 right-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
           </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
-              <Users className="w-4 h-4 text-indigo-300" />
+              <Users className="w-4 h-4 text-purple-900" />
               <span>Join Our Family</span>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
               Our{' '}
-              <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+              <span className="text-purple-900 drop-shadow-lg">
                 Community
               </span>
             </h1>
@@ -153,19 +153,19 @@ export default function CommunityPage() {
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-indigo-300">
                   50,000+
                 </div>
                 <div className="text-white/80 text-sm mt-1">Members</div>
               </div>
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-purple-300">
                   500+
                 </div>
                 <div className="text-white/80 text-sm mt-1">Events</div>
               </div>
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold bg-gradient-to-r from-pink-300 to-indigo-300 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-pink-300">
                   25+
                 </div>
                 <div className="text-white/80 text-sm mt-1">Countries</div>
@@ -175,10 +175,10 @@ export default function CommunityPage() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
+        <section className="py-20 bg-indigo-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-4xl font-bold text-indigo-600 mb-4">
                 Community Stories
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -199,7 +199,7 @@ export default function CommunityPage() {
                         alt={testimonial.name}
                         className="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-indigo-200 group-hover:ring-indigo-400 transition-all"
                       />
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs px-3 py-1 rounded-full">
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-indigo-500 text-white text-xs px-3 py-1 rounded-full">
                         {testimonial.role}
                       </div>
                     </div>
@@ -223,10 +223,10 @@ export default function CommunityPage() {
         </section>
 
         {/* Upcoming Events */}
-        <section className="py-20 bg-gradient-to-b from-indigo-50 to-white">
+        <section className="py-20 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-4xl font-bold text-purple-600 mb-4">
                 Upcoming Community Events
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -245,8 +245,8 @@ export default function CommunityPage() {
                       <Badge
                         className={
                           event.type === 'online'
-                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0'
-                            : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0'
+                            ? 'bg-blue-500 text-white border-0'
+                            : 'bg-purple-500 text-white border-0'
                         }
                       >
                         {event.type === 'online' ? '🌐 Online' : '📍 Offline'}
@@ -271,7 +271,7 @@ export default function CommunityPage() {
                         <span>{event.attendees} attending</span>
                       </div>
                     </div>
-                    <Button className="w-full mt-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                    <Button className="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105">
                       <Heart className="mr-2 h-4 w-4" />
                       Join Event
                     </Button>
@@ -283,10 +283,10 @@ export default function CommunityPage() {
         </section>
 
         {/* Community Forum */}
-        <section className="py-20 bg-gradient-to-b from-white to-purple-50">
+        <section className="py-20 bg-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-4xl font-bold text-indigo-600 mb-4">
                 Community Discussions
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -338,97 +338,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        {/* Share Your Story Section */}
-        <section className="py-20 bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-          </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-3xl mx-auto">
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
-                  <Heart className="w-4 h-4 text-pink-300" />
-                  <span>Share Your Journey</span>
-                </div>
-                <h2 className="text-4xl font-bold text-white mb-4">
-                  Inspire Others with Your Story
-                </h2>
-                <p className="text-purple-100">
-                  Your experience can motivate and guide others on their meditation journey
-                </p>
-              </div>
-
-              <Card className="bg-white/10 backdrop-blur-md border border-white/20">
-                <CardContent className="p-8">
-                  {submitted ? (
-                    <div className="text-center py-8">
-                      <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
-                        <Heart className="h-10 w-10 text-white" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-white mb-2">
-                        Thank You for Sharing! ✨
-                      </h3>
-                      <p className="text-purple-100">
-                        Your story has been submitted and will inspire our community.
-                      </p>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="name" className="text-white">Name *</Label>
-                          <Input
-                            id="name"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            required
-                            placeholder="Your name"
-                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-purple-400"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="email" className="text-white">Email *</Label>
-                          <Input
-                            id="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            required
-                            placeholder="your@email.com"
-                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-purple-400"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="message" className="text-white">Your Story *</Label>
-                        <Textarea
-                          id="message"
-                          value={formData.message}
-                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                          required
-                          placeholder="Share your meditation journey and experiences..."
-                          rows={6}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-purple-400"
-                        />
-                      </div>
-
-                      <Button
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all hover:scale-[1.02]"
-                      >
-                        <Send className="mr-2 h-5 w-5" />
-                        Share Your Story
-                      </Button>
-                    </form>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
       </main>
 
       <Footer />

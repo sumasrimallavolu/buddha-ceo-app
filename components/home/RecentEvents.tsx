@@ -63,11 +63,11 @@ const formatDate = (date: Date) => {
 
 export function RecentEvents() {
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <section className="py-20 bg-purple-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-12">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2 text-purple-600">
               Upcoming Events
             </h2>
             <p className="text-lg text-gray-600">
@@ -85,7 +85,7 @@ export function RecentEvents() {
               key={event.id}
               className="group overflow-hidden hover:shadow-xl transition-shadow border-purple-100 bg-white/60 backdrop-blur-sm"
             >
-              <div className="relative aspect-video bg-gradient-to-br from-purple-200/50 to-pink-200/50">
+              <div className="relative aspect-video bg-purple-200/50">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-6xl">🧘</div>
                 </div>
@@ -116,7 +116,7 @@ export function RecentEvents() {
               <CardFooter>
                 {event.status !== 'completed' && (
                   <Link href={`/events/${event.id}`} className="w-full">
-                    <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                    <Button className="w-full bg-purple-600 hover:bg-purple-700">
                       Register Now
                     </Button>
                   </Link>

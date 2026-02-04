@@ -13,7 +13,7 @@ export function AboutHero() {
   }, []);
 
   return (
-    <section className="relative min-h-[70vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800/30 to-purple-800/20">
+    <section className="relative min-h-[70vh] flex items-center overflow-hidden bg-slate-800">
       {/* Video Background */}
       <div className="absolute inset-0 overflow-hidden">
         <video
@@ -31,7 +31,7 @@ export function AboutHero() {
         </video>
 
         {/* Light Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-purple-900/15 to-indigo-900/20" />
+        <div className="absolute inset-0 bg-slate-900/20" />
 
         {/* Animated Orbs */}
         <div className="absolute top-20 left-20 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -61,7 +61,7 @@ export function AboutHero() {
           }}
         >
           About{' '}
-          <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent animate-gradient bg-gradient-to-r">
+          <span className="text-purple-300">
             Us
           </span>
         </h1>
@@ -88,19 +88,19 @@ export function AboutHero() {
           }}
         >
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-            <div className="text-4xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent mb-2">
+            <div className="text-4xl font-bold text-purple-300 mb-2">
               15+
             </div>
             <div className="text-white/80">Years of Service</div>
           </div>
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-            <div className="text-4xl font-bold bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent mb-2">
+            <div className="text-4xl font-bold text-blue-300 mb-2">
               100K+
             </div>
             <div className="text-white/80">Lives Transformed</div>
           </div>
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-            <div className="text-4xl font-bold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent mb-2">
+            <div className="text-4xl font-bold text-pink-300 mb-2">
               500+
             </div>
             <div className="text-white/80">Programs Conducted</div>

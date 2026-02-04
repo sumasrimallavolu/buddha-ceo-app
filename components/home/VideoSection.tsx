@@ -46,7 +46,7 @@ export function VideoSection() {
   ];
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 relative overflow-hidden">
+    <section className="py-16 sm:py-20 lg:py-24 bg-purple-50 relative overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute top-20 left-10 w-64 h-64 bg-purple-200/30 rounded-full blur-3xl animate-pulse-slow"></div>
       <div className="absolute bottom-20 right-10 w-80 h-80 bg-pink-200/30 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
@@ -59,7 +59,7 @@ export function VideoSection() {
             <Youtube className="w-4 h-4 text-red-500" />
             <span>Video Library</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-purple-600">
             Guided Meditations & Resources
           </h2>
           <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
@@ -122,7 +122,7 @@ export function VideoSection() {
 
                 <button
                   onClick={() => activeVideo === video.id ? setActiveVideo(null) : setActiveVideo(video.id)}
-                  className="w-full mt-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                  className="w-full mt-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
                 >
                   <Youtube className="w-4 h-4" />
                   {activeVideo === video.id ? 'Close' : 'Watch Now'}
@@ -145,7 +145,7 @@ export function VideoSection() {
               href="https://youtube.com/@BuddhaCEO"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-medium transition-all shadow-md hover:shadow-lg hover:scale-105"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition-all shadow-md hover:shadow-lg hover:scale-105"
             >
               <Youtube className="w-5 h-5" />
               Subscribe

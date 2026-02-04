@@ -108,15 +108,15 @@ export default function TeachPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 bg-gradient-to-br from-purple-50 to-blue-50">
+      <main className="flex-1 bg-purple-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-600 rounded-full mb-4">
                 <GraduationCap className="h-8 w-8 text-white" />
               </div>
-              <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-purple-600">
                 Become a Meditation Teacher
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -125,7 +125,7 @@ export default function TeachPage() {
             </div>
 
             {/* Benefits Section */}
-            <Card className="mb-8 bg-gradient-to-br from-purple-100 to-blue-100 border-0">
+            <Card className="mb-8 bg-purple-100 border-0">
               <CardContent className="pt-6">
                 <h2 className="text-2xl font-bold mb-6 text-center">Why Become a Teacher?</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -393,7 +393,7 @@ export default function TeachPage() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
+                    className="w-full bg-purple-600"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

@@ -112,7 +112,7 @@ export default function UsersPage() {
           </p>
         </div>
         <Link href="/admin/users/new">
-          <Button className="bg-gradient-to-r from-purple-600 to-blue-600">
+          <Button className="bg-purple-600">
             <UserPlus className="mr-2 h-4 w-4" />
             Add User
           </Button>

@@ -41,10 +41,10 @@ function getInitials(name: string) {
 export function FoundersTrustees() {
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
   return (
-    <section className="py-20 bg-gradient-to-b from-purple-50/50 via-white to-pink-50/30">
+    <section className="py-20 bg-purple-50/50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <Badge className="mb-4 px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border border-purple-200">
+          <Badge className="mb-4 px-4 py-1.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200">
             Founders & Trustees
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-slate-800">
@@ -68,10 +68,10 @@ export function FoundersTrustees() {
               <CardContent className="relative pt-10 pb-8 px-8 flex flex-col items-center text-center">
                 {/* Profile Image with elegant border */}
                 <div className="relative mb-5">
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 p-1 shadow-xl">
+                  <div className="w-32 h-32 rounded-full bg-slate-200 p-1 shadow-xl">
                     <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center overflow-hidden relative">
                       {imageErrors[index] ? (
-                        <div className="w-full h-full rounded-full bg-gradient-to-br from-purple-300 to-pink-300 flex items-center justify-center">
+                        <div className="w-full h-full rounded-full bg-purple-300 flex items-center justify-center">
                           <span className="text-3xl font-bold text-white">{getInitials(person.name)}</span>
                         </div>
                       ) : (
@@ -95,7 +95,7 @@ export function FoundersTrustees() {
                   <h3 className="text-xl font-bold mb-1.5 text-slate-800">
                     {person.name}
                   </h3>
-                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 text-xs font-medium tracking-wide border border-purple-200">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-medium tracking-wide border border-purple-200">
                     {person.role}
                   </div>
                 </div>

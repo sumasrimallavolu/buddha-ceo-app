@@ -112,7 +112,7 @@ export default function EventsPage() {
             Manage meditation programs and events
           </p>
         </div>
-        <Button className="bg-gradient-to-r from-purple-600 to-blue-600">
+        <Button className="bg-purple-600">
           <CalendarPlus className="mr-2 h-4 w-4" />
           Add Event
         </Button>

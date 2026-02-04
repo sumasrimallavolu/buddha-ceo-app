@@ -43,7 +43,7 @@ export function Services() {
             return (
               <Card key={index} className="hover:shadow-xl transition-shadow">
                 <CardHeader>
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-100 to-blue-100 mb-4">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 mb-4">
                     <Icon className="h-8 w-8 text-purple-600" />
                   </div>
                   <CardTitle className="text-xl">{service.title}</CardTitle>

@@ -43,6 +43,10 @@ interface Content {
 }
 
 const contentTypes = [
+  'photo_collage',
+  'video_content',
+  'book_publication',
+  'mixed_media',
   'poster',
   'testimonial',
   'team_member',
@@ -195,7 +199,7 @@ export default function ContentPage() {
         </div>
         {canEdit && (
           <Link href="/admin/content/new">
-            <Button className="bg-gradient-to-r from-purple-600 to-blue-600">
+            <Button className="bg-purple-600">
               <FilePlus className="mr-2 h-4 w-4" />
               Add Content
             </Button>
@@ -302,9 +306,11 @@ export default function ContentPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Eye className="mr-2 h-4 w-4" />
-                            View
+                          <DropdownMenuItem asChild>
+                            <Link href={`/admin/content/review/${item._id}`}>
+                              <Eye className="mr-2 h-4 w-4" />
+                              {item.status === 'pending_review' ? 'Review' : 'View'}
+                            </Link>
                           </DropdownMenuItem>
                           {canEdit && item.status === 'draft' && (
                             <DropdownMenuItem>

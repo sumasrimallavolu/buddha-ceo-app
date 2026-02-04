@@ -109,7 +109,7 @@ export default function ProjectExcellencePage() {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-purple-800/30 to-pink-800/20">
+        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-slate-800">
           <div className="absolute inset-0 overflow-hidden">
             <video
               autoPlay
@@ -124,7 +124,7 @@ export default function ProjectExcellencePage() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-purple-900/15 to-pink-900/20" />
+            <div className="absolute inset-0 bg-slate-900/20" />
             <div className="absolute top-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 left-20 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
           </div>
@@ -136,7 +136,7 @@ export default function ProjectExcellencePage() {
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
               Project{' '}
-              <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-amber-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+              <span className="text-purple-300 drop-shadow-lg">
                 Excellence
               </span>
             </h1>
@@ -147,10 +147,10 @@ export default function ProjectExcellencePage() {
         </section>
 
         {/* Featured Programs Gallery */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-white to-purple-50">
+        <section className="py-16 md:py-20 bg-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-purple-600 mb-4">
                 Featured Programs & Events
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -169,7 +169,7 @@ export default function ProjectExcellencePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-                    <Badge className="mb-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                    <Badge className="mb-4 bg-purple-500 text-white border-0">
                       {excellenceImages[0].category}
                     </Badge>
                     <h3 className="text-2xl md:text-3xl font-bold mb-3 drop-shadow-lg">{excellenceImages[0].title}</h3>
@@ -208,10 +208,10 @@ export default function ProjectExcellencePage() {
         </section>
 
         {/* Excellence Highlights */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-purple-50 to-white">
+        <section className="py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-purple-600 mb-4">
                 Pillars of Excellence
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -241,7 +241,7 @@ export default function ProjectExcellencePage() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 md:py-20 bg-gradient-to-br from-purple-900 via-pink-900 to-indigo-900 relative overflow-hidden">
+        <section className="py-16 md:py-20 bg-purple-900 relative overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl"></div>
@@ -259,7 +259,7 @@ export default function ProjectExcellencePage() {
                   key={index}
                   className="text-center bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
                 >
-                  <div className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
+                  <div className="text-4xl md:text-5xl font-bold text-purple-200 mb-2">
                     {stat.value}
                   </div>
                   <div className="text-white/80 font-medium text-sm md:text-base">{stat.label}</div>
@@ -270,10 +270,10 @@ export default function ProjectExcellencePage() {
         </section>
 
         {/* Success Stories */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-white to-purple-50">
+        <section className="py-16 md:py-20 bg-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-purple-600 mb-4">
                 Stories of Transformation
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
@@ -285,12 +285,12 @@ export default function ProjectExcellencePage() {
               {successStories.map((story, index) => (
                 <Card
                   key={index}
-                  className={`group hover:shadow-2xl transition-all duration-500 border-2 bg-gradient-to-br backdrop-blur-sm hover:scale-[1.02] ${
+                  className={`group hover:shadow-2xl transition-all duration-500 border-2 backdrop-blur-sm hover:scale-[1.02] ${
                     story.color === 'amber'
-                      ? 'border-amber-100 hover:border-amber-300 from-amber-50 to-orange-50'
+                      ? 'border-amber-100 hover:border-amber-300 bg-amber-50'
                       : story.color === 'pink'
-                      ? 'border-pink-100 hover:border-pink-300 from-pink-50 to-rose-50'
-                      : 'border-blue-100 hover:border-blue-300 from-blue-50 to-cyan-50'
+                      ? 'border-pink-100 hover:border-pink-300 bg-pink-50'
+                      : 'border-blue-100 hover:border-blue-300 bg-blue-50'
                   }`}
                 >
                   <CardContent className="p-6 md:p-8">
@@ -336,9 +336,9 @@ export default function ProjectExcellencePage() {
         </section>
 
         {/* Featured Quote */}
-        <section className="py-16 md:py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+        <section className="py-16 md:py-20 bg-amber-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 shadow-2xl">
+            <Card className="bg-white border-2 border-amber-200 shadow-2xl">
               <CardContent className="p-8 md:p-12">
                 <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                   <img

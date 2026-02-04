@@ -1,7 +1,18 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-export type ContentType = 'poster' | 'testimonial' | 'team_member' | 'achievement' | 'service';
+export type ContentType =
+  | 'poster'
+  | 'testimonial'
+  | 'team_member'
+  | 'achievement'
+  | 'service'
+  | 'photo_collage'      // Multiple photos in grid layouts
+  | 'video_content'      // YouTube/embedded videos
+  | 'book_publication'   // Books/publications
+  | 'mixed_media';       // Text + images + videos
+
 export type ContentStatus = 'draft' | 'pending_review' | 'published' | 'archived';
+export type ContentLayout = 'grid' | 'masonry' | 'slider';
 
 export interface IContent {
   title: string;
@@ -14,6 +25,10 @@ export interface IContent {
   createdAt: Date;
   updatedAt: Date;
   publishedAt?: Date;
+  thumbnailUrl?: string;        // For gallery previews
+  layout?: ContentLayout;       // For photo collages
+  mediaOrder?: string[];        // Order of media items
+  isFeatured?: boolean;         // Highlight on homepage
 }
 
 export interface IContentDocument extends IContent, Document {}
@@ -27,7 +42,7 @@ const ContentSchema = new Schema<IContentDocument>(
     },
     type: {
       type: String,
-      enum: ['poster', 'testimonial', 'team_member', 'achievement', 'service'],
+      enum: ['poster', 'testimonial', 'team_member', 'achievement', 'service', 'photo_collage', 'video_content', 'book_publication', 'mixed_media'],
       required: [true, 'Content type is required'],
     },
     status: {
@@ -57,6 +72,23 @@ const ContentSchema = new Schema<IContentDocument>(
     publishedAt: {
       type: Date,
       default: null,
+    },
+    thumbnailUrl: {
+      type: String,
+      default: null,
+    },
+    layout: {
+      type: String,
+      enum: ['grid', 'masonry', 'slider'],
+      default: 'grid',
+    },
+    mediaOrder: {
+      type: [String],
+      default: [],
+    },
+    isFeatured: {
+      type: Boolean,
+      default: false,
     },
   },
   {

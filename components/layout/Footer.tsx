@@ -175,7 +175,7 @@ export function Footer() {
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-slate-700 hover:bg-slate-800 text-white"
+                  className="w-full bg-purple-900 hover:bg-purple-800 text-white"
                   disabled={loading}
                 >
                   {loading ? 'Subscribing...' : 'Subscribe'}

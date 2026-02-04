@@ -52,7 +52,7 @@ export default function ContactPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-blue-800/30 to-purple-800/20">
+        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-slate-800">
           <div className="absolute inset-0 overflow-hidden">
             <video
               autoPlay
@@ -67,7 +67,7 @@ export default function ContactPage() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-blue-900/15 to-purple-900/20" />
+            <div className="absolute inset-0 bg-slate-900/20" />
             <div className="absolute top-20 right-20 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
           </div>
@@ -79,7 +79,7 @@ export default function ContactPage() {
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
               Contact{' '}
-              <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent animate-gradient drop-shadow-lg">
+              <span className="text-purple-300 drop-shadow-lg">
                 Us
               </span>
             </h1>
@@ -90,7 +90,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <section className="py-16 bg-gradient-to-b from-white to-purple-50">
+        <section className="py-16 bg-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Contact Information */}

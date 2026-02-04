@@ -243,7 +243,7 @@ export default function NewUserPage() {
               </Link>
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-purple-600 to-blue-600"
+                className="bg-purple-600"
                 disabled={loading}
               >
                 {loading ? (

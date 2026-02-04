@@ -138,7 +138,7 @@ export default function ResourcesPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-800 via-indigo-800/30 to-purple-800/20">
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-800">
           {/* Video Background */}
           <div className="absolute inset-0 overflow-hidden">
             <video
@@ -154,7 +154,7 @@ export default function ResourcesPage() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-indigo-900/15 to-purple-900/20" />
+            <div className="absolute inset-0 bg-slate-900/20" />
             <div className="absolute top-20 right-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute bottom-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
           </div>
@@ -183,25 +183,25 @@ export default function ResourcesPage() {
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto mt-12">
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-purple-300">
                   {books.length}
                 </div>
                 <div className="text-white/80 text-sm mt-1">Books</div>
               </div>
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-blue-300">
                   {videos.length}
                 </div>
                 <div className="text-white/80 text-sm mt-1">Videos</div>
               </div>
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold bg-gradient-to-r from-pink-300 to-purple-300 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-pink-300">
                   {blogs.length}
                 </div>
                 <div className="text-white/80 text-sm mt-1">Articles</div>
               </div>
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-cyan-300">
                   {links.length}
                 </div>
                 <div className="text-white/80 text-sm mt-1">Links</div>
@@ -210,27 +210,27 @@ export default function ResourcesPage() {
           </div>
         </section>
 
-        <section className="py-16 bg-gradient-to-b from-white to-purple-50">
+        <section className="py-16 bg-purple-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid bg-white/80 backdrop-blur-md p-2 rounded-xl border-2 border-purple-200 shadow-lg">
-                <TabsTrigger value="books" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
+                <TabsTrigger value="books" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <Book className="h-4 w-4" />
                   Books
                 </TabsTrigger>
-                <TabsTrigger value="videos" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
+                <TabsTrigger value="videos" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <Video className="h-4 w-4" />
                   Videos
                 </TabsTrigger>
-                <TabsTrigger value="magazines" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
+                <TabsTrigger value="magazines" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <FileText className="h-4 w-4" />
                   Magazines
                 </TabsTrigger>
-                <TabsTrigger value="blogs" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
+                <TabsTrigger value="blogs" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <PenTool className="h-4 w-4" />
                   Blogs
                 </TabsTrigger>
-                <TabsTrigger value="links" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
+                <TabsTrigger value="links" className="flex items-center gap-2 data-[state=active]:bg-purple-600 data-[state=active]:text-white hover:bg-purple-100 transition-all">
                   <ExternalLink className="h-4 w-4" />
                   Links
                 </TabsTrigger>
@@ -241,7 +241,7 @@ export default function ResourcesPage() {
                   {books.map((book) => (
                     <Card key={book.id} className="hover:shadow-xl transition-shadow">
                       <CardHeader>
-                        <div className="aspect-[3/4] rounded-lg bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center mb-4">
+                        <div className="aspect-[3/4] rounded-lg bg-purple-100 flex items-center justify-center mb-4">
                           <Book className="h-24 w-24 text-purple-600" />
                         </div>
                         <CardTitle className="text-xl">{book.title}</CardTitle>
@@ -265,7 +265,7 @@ export default function ResourcesPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {videos.map((video, index) => (
                     <Card key={video.id} className="group overflow-hidden hover:shadow-2xl transition-all duration-500 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105" style={{ animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both` }}>
-                      <div className="relative aspect-video bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-100 overflow-hidden">
+                      <div className="relative aspect-video bg-purple-100 overflow-hidden">
                         <img
                           src={video.thumbnail}
                           alt={video.title}
@@ -282,7 +282,7 @@ export default function ResourcesPage() {
                             <Video className="w-8 h-8 text-purple-600 ml-1" />
                           </div>
                         </a>
-                        <Badge className="absolute top-3 right-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 shadow-lg">
+                        <Badge className="absolute top-3 right-3 bg-purple-600 text-white border-0 shadow-lg">
                           {video.category}
                         </Badge>
                       </div>
@@ -306,7 +306,7 @@ export default function ResourcesPage() {
                   {magazines.map((magazine) => (
                     <Card key={magazine.id} className="hover:shadow-xl transition-shadow">
                       <CardHeader>
-                        <div className="aspect-[3/4] rounded-lg bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center mb-4">
+                        <div className="aspect-[3/4] rounded-lg bg-blue-100 flex items-center justify-center mb-4">
                           <FileText className="h-24 w-24 text-blue-600" />
                         </div>
                         <CardTitle className="text-xl">{magazine.title}</CardTitle>

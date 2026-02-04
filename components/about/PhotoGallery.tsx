@@ -67,14 +67,14 @@ const galleryPhotos = [
 
 export function PhotoGallery() {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-purple-50">
+    <section className="py-20 bg-purple-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
             <Images className="w-4 h-4" />
             <span>Photo Gallery</span>
           </div>
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-4xl font-bold text-purple-600 mb-4">
             Moments of Transformation
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
@@ -94,7 +94,7 @@ export function PhotoGallery() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <Badge className="mb-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-xs">
+                <Badge className="mb-2 bg-purple-500 text-white border-0 text-xs">
                   {galleryPhotos[0].category}
                 </Badge>
                 <h3 className="text-lg font-bold drop-shadow-lg">{galleryPhotos[0].title}</h3>
@@ -112,7 +112,7 @@ export function PhotoGallery() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <Badge className="mb-1.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white border-0 text-xs">
+                <Badge className="mb-1.5 bg-pink-500 text-white border-0 text-xs">
                   {galleryPhotos[1].category}
                 </Badge>
                 <h3 className="text-sm font-bold drop-shadow-lg">{galleryPhotos[1].title}</h3>
@@ -129,7 +129,7 @@ export function PhotoGallery() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <Badge className="mb-1.5 bg-gradient-to-r from-indigo-500 to-blue-500 text-white border-0 text-xs">
+                <Badge className="mb-1.5 bg-indigo-500 text-white border-0 text-xs">
                   {galleryPhotos[7].category}
                 </Badge>
                 <h3 className="text-sm font-bold drop-shadow-lg">{galleryPhotos[7].title}</h3>
@@ -151,7 +151,7 @@ export function PhotoGallery() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-2 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <Badge className="mb-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-xs">
+                  <Badge className="mb-1 bg-purple-500 text-white border-0 text-xs">
                     {photo.category}
                   </Badge>
                   <h3 className="text-xs font-bold drop-shadow-lg line-clamp-2">{photo.title}</h3>
@@ -174,7 +174,7 @@ export function PhotoGallery() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-2 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <Badge className="mb-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-xs">
+                  <Badge className="mb-1 bg-purple-500 text-white border-0 text-xs">
                     {photo.category}
                   </Badge>
                   <h3 className="text-xs font-bold drop-shadow-lg line-clamp-2">{photo.title}</h3>
@@ -184,7 +184,7 @@ export function PhotoGallery() {
           ))}
 
           {/* Featured testimonial card */}
-          <Card className="md:col-span-2 group overflow-hidden border-2 border-amber-100 hover:border-amber-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-gradient-to-br from-amber-50 to-orange-50">
+          <Card className="md:col-span-2 group overflow-hidden border-2 border-amber-100 hover:border-amber-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-amber-50">
             <CardContent className="p-8 h-full flex flex-col justify-center">
               <div className="flex items-center gap-4 mb-6">
                 <img
@@ -210,7 +210,7 @@ export function PhotoGallery() {
             href="https://www.buddhaceo.org/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            className="inline-flex items-center justify-center px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
             <Images className="mr-2 h-5 w-5" />
             View More on Buddha-CEO.org

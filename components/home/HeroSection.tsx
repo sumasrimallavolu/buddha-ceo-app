@@ -15,7 +15,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden min-h-[80vh] flex items-center bg-gradient-to-br from-peach-100 via-peach-100/80 to-peach-100/70">
+    <section className="relative overflow-hidden min-h-[80vh] flex items-center bg-peach-100">
       {/* Video Background with Minimal Overlay */}
       <div className="absolute inset-0 overflow-hidden">
         {/* MP4 Video Background - Meditation/Peaceful Nature */}
@@ -34,7 +34,7 @@ export function HeroSection() {
         </video>
 
         {/* Soft Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-200/30 via-pink-200/20 to-blue-200/40" />
+        <div className="absolute inset-0 bg-purple-100/30" />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20 lg:py-24">
@@ -52,7 +52,7 @@ export function HeroSection() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-gray-800">
               Discover Inner Peace &{' '}
               <span className="relative">
-                <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 bg-clip-text text-transparent animate-gradient">
+                <span className="text-purple-600 font-bold">
                   Radiant Health
                 </span>
                 <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
@@ -75,7 +75,7 @@ export function HeroSection() {
             </h1>
 
             {/* Description */}
-            <p className="text-sm sm:text-base text-gray-700 max-w-2xl leading-relaxed border-l-4 border-purple-400/60 pl-4">
+            <p className="text-sm sm:text-base text-gray-900 max-w-2xl leading-relaxed border-l-4 border-purple-400/60 pl-4">
               Join our scientifically designed meditation programs. Experience
               transformation through ancient wisdom combined with modern understanding.
               Perfect for leaders, professionals, and seekers on the path of self-discovery.
@@ -86,7 +86,7 @@ export function HeroSection() {
               <Link href="/events" className="flex-1 sm:flex-none">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all text-base sm:text-lg px-6 sm:px-8 border border-white/30"
+                  className="w-full sm:w-auto bg-purple-900 hover:bg-purple-700 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all text-base sm:text-lg px-6 sm:px-8"
                 >
                   <Play className="mr-2 h-5 w-5" />
                   Explore Programs
@@ -122,12 +122,12 @@ export function HeroSection() {
                   alt="Student"
                   className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-3 border-white/80 object-cover hover:scale-110 hover:z-10 transition-all shadow-lg"
                 />
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-3 border-white/80 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-3 border-white/80 bg-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-lg">
                   +50K
                 </div>
               </div>
-              <div className="text-sm text-gray-700 text-center sm:text-left">
-                <span className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <div className="text-sm text-gray-900 text-center sm:text-left">
+                <span className="font-bold text-xl sm:text-2xl text-purple-600">
                   50,000+
                 </span>{' '}
                 lives transformed
@@ -137,19 +137,19 @@ export function HeroSection() {
             {/* Stats Counter */}
             <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-purple-200/50">
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl font-bold text-purple-600">
                   40+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 mt-1">Programs</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600">
                   100K+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 mt-1">Students</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+                <div className="text-2xl sm:text-3xl font-bold text-pink-600">
                   15+
                 </div>
                 <div className="text-xs sm:text-sm text-gray-600 mt-1">Years</div>
@@ -160,21 +160,21 @@ export function HeroSection() {
           {/* Right Side - Enrollment Card */}
           <div className="relative order-first lg:order-last">
             <div
-              className="aspect-[4/3] w-full max-w-lg mx-auto lg:max-w-xl rounded-3xl bg-gradient-to-br from-purple-300/50 via-pink-300/40 to-blue-300/50 p-[10px] shadow-xl border border-white/60 hover:scale-105 transition-transform duration-700"
+              className="aspect-[4/3] w-full max-w-lg mx-auto lg:max-w-xl rounded-3xl bg-purple-200/50 p-[10px] shadow-xl border border-white/60 hover:scale-105 transition-transform duration-700"
               style={{ transform: `translateY(${scrollY * 0.1}px)` }}
             >
-              <div className="w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100">
+              <div className="w-full h-full rounded-3xl overflow-hidden relative bg-purple-100">
                 <img
                   src="https://images.unsplash.com/photo-1523419409543-3e4f83b9b9f4?w=1200&q=80"
                   alt="Meditation by the ocean"
                   className="w-full h-full object-cover opacity-70"
                 />
                 {/* Color wash over image */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-purple-300/60 via-pink-300/50 to-blue-300/60 mix-blend-multiply" />
+                <div className="absolute inset-0 bg-purple-300/60 mix-blend-multiply" />
 
                 {/* Content Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 text-gray-800">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-xs font-bold mb-3 shadow-lg text-white">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-600 text-xs font-bold mb-3 shadow-lg text-white">
                     <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                     NOW ENROLLING
                   </div>
@@ -195,7 +195,7 @@ export function HeroSection() {
                   <Link href="/events" className="block">
                     <Button
                       size="lg"
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white w-full shadow-xl hover:scale-105 transition-all text-base sm:text-lg border border-white/30 py-6"
+                      className="bg-purple-600 hover:bg-purple-700 text-white w-full shadow-xl hover:scale-105 transition-all text-base sm:text-lg py-6"
                     >
                       <Play className="mr-2 h-5 w-5" />
                       Register Now - FREE

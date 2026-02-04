@@ -104,7 +104,7 @@ export default function ResourcesPage() {
             Manage books, videos, magazines, and links
           </p>
         </div>
-        <Button className="bg-gradient-to-r from-purple-600 to-blue-600">
+        <Button className="bg-purple-600">
           <BookOpen className="mr-2 h-4 w-4" />
           Add Resource
         </Button>
