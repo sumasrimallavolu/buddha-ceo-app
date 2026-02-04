@@ -49,7 +49,6 @@ const TeacherEnrollmentSchema = new Schema<ITeacherEnrollmentDocument>(
       required: [true, 'Email is required'],
       lowercase: true,
       trim: true,
-      index: true,
     },
     phone: {
       type: String,

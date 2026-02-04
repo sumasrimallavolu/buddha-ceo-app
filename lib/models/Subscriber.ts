@@ -36,7 +36,6 @@ const SubscriberSchema = new Schema<ISubscriberDocument>(
 );
 
 // Index for faster queries
-SubscriberSchema.index({ email: 1 });
 SubscriberSchema.index({ status: 1 });
 
 const Subscriber: Model<ISubscriberDocument> = mongoose.models.Subscriber || mongoose.model<ISubscriberDocument>('Subscriber', SubscriberSchema);

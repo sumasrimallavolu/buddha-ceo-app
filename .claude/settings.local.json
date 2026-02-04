@@ -17,7 +17,8 @@
       "Bash(git add:*)",
       "Bash(git revert:*)",
       "mcp__plugin_serena_serena__initial_instructions",
-      "mcp__plugin_serena_serena__get_current_config"
+      "mcp__plugin_serena_serena__get_current_config",
+      "Bash(npm run type-check:*)"
     ]
   }
 }

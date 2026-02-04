@@ -48,7 +48,6 @@ const UserSchema = new Schema<IUserDocument>(
 );
 
 // Index for faster queries
-UserSchema.index({ email: 1 });
 UserSchema.index({ role: 1 });
 
 const User: Model<IUserDocument> = mongoose.models.User || mongoose.model<IUserDocument>('User', UserSchema);

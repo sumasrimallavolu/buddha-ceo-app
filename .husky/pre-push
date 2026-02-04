@@ -1,0 +1,26 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Running pre-push checks..."
+
+# Run type check
+echo "▶️ Checking TypeScript types..."
+npm run type-check
+TYPE_STATUS=$?
+
+# Run linting
+echo "▶️ Running ESLint..."
+npm run lint
+LINT_STATUS=$?
+
+if [ $TYPE_STATUS -ne 0 ] || [ $LINT_STATUS -ne 0 ]; then
+  echo ""
+  echo "❌ Pre-push checks failed!"
+  echo "   - TypeScript: $([ $TYPE_STATUS -eq 0 ] && echo '✅ PASSED' || echo '❌ FAILED')"
+  echo "   - ESLint: $([ $LINT_STATUS -eq 0 ] && echo '✅ PASSED' || echo '❌ FAILED')"
+  echo ""
+  echo "Please fix the errors before pushing."
+  exit 1
+fi
+
+echo "✅ All checks passed! Proceeding with push..."

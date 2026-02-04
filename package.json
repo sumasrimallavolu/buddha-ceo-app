@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "type-check": "tsc --noEmit",
+    "pre-deploy": "bash scripts/pre-deploy.sh",
+    "deploy": "bash scripts/watch-and-deploy.sh",
     "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
