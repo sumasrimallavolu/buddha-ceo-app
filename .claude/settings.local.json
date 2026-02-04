@@ -15,7 +15,9 @@
       "Bash(git commit:*)",
       "Bash(git push)",
       "Bash(git add:*)",
-      "Bash(git revert:*)"
+      "Bash(git revert:*)",
+      "mcp__plugin_serena_serena__initial_instructions",
+      "mcp__plugin_serena_serena__get_current_config"
     ]
   }
 }

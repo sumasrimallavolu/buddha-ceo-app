@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 
-export async function middleware(req: NextRequest) {
-  // Skip middleware if NEXTAUTH_SECRET is not set (edge compatibility)
+export async function proxy(req: NextRequest) {
+  // Skip proxy if NEXTAUTH_SECRET is not set (edge compatibility)
   if (!process.env.NEXTAUTH_SECRET) {
     return NextResponse.next();
   }
@@ -37,8 +37,6 @@ export async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: [
-    '/admin/:path*',
-  ],
-};
+export const matcher = [
+  '/admin/:path*',
+];
