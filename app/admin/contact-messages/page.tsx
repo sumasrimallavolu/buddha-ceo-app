@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreVertical, Mail, MailOpen, Check, Trash } from 'lucide-react';
 import { Alert } from '@/components/ui/alert';
+import { MessageViewModal } from '@/components/admin';
 
 interface ContactMessage {
   _id: string;
@@ -32,16 +34,21 @@ interface ContactMessage {
 }
 
 export default function ContactMessagesPage() {
+  const { data: session } = useSession();
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  // Only admins can delete messages
+  const canDelete = session?.user?.role === 'admin';
 
   useEffect(() => {
     fetchMessages();
   }, []);
 
   const fetchMessages = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/admin/contact-messages');
       if (response.ok) {
@@ -129,7 +136,7 @@ export default function ContactMessagesPage() {
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'new':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-emerald-100 text-emerald-800';
       case 'read':
         return 'bg-yellow-100 text-yellow-800';
       case 'responded':
@@ -219,36 +226,37 @@ export default function ContactMessagesPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <MailOpen className="mr-2 h-4 w-4" />
-                            View Full Message
-                          </DropdownMenuItem>
-                          {message.status === 'new' && (
-                            <DropdownMenuItem
-                              onClick={() => handleMarkAsRead(message._id)}
-                              disabled={actionLoading === message._id}
-                            >
-                              <MailOpen className="mr-2 h-4 w-4" />
-                              Mark as Read
-                            </DropdownMenuItem>
-                          )}
+                          <MessageViewModal
+                            messageId={message._id}
+                            trigger={
+                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <MailOpen className="mr-2 h-4 w-4" />
+                                View Full Message
+                              </DropdownMenuItem>
+                            }
+                            onStatusChange={fetchMessages}
+                          />
+
                           {message.status !== 'responded' && (
                             <DropdownMenuItem
                               onClick={() => handleMarkAsResponded(message._id)}
                               disabled={actionLoading === message._id}
                             >
                               <Check className="mr-2 h-4 w-4" />
-                              Mark as Responded
+                              {actionLoading === message._id ? 'Marking...' : 'Mark as Responded'}
                             </DropdownMenuItem>
                           )}
-                          <DropdownMenuItem
-                            className="text-red-600"
-                            onClick={() => handleDelete(message._id)}
-                            disabled={actionLoading === message._id}
-                          >
-                            <Trash className="mr-2 h-4 w-4" />
-                            {actionLoading === message._id ? 'Deleting...' : 'Delete'}
-                          </DropdownMenuItem>
+
+                          {canDelete && (
+                            <DropdownMenuItem
+                              className="text-red-600"
+                              onClick={() => handleDelete(message._id)}
+                              disabled={actionLoading === message._id}
+                            >
+                              <Trash className="mr-2 h-4 w-4" />
+                              {actionLoading === message._id ? 'Deleting...' : 'Delete'}
+                            </DropdownMenuItem>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

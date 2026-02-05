@@ -132,7 +132,7 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
     // @ts-ignore
     const userIcon = (window as any).L.divIcon({
       className: 'user-marker',
-      html: '<div class="bg-blue-500 w-4 h-4 rounded-full border-2 border-white shadow-lg"></div>',
+      html: '<div class="bg-emerald-500 w-4 h-4 rounded-full border-2 border-white shadow-lg"></div>',
       iconSize: [16, 16],
       iconAnchor: [8, 8],
     });
@@ -140,7 +140,7 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
     // @ts-ignore
     (window as any).L.marker([location.latitude, location.longitude], { icon: userIcon })
       .addTo(map)
-      .bindPopup('<strong class="text-blue-600">You are here</strong>');
+      .bindPopup('<strong class="text-emerald-600">You are here</strong>');
 
     // Add event markers
     events.forEach((event) => {
@@ -157,7 +157,7 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
           // @ts-ignore
           const eventIcon = (window as any).L.divIcon({
             className: 'event-marker',
-            html: `<div class="bg-purple-600 w-6 h-6 rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+            html: `<div class="bg-blue-600 w-6 h-6 rounded-full border-2 border-white shadow-lg flex items-center justify-center">
               <span class="text-white text-xs">🧘</span>
             </div>`,
             iconSize: [24, 24],
@@ -172,9 +172,9 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
             .addTo(map)
             .bindPopup(`
               <div class="p-2">
-                <strong class="text-purple-600">${event.title}</strong><br/>
+                <strong class="text-blue-400">${event.title}</strong><br/>
                 <small>${event.location.city || ''}${event.location.state ? ', ' + event.location.state : ''}</small><br/>
-                <small class="text-gray-600">${distance.toFixed(1)} km away</small>
+                <small class="text-slate-400">${distance.toFixed(1)} km away</small>
               </div>
             `);
         }
@@ -229,7 +229,7 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-purple-600" />
+              <MapPin className="h-5 w-5 text-blue-400" />
               Nearby Events
             </CardTitle>
             <CardDescription>
@@ -239,7 +239,7 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
           {!userPosition && (
             <Button
               onClick={getCurrentLocation}
-              className="bg-gradient-to-r from-purple-600 to-blue-600"
+              className="bg-gradient-to-r from-blue-500 to-violet-500"
             >
               <Navigation className="mr-2 h-4 w-4" />
               Use My Location
@@ -250,8 +250,8 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
       <CardContent>
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-            <span className="ml-3 text-muted-foreground">Loading events...</span>
+            <Loader2 className="h-8 w-8 animate-spin text-blue-400" />
+            <span className="ml-3 text-slate-400">Loading events...</span>
           </div>
         ) : error ? (
           <div className="text-center py-12">
@@ -265,14 +265,14 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
             </Button>
           </div>
         ) : !userPosition ? (
-          <div className="text-center py-12 bg-purple-50 rounded-lg">
-            <MapPin className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-            <p className="text-muted-foreground mb-4">
+          <div className="text-center py-12 bg-slate-900/40 border border-white/5 rounded-2xl">
+            <MapPin className="h-12 w-12 text-blue-400 mx-auto mb-4" />
+            <p className="text-slate-400 mb-4">
               Enable location services to find events near you
             </p>
             <Button
               onClick={getCurrentLocation}
-              className="bg-gradient-to-r from-purple-600 to-blue-600"
+              className="bg-gradient-to-r from-blue-500 to-violet-500"
             >
               <Navigation className="mr-2 h-4 w-4" />
               Enable Location
@@ -281,7 +281,7 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
         ) : (
           <div className="space-y-4">
             {/* Map container */}
-            <div id="map" className="w-full h-80 rounded-lg border-2 border-purple-200 z-0"></div>
+            <div id="map" className="w-full h-80 rounded-2xl border border-blue-500/40 z-0"></div>
 
             {/* Nearby events list */}
             <div>
@@ -290,7 +290,7 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
                   Events within {radius} km
                 </h3>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Radius:</span>
+                  <span className="text-sm text-slate-400">Radius:</span>
                   {[25, 50, 100, 200].map((r) => (
                     <Button
                       key={r}
@@ -305,12 +305,12 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
               </div>
 
               {nearbyEvents.length === 0 ? (
-                <div className="text-center py-8 bg-gray-50 rounded-lg">
-                  <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-muted-foreground">
+                <div className="text-center py-8 bg-slate-900/40 border border-white/5 rounded-2xl">
+                  <MapPin className="h-12 w-12 text-blue-400 mx-auto mb-4" />
+                  <p className="text-slate-400">
                     No events found within {radius} km of your location
                   </p>
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-sm text-slate-400 mt-2">
                     Try increasing the search radius
                   </p>
                 </div>
@@ -319,19 +319,19 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
                   {nearbyEvents.map((event) => (
                     <div
                       key={event._id}
-                      className="flex items-start gap-4 p-4 border rounded-lg hover:border-purple-300 hover:shadow-md transition-all"
+                      className="flex items-start gap-4 p-4 border border-white/5 rounded-2xl bg-slate-900/40 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/10 transition-all"
                     >
-                      <div className="bg-purple-100 p-3 rounded-full">
-                        <Calendar className="h-5 w-5 text-purple-600" />
+                      <div className="bg-blue-500/10 p-3 rounded-full">
+                        <Calendar className="h-5 w-5 text-blue-400" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-base mb-1 truncate">
+                        <h4 className="font-semibold text-base mb-1 truncate text-white">
                           {event.title}
                         </h4>
-                        <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                        <p className="text-sm text-slate-400 line-clamp-2 mb-2">
                           {event.description}
                         </p>
-                        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
                           <span className="flex items-center">
                             <MapPin className="h-3 w-3 mr-1" />
                             {event.location?.city}
@@ -349,8 +349,11 @@ export function NearbyEventsMap({ userLocation }: NearbyEventsMapProps) {
                         </div>
                       </div>
                       <Badge
-                        variant={event.status === 'upcoming' ? 'default' : 'secondary'}
-                        className="shrink-0"
+                        className={`shrink-0 border ${
+                          event.status === 'upcoming'
+                            ? 'bg-blue-500/20 text-blue-300 border-blue-400/40'
+                            : 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40'
+                        }`}
                       >
                         {event.status === 'upcoming' ? 'Upcoming' : 'Ongoing'}
                       </Badge>

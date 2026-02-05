@@ -43,10 +43,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-purple-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-amber-50 p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold text-purple-600">
+          <CardTitle className="text-3xl font-bold text-amber-700">
             Meditation Institute
           </CardTitle>
           <CardDescription>Enter your credentials to access the admin panel</CardDescription>
@@ -84,7 +84,7 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full bg-purple-600" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-amber-600" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
             <Link href="/" className="text-sm text-center text-muted-foreground hover:text-foreground">

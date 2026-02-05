@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { title, type, content: contentData } = body;
+    const { title, type, content: contentData, status, autoPublish, thumbnailUrl, layout, isFeatured } = body;
 
     if (!title || !type || !contentData) {
       return NextResponse.json(
@@ -73,18 +73,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Determine the status
+    let contentStatus = status || 'draft';
+
+    // Auto-publish for content_manager and admin roles
+    if (autoPublish && (session.user.role === 'content_manager' || session.user.role === 'admin')) {
+      contentStatus = 'published';
+    }
+
     const content = await Content.create({
       title,
       type,
       content: contentData,
-      status: 'draft',
+      status: contentStatus,
       createdBy: session.user.id,
+      ...(thumbnailUrl && { thumbnailUrl }),
+      ...(layout && { layout }),
+      ...(isFeatured !== undefined && { isFeatured }),
+      ...(contentStatus === 'published' && { publishedAt: new Date() }),
     });
 
     await content.populate('createdBy', 'name email');
 
     return NextResponse.json(
-      { message: 'Content created successfully', content },
+      {
+        message: contentStatus === 'published' ? 'Content published successfully' : 'Content created successfully',
+        content
+      },
       { status: 201 }
     );
   } catch (error) {

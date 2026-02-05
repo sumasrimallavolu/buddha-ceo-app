@@ -108,15 +108,15 @@ export default function TeachPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 bg-purple-50">
+      <main className="flex-1 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-600 rounded-full mb-4">
-                <GraduationCap className="h-8 w-8 text-white" />
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">
+                <GraduationCap className="h-8 w-8 text-primary-foreground" />
               </div>
-              <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-purple-600">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-foreground">
                 Become a Meditation Teacher
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -125,33 +125,33 @@ export default function TeachPage() {
             </div>
 
             {/* Benefits Section */}
-            <Card className="mb-8 bg-purple-100 border-0">
+            <Card className="mb-8 bg-muted/30 border-border">
               <CardContent className="pt-6">
-                <h2 className="text-2xl font-bold mb-6 text-center">Why Become a Teacher?</h2>
+                <h2 className="text-2xl font-bold mb-6 text-center text-foreground">Why Become a Teacher?</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center">
-                    <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md">
-                      <GraduationCap className="h-8 w-8 text-purple-600" />
+                    <div className="bg-background w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md border border-border">
+                      <GraduationCap className="h-8 w-8 text-primary" />
                     </div>
-                    <h3 className="font-semibold mb-2">Comprehensive Training</h3>
+                    <h3 className="font-semibold mb-2 text-foreground">Comprehensive Training</h3>
                     <p className="text-sm text-muted-foreground">
                       Receive complete training in meditation techniques and teaching methodologies
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md">
-                      <User className="h-8 w-8 text-blue-600" />
+                    <div className="bg-background w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md border border-border">
+                      <User className="h-8 w-8 text-secondary" />
                     </div>
-                    <h3 className="font-semibold mb-2">Global Community</h3>
+                    <h3 className="font-semibold mb-2 text-foreground">Global Community</h3>
                     <p className="text-sm text-muted-foreground">
                       Join a worldwide network of meditation teachers and practitioners
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md">
-                      <Briefcase className="h-8 w-8 text-green-600" />
+                    <div className="bg-background w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md border border-border">
+                      <Briefcase className="h-8 w-8 text-accent" />
                     </div>
-                    <h3 className="font-semibold mb-2">Transform Lives</h3>
+                    <h3 className="font-semibold mb-2 text-foreground">Transform Lives</h3>
                     <p className="text-sm text-muted-foreground">
                       Make a meaningful impact by helping others find peace and clarity
                     </p>
@@ -171,7 +171,7 @@ export default function TeachPage() {
                 {submitStatus.type && (
                   <Alert
                     variant={submitStatus.type === 'error' ? 'destructive' : 'default'}
-                    className={`mb-6 ${submitStatus.type === 'success' ? 'border-green-500 bg-green-50 text-green-700' : ''}`}
+                    className={`mb-6 ${submitStatus.type === 'success' ? 'border-secondary bg-secondary/10 text-secondary-foreground' : ''}`}
                   >
                     {submitStatus.type === 'success' && <CheckCircle2 className="h-4 w-4" />}
                     <AlertDescription>{submitStatus.message}</AlertDescription>
@@ -182,7 +182,7 @@ export default function TeachPage() {
                   {/* Personal Information */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold flex items-center">
-                      <User className="mr-2 h-5 w-5 text-purple-600" />
+                      <User className="mr-2 h-5 w-5 text-primary" />
                       Personal Information
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -194,7 +194,7 @@ export default function TeachPage() {
                           placeholder="John"
                         />
                         {form.formState.errors.firstName && (
-                          <p className="text-sm text-red-600">{form.formState.errors.firstName.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.firstName.message}</p>
                         )}
                       </div>
                       <div className="space-y-2">
@@ -205,7 +205,7 @@ export default function TeachPage() {
                           placeholder="Doe"
                         />
                         {form.formState.errors.lastName && (
-                          <p className="text-sm text-red-600">{form.formState.errors.lastName.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.lastName.message}</p>
                         )}
                       </div>
                     </div>
@@ -223,7 +223,7 @@ export default function TeachPage() {
                           placeholder="john.doe@example.com"
                         />
                         {form.formState.errors.email && (
-                          <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
                         )}
                       </div>
                       <div className="space-y-2">
@@ -238,7 +238,7 @@ export default function TeachPage() {
                           placeholder="+91 98765 43210"
                         />
                         {form.formState.errors.phone && (
-                          <p className="text-sm text-red-600">{form.formState.errors.phone.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.phone.message}</p>
                         )}
                       </div>
                     </div>
@@ -255,7 +255,7 @@ export default function TeachPage() {
                           max="100"
                         />
                         {form.formState.errors.age && (
-                          <p className="text-sm text-red-600">{form.formState.errors.age.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.age.message}</p>
                         )}
                       </div>
                       <div className="space-y-2">
@@ -269,7 +269,7 @@ export default function TeachPage() {
                           placeholder="Bangalore"
                         />
                         {form.formState.errors.city && (
-                          <p className="text-sm text-red-600">{form.formState.errors.city.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.city.message}</p>
                         )}
                       </div>
                       <div className="space-y-2">
@@ -280,7 +280,7 @@ export default function TeachPage() {
                           placeholder="Karnataka"
                         />
                         {form.formState.errors.state && (
-                          <p className="text-sm text-red-600">{form.formState.errors.state.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.state.message}</p>
                         )}
                       </div>
                     </div>
@@ -294,7 +294,7 @@ export default function TeachPage() {
                           placeholder="India"
                         />
                         {form.formState.errors.country && (
-                          <p className="text-sm text-red-600">{form.formState.errors.country.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.country.message}</p>
                         )}
                       </div>
                       <div className="space-y-2">
@@ -308,7 +308,7 @@ export default function TeachPage() {
                           placeholder="Software Engineer"
                         />
                         {form.formState.errors.profession && (
-                          <p className="text-sm text-red-600">{form.formState.errors.profession.message}</p>
+                          <p className="text-sm text-destructive">{form.formState.errors.profession.message}</p>
                         )}
                       </div>
                     </div>
@@ -321,7 +321,7 @@ export default function TeachPage() {
                         placeholder="Bachelor's in Engineering"
                       />
                       {form.formState.errors.education && (
-                        <p className="text-sm text-red-600">{form.formState.errors.education.message}</p>
+                        <p className="text-sm text-destructive">{form.formState.errors.education.message}</p>
                       )}
                     </div>
                   </div>
@@ -329,7 +329,7 @@ export default function TeachPage() {
                   {/* Experience Section */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold flex items-center">
-                      <GraduationCap className="mr-2 h-5 w-5 text-purple-600" />
+                      <GraduationCap className="mr-2 h-5 w-5 text-primary" />
                       Experience & Motivation
                     </h3>
                     <div className="space-y-2">
@@ -343,7 +343,7 @@ export default function TeachPage() {
                         rows={4}
                       />
                       {form.formState.errors.meditationExperience && (
-                        <p className="text-sm text-red-600">{form.formState.errors.meditationExperience.message}</p>
+                        <p className="text-sm text-destructive">{form.formState.errors.meditationExperience.message}</p>
                       )}
                     </div>
 
@@ -370,7 +370,7 @@ export default function TeachPage() {
                         rows={4}
                       />
                       {form.formState.errors.whyTeach && (
-                        <p className="text-sm text-red-600">{form.formState.errors.whyTeach.message}</p>
+                        <p className="text-sm text-destructive">{form.formState.errors.whyTeach.message}</p>
                       )}
                     </div>
 
@@ -386,14 +386,14 @@ export default function TeachPage() {
                         rows={3}
                       />
                       {form.formState.errors.availability && (
-                        <p className="text-sm text-red-600">{form.formState.errors.availability.message}</p>
+                        <p className="text-sm text-destructive">{form.formState.errors.availability.message}</p>
                       )}
                     </div>
                   </div>
 
                   <Button
                     type="submit"
-                    className="w-full bg-purple-600"
+                    className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg hover:shadow-xl hover:shadow-primary/25 transition-all"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -421,32 +421,32 @@ export default function TeachPage() {
               <CardContent>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
-                      <div className="w-2 h-2 bg-green-600 rounded-full" />
+                    <div className="bg-secondary/20 rounded-full p-1 mr-3 mt-0.5">
+                      <div className="w-2 h-2 bg-secondary rounded-full" />
                     </div>
                     <span className="text-sm">Must be at least 18 years old</span>
                   </li>
                   <li className="flex items-start">
-                    <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
-                      <div className="w-2 h-2 bg-green-600 rounded-full" />
+                    <div className="bg-secondary/20 rounded-full p-1 mr-3 mt-0.5">
+                      <div className="w-2 h-2 bg-secondary rounded-full" />
                     </div>
                     <span className="text-sm">Minimum 6 months of regular meditation practice</span>
                   </li>
                   <li className="flex items-start">
-                    <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
-                      <div className="w-2 h-2 bg-green-600 rounded-full" />
+                    <div className="bg-secondary/20 rounded-full p-1 mr-3 mt-0.5">
+                      <div className="w-2 h-2 bg-secondary rounded-full" />
                     </div>
                     <span className="text-sm">Commitment to complete the teacher training program</span>
                   </li>
                   <li className="flex items-start">
-                    <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
-                      <div className="w-2 h-2 bg-green-600 rounded-full" />
+                    <div className="bg-secondary/20 rounded-full p-1 mr-3 mt-0.5">
+                      <div className="w-2 h-2 bg-secondary rounded-full" />
                     </div>
                     <span className="text-sm">Genuine interest in helping others through meditation</span>
                   </li>
                   <li className="flex items-start">
-                    <div className="bg-green-100 rounded-full p-1 mr-3 mt-0.5">
-                      <div className="w-2 h-2 bg-green-600 rounded-full" />
+                    <div className="bg-secondary/20 rounded-full p-1 mr-3 mt-0.5">
+                      <div className="w-2 h-2 bg-secondary rounded-full" />
                     </div>
                     <span className="text-sm">Basic proficiency in English (for training materials)</span>
                   </li>

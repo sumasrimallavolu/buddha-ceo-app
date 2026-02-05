@@ -2,230 +2,347 @@
 
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, Users, Gift, Sparkles, Check } from 'lucide-react';
+import { Heart, ArrowRight, Sparkles, Users, Gift, Target, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 
 export default function DonatePage() {
+  const [selectedAmount, setSelectedAmount] = useState<string>('');
+  const [customAmount, setCustomAmount] = useState('');
+  const [isHovered, setIsHovered] = useState<number | null>(null);
+
+  const donationOptions = [
+    { amount: '500', label: 'Starter', icon: '🌱', color: 'from-emerald-400 to-teal-500', bg: 'bg-emerald-50' },
+    { amount: '1000', label: 'Supporter', icon: '🌿', color: 'from-blue-400 to-indigo-500', bg: 'bg-blue-50' },
+    { amount: '5000', label: 'Champion', icon: '🌳', color: 'from-violet-400 to-purple-500', bg: 'bg-violet-50', featured: true },
+    { amount: '10000', label: 'Visionary', icon: '🌴', color: 'from-amber-400 to-orange-500', bg: 'bg-amber-50' },
+  ];
+
+  const impactData = [
+    { number: '10+', text: 'Meditation Sessions', icon: '🧘' },
+    { number: '5+', text: 'Community Workshops', icon: '🎯' },
+    { number: '25+', text: 'Lives Transformed', icon: '✨' },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-950">
       <Header />
-      <main className="flex-1">
+
+      <main className="flex-1 relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-3xl" />
+
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+        </div>
+
         {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-800">
-          <div className="absolute inset-0 overflow-hidden">
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-              poster="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=1920"
-            >
-              <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-growing-plant-23779-large.mp4"
-                type="video/mp4"
-              />
-            </video>
-            <div className="absolute inset-0 bg-slate-900/20" />
-            <div className="absolute top-20 right-20 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
-          </div>
+        <section className="relative min-h-[90vh] flex items-center">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div className="max-w-5xl mx-auto text-center space-y-8">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                <Heart className="w-4 h-4 text-rose-500 animate-pulse" fill="currentColor" />
+                <span className="text-white/80 text-sm">Make a Difference Today</span>
+              </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
-              <Heart className="w-4 h-4 text-pink-300" />
-              <span>Support Our Mission</span>
-            </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
-              Donate &{' '}
-              <span className="text-pink-300 drop-shadow-lg">
-                Transform Lives
-              </span>
-            </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto border-l-4 border-pink-400/50 pl-6">
-              Your generous contribution helps us bring meditation and inner peace to thousands of people around the world
-            </p>
-          </div>
-        </section>
+              {/* Main Heading */}
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-white leading-tight">
+                Your Generosity
+                <br />
+                <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">
+                  Creates Change
+                </span>
+              </h1>
 
-        {/* Impact Section */}
-        <section className="py-20 bg-purple-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-purple-600 mb-4">
-                Your Impact
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Every donation makes a real difference in spreading meditation and wellness globally
+              {/* Subtitle */}
+              <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                Join thousands of supporters making meditation accessible to all. Every contribution transforms lives.
               </p>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-              <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Users className="h-8 w-8 text-white" />
+              {/* Stats */}
+              <div className="flex flex-wrap justify-center gap-8 pt-8">
+                {[
+                  { value: '50K+', label: 'Lives Impacted' },
+                  { value: '100+', label: 'Programs' },
+                  { value: '25+', label: 'Cities' },
+                ].map((stat, i) => (
+                  <div key={i} className="text-center">
+                    <div className="text-4xl font-bold text-white">{stat.value}</div>
+                    <div className="text-sm text-slate-400">{stat.label}</div>
                   </div>
-                  <CardTitle className="text-center text-xl">₹1,000</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-gray-600">Provides meditation training to 10 students from underserved communities</p>
-                </CardContent>
-              </Card>
+                ))}
+              </div>
 
-              <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-pink-100 hover:border-pink-300 bg-white/50 backdrop-blur-sm hover:scale-105">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Gift className="h-8 w-8 text-white" />
-                  </div>
-                  <CardTitle className="text-center text-xl">₹5,000</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-gray-600">Sponsors a complete 40-day meditation program for 25 participants</p>
-                </CardContent>
-              </Card>
-
-              <Card className="group hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105">
-                <CardHeader>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Sparkles className="h-8 w-8 text-white" />
-                  </div>
-                  <CardTitle className="text-center text-xl">₹25,000+</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-gray-600">Enables us to conduct corporate wellness programs reaching 100+ professionals</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Donation Options */}
-        <section className="py-20 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-purple-600 mb-4">
-                Choose Your Contribution
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Select a donation amount that feels right for you
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-              {[
-                { amount: '₹500', label: 'Supporter', popular: false },
-                { amount: '₹1,000', label: 'Friend', popular: false },
-                { amount: '₹5,000', label: 'Patron', popular: true },
-                { amount: '₹10,000', label: 'Benefactor', popular: false },
-              ].map((option) => (
-                <Card
-                  key={option.amount}
-                  className={`relative group hover:shadow-2xl transition-all duration-300 cursor-pointer ${
-                    option.popular
-                      ? 'border-2 border-purple-400 bg-purple-50 scale-105'
-                      : 'border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105'
-                  }`}
+              {/* CTA Button */}
+              <div className="pt-8">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-full px-12 py-6 text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105"
+                  onClick={() => document.getElementById('donate-section')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-3xl font-bold text-purple-600">
-                      {option.amount}
-                    </CardTitle>
-                    <p className="text-sm text-gray-600 font-medium">{option.label}</p>
-                  </CardHeader>
-                  <CardContent>
+                  Start Giving
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Donation Amount Selector */}
+        <section id="donate-section" className="relative py-32">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              {/* Section Header */}
+              <div className="text-center mb-16">
+                <h2 className="text-5xl font-bold text-white mb-4">Choose Your Impact</h2>
+                <p className="text-slate-400 text-lg">Select an amount or enter your own</p>
+              </div>
+
+              {/* Amount Grid */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                {donationOptions.map((option, index) => (
+                  <button
+                    key={option.amount}
+                    onMouseEnter={() => setIsHovered(index)}
+                    onMouseLeave={() => setIsHovered(null)}
+                    onClick={() => {
+                      setSelectedAmount(option.amount);
+                      setCustomAmount('');
+                    }}
+                    className={`
+                      relative p-6 rounded-2xl border-2 transition-all duration-500
+                      ${selectedAmount === option.amount
+                        ? `border-transparent bg-gradient-to-br ${option.color} shadow-2xl scale-105`
+                        : `border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 hover:scale-105`
+                      }
+                      ${option.featured ? 'lg:col-span-2' : ''}
+                    `}
+                  >
+                    {option.featured && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full text-xs font-bold text-white shadow-lg">
+                        Most Popular
+                      </div>
+                    )}
+
+                    <div className="text-3xl mb-2">{option.icon}</div>
+                    <div className="text-2xl font-bold text-white mb-1">₹{option.amount}</div>
+                    <div className="text-sm text-slate-300">{option.label}</div>
+
+                    {isHovered === index && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl animate-pulse" />
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Custom Amount */}
+              <div className="mb-8">
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">₹</span>
+                  <input
+                    type="number"
+                    placeholder="Enter custom amount"
+                    value={customAmount}
+                    onChange={(e) => {
+                      setCustomAmount(e.target.value);
+                      setSelectedAmount('');
+                    }}
+                    className="w-full pl-10 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Donate Button */}
+              <Button
+                size="lg"
+                className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl py-6 text-lg shadow-xl hover:shadow-emerald-500/25 transition-all duration-300 hover:scale-[1.02] font-semibold"
+                disabled={!selectedAmount && !customAmount}
+              >
+                <Heart className="mr-2 h-5 w-5" fill="currentColor" />
+                Donate ₹{selectedAmount || customAmount || '0'} Now
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Impact Breakdown */}
+        <section className="relative py-32 bg-gradient-to-b from-transparent via-slate-900/50 to-transparent">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-5xl font-bold text-white mb-4">Where Your Money Goes</h2>
+                <p className="text-slate-400 text-lg">Transparent allocation of every donation</p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {[
+                  {
+                    title: 'Program Delivery',
+                    percentage: '60%',
+                    description: 'Direct funding for meditation programs, workshops, and retreats',
+                    color: 'from-blue-500 to-cyan-500',
+                    icon: '🎯',
+                  },
+                  {
+                    title: 'Community Outreach',
+                    percentage: '25%',
+                    description: 'Expanding access to underserved communities and schools',
+                    color: 'from-violet-500 to-purple-500',
+                    icon: '🤝',
+                  },
+                  {
+                    title: 'Operations & Growth',
+                    percentage: '15%',
+                    description: 'Platform maintenance, content creation, and organizational development',
+                    color: 'from-emerald-500 to-teal-500',
+                    icon: '📈',
+                  },
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="group relative p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-500 hover:scale-105"
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-500`} />
+
+                    <div className="relative">
+                      <div className="text-4xl mb-4">{item.icon}</div>
+                      <div className="text-3xl font-bold text-white mb-2">{item.percentage}</div>
+                      <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
+                      <p className="text-slate-400 leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Impact Calculator */}
+        <section className="relative py-32">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-5xl font-bold text-white mb-4">Your Impact Calculator</h2>
+                <p className="text-slate-400 text-lg">See the real difference your donation makes</p>
+              </div>
+
+              <div className="grid sm:grid-cols-3 gap-6">
+                {[
+                  { amount: '₹1,000', impact: impactData, color: 'from-emerald-400 to-teal-500' },
+                  { amount: '₹5,000', impact: impactData.map(d => ({ ...d, number: String(parseInt(d.number) * 5) })), color: 'from-blue-400 to-indigo-500' },
+                  { amount: '₹10,000', impact: impactData.map(d => ({ ...d, number: String(parseInt(d.number) * 10) })), color: 'from-violet-400 to-purple-500' },
+                ].map((tier, i) => (
+                  <div
+                    key={i}
+                    className="p-6 rounded-2xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10"
+                  >
+                    <div className="text-center mb-6">
+                      <div className={`text-2xl font-bold bg-gradient-to-r ${tier.color} bg-clip-text text-transparent mb-2`}>
+                        {tier.amount}
+                      </div>
+                      <div className="text-sm text-slate-400">Your Impact</div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {tier.impact.map((item, j) => (
+                        <div key={j} className="flex items-center gap-3">
+                          <div className="text-2xl">{item.icon}</div>
+                          <div>
+                            <div className="text-white font-semibold">{item.number}</div>
+                            <div className="text-xs text-slate-400">{item.text}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonial / Trust Section */}
+        <section className="relative py-32 bg-gradient-to-b from-transparent via-slate-900/50 to-transparent">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 mb-8 shadow-2xl">
+                <Heart className="w-10 h-10 text-white" fill="currentColor" />
+              </div>
+
+              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                Trusted by Thousands
+              </h2>
+
+              <p className="text-xl text-slate-400 leading-relaxed mb-8">
+                "Your donation helps us bring meditation and inner peace to people around the world. Join our community of changemakers."
+              </p>
+
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-2 border-white/20 text-white hover:bg-white/10 rounded-full px-8"
+                >
+                  Learn About Our Mission
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="relative py-32">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="relative p-12 rounded-3xl bg-gradient-to-br from-blue-500/20 via-violet-500/20 to-emerald-500/20 border border-white/10 overflow-hidden">
+                {/* Animated Background */}
+                <div className="absolute inset-0">
+                  <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl animate-pulse" />
+                  <div className="absolute bottom-0 right-0 w-64 h-64 bg-violet-500/30 rounded-full blur-3xl animate-pulse delay-1000" />
+                </div>
+
+                <div className="relative text-center space-y-8">
+                  <Sparkles className="w-16 h-16 text-amber-400 mx-auto animate-pulse" />
+
+                  <h2 className="text-5xl font-bold text-white">
+                    Ready to Transform Lives?
+                  </h2>
+
+                  <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+                    Your generosity creates ripple effects of positive change. Join us in making meditation accessible to all.
+                  </p>
+
+                  <div className="flex flex-wrap justify-center gap-4">
                     <Button
-                      className={`w-full ${
-                        option.popular
-                          ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg'
-                          : 'bg-purple-500 hover:bg-purple-600 text-white'
-                      } transition-all hover:scale-105`}
+                      size="lg"
+                      className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-12 py-6 text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 hover:scale-105 font-semibold"
+                      onClick={() => document.getElementById('donate-section')?.scrollIntoView({ behavior: 'smooth' })}
                     >
+                      <Heart className="mr-2 h-5 w-5" fill="currentColor" />
                       Donate Now
                     </Button>
-                  </CardContent>
-                </Card>
-              ))}
+
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="border-2 border-white/20 text-white hover:bg-white/10 rounded-full px-12 py-6 text-lg backdrop-blur-sm"
+                    >
+                      Contact Us
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
-
-        {/* How Your Donation Helps */}
-        {/* <section className="py-20 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-          </div>
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-white mb-4">
-                How Your Donation Helps
-              </h2>
-              <p className="text-purple-100 max-w-2xl mx-auto">
-                We ensure every rupee is utilized effectively to maximize our impact
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {[
-                'Free meditation programs for underserved communities',
-                'Training and certifying new meditation teachers',
-                'Creating educational content in multiple languages',
-                'Organizing public meditation events and retreats',
-                'Supporting research on meditation benefits',
-                'Maintaining meditation centers and facilities',
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all flex items-start gap-4"
-                >
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mt-1">
-                    <Check className="h-5 w-5 text-white" />
-                  </div>
-                  <p className="text-white text-lg leading-relaxed">{item}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <Card className="inline-block bg-white/10 backdrop-blur-md border border-white/20">
-                <CardContent className="p-8">
-                  <p className="text-white text-lg mb-4">
-                    For direct bank transfer or other donation methods:
-                  </p>
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-xl hover:shadow-2xl transition-all hover:scale-105 border border-white/20"
-                  >
-                    <Heart className="mr-2 h-5 w-5" />
-                    Contact Us for Details
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section> */}
-
-        {/* Tax Benefits */}
-        {/* <section className="py-16 bg-gradient-to-b from-white to-purple-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="max-w-3xl mx-auto bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                  <Gift className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  80G Tax Benefits Available
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  All donations to Buddha-CEO Quantum Foundation are eligible for tax deduction under Section 80G of the Income Tax Act. You will receive a tax exemption certificate for your donation.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </section> */}
       </main>
 
       <Footer />

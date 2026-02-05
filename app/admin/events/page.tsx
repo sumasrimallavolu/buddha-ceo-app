@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { CalendarPlus, MoreVertical, Edit, Trash, Users } from 'lucide-react';
 import { Alert } from '@/components/ui/alert';
+import { EventCreateModal, EventEditModal, EventRegistrationsModal } from '@/components/admin';
 
 interface Event {
   _id: string;
@@ -34,16 +35,20 @@ interface Event {
 }
 
 export default function EventsPage() {
+  const { data: session } = useSession();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [showRegistrations, setShowRegistrations] = useState(false);
 
   useEffect(() => {
     fetchEvents();
   }, []);
 
   const fetchEvents = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/admin/events');
       if (response.ok) {
@@ -87,7 +92,7 @@ export default function EventsPage() {
       case 'upcoming':
         return 'bg-green-100 text-green-800';
       case 'ongoing':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-emerald-100 text-emerald-800';
       case 'completed':
         return 'bg-gray-100 text-gray-800';
       case 'cancelled':
@@ -103,6 +108,8 @@ export default function EventsPage() {
     ).join(' ');
   };
 
+  const canEdit = session?.user?.role === 'admin' || session?.user?.role === 'content_manager';
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -112,10 +119,17 @@ export default function EventsPage() {
             Manage meditation programs and events
           </p>
         </div>
-        <Button className="bg-purple-600">
-          <CalendarPlus className="mr-2 h-4 w-4" />
-          Add Event
-        </Button>
+        {canEdit && (
+          <EventCreateModal
+            trigger={
+              <Button className="bg-amber-600">
+                <CalendarPlus className="mr-2 h-4 w-4" />
+                Add Event
+              </Button>
+            }
+            onSuccess={fetchEvents}
+          />
+        )}
       </div>
 
       {error && (
@@ -182,22 +196,39 @@ export default function EventsPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setSelectedEvent(event);
+                              setShowRegistrations(true);
+                            }}
+                          >
                             <Users className="mr-2 h-4 w-4" />
                             View Registrations
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-red-600"
-                            onClick={() => handleDelete(event._id)}
-                            disabled={deleting === event._id}
-                          >
-                            <Trash className="mr-2 h-4 w-4" />
-                            {deleting === event._id ? 'Deleting...' : 'Delete'}
-                          </DropdownMenuItem>
+
+                          {canEdit && (
+                            <EventEditModal
+                              eventId={event._id}
+                              trigger={
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                              }
+                              onSuccess={fetchEvents}
+                            />
+                          )}
+
+                          {canEdit && (
+                            <DropdownMenuItem
+                              className="text-red-600"
+                              onClick={() => handleDelete(event._id)}
+                              disabled={deleting === event._id}
+                            >
+                              <Trash className="mr-2 h-4 w-4" />
+                              {deleting === event._id ? 'Deleting...' : 'Delete'}
+                            </DropdownMenuItem>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -208,6 +239,15 @@ export default function EventsPage() {
           </Table>
         </CardContent>
       </Card>
+
+      {selectedEvent && (
+        <EventRegistrationsModal
+          eventId={selectedEvent._id}
+          eventTitle={selectedEvent.title}
+          open={showRegistrations}
+          onOpenChange={setShowRegistrations}
+        />
+      )}
     </div>
   );
 }

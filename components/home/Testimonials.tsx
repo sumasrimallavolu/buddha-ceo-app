@@ -46,93 +46,70 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="py-20 bg-purple-50">
+    <section className="py-24 bg-gradient-to-br from-orange-50/80 via-stone-50/70 to-amber-50/80">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-100 mb-4">
-            <Quote className="w-8 h-8 text-purple-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 mb-4 shadow-md">
+            <Quote className="w-8 h-8 text-amber-700" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-purple-600">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-stone-800">
             Transformations Through Meditation
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
             Hear from leaders, professionals, and students who have
             transformed their lives through meditation
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {testimonials.map((testimonial) => (
             <Card
               key={testimonial.id}
-              className="group cursor-pointer overflow-hidden transition-all hover:shadow-2xl border-2 hover:border-purple-200"
+              className="group bg-white/40 backdrop-blur-md border-amber-200/30 hover:bg-white/60 hover:shadow-2xl transition-all duration-500 overflow-hidden"
             >
-              <div className="relative aspect-video bg-gray-100">
-                <img
-                  src={testimonial.thumbnail}
-                  alt={testimonial.name}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-                {/* Play button overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <a
-                    href={testimonial.videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transform transition-transform hover:scale-110"
-                  >
-                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/95 backdrop-blur-sm hover:bg-white shadow-xl transition-all">
-                      <Play className="w-7 h-7 text-purple-600 ml-1" />
+              <CardContent className="p-6">
+                {/* Video Thumbnail */}
+                <div className="relative aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-amber-100/50 to-emerald-100/50">
+                  <img
+                    src={testimonial.thumbnail}
+                    alt={testimonial.name}
+                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                  />
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-all">
+                    <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Play className="w-6 h-6 text-amber-700 ml-1" />
                     </div>
-                  </a>
+                  </div>
                 </div>
 
-                {/* Rating stars */}
-                <div className="absolute top-3 right-3 flex">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-              </div>
+                {/* Quote */}
+                <p className="text-stone-700 mb-6 leading-relaxed border-l-4 border-amber-300/60 pl-4 italic">
+                  "{testimonial.quote}"
+                </p>
 
-              <CardContent className="p-5">
-                <div className="flex items-center gap-3 mb-3">
+                {/* Author */}
+                <div className="flex items-center">
                   <img
                     src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-purple-100"
+                    className="w-12 h-12 rounded-full border-2 border-amber-200/50 mr-4"
                   />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm text-gray-900 truncate">
-                      {testimonial.name}
-                    </h3>
-                    <p className="text-xs text-purple-600 truncate">
-                      {testimonial.subtitle}
-                    </p>
+                  <div>
+                    <h4 className="font-semibold text-stone-800">{testimonial.name}</h4>
+                    <p className="text-sm text-stone-600">{testimonial.subtitle}</p>
                   </div>
                 </div>
-                {testimonial.quote && (
-                  <p className="text-xs text-gray-600 italic leading-relaxed line-clamp-3">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </p>
-                )}
+
+                {/* Rating */}
+                <div className="flex items-center mt-4 gap-1">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
+                  ))}
+                </div>
               </CardContent>
             </Card>
           ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <a
-            href="https://www.youtube.com/@BuddhaCEOQuantumFoundation"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 shadow-lg hover:shadow-xl transition-all"
-          >
-            <Play className="w-5 h-5" />
-            Watch More on YouTube
-          </a>
         </div>
       </div>
     </section>

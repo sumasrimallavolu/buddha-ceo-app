@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { UserPlus, MoreVertical, Edit, Trash } from 'lucide-react';
 import { Alert } from '@/components/ui/alert';
-import Link from 'next/link';
+import { UserCreateModal, UserEditModal } from '@/components/admin';
 
 interface User {
   _id: string;
@@ -43,6 +43,7 @@ export default function UsersPage() {
   }, []);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/admin/users');
       if (response.ok) {
@@ -86,7 +87,7 @@ export default function UsersPage() {
       case 'admin':
         return 'bg-red-100 text-red-800';
       case 'content_manager':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-emerald-100 text-emerald-800';
       case 'content_reviewer':
         return 'bg-green-100 text-green-800';
       default:
@@ -94,10 +95,13 @@ export default function UsersPage() {
     }
   };
 
-  if (loading) {
+  // Only admins can access user management
+  if (session?.user?.role !== 'admin') {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading users...</div>
+        <Alert variant="destructive">
+          You don't have permission to access this page.
+        </Alert>
       </div>
     );
   }
@@ -111,12 +115,15 @@ export default function UsersPage() {
             Manage user accounts and permissions
           </p>
         </div>
-        <Link href="/admin/users/new">
-          <Button className="bg-purple-600">
-            <UserPlus className="mr-2 h-4 w-4" />
-            Add User
-          </Button>
-        </Link>
+        <UserCreateModal
+          trigger={
+            <Button className="bg-amber-600">
+              <UserPlus className="mr-2 h-4 w-4" />
+              Add User
+            </Button>
+          }
+          onSuccess={fetchUsers}
+        />
       </div>
 
       {error && (
@@ -141,7 +148,13 @@ export default function UsersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.length === 0 ? (
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8">
+                    <p className="text-gray-500">Loading...</p>
+                  </TableCell>
+                </TableRow>
+              ) : users.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-8">
                     <p className="text-gray-500">No users found</p>
@@ -168,10 +181,16 @@ export default function UsersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
+                          <UserEditModal
+                            userId={user._id}
+                            trigger={
+                              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit
+                              </DropdownMenuItem>
+                            }
+                            onSuccess={fetchUsers}
+                          />
                           {user._id !== session?.user?.id && (
                             <DropdownMenuItem
                               className="text-red-600"

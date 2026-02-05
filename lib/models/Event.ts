@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export type EventType = 'beginner_online' | 'beginner_physical' | 'advanced_online' | 'advanced_physical' | 'conference';
-export type EventStatus = 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
+export type EventStatus = 'draft' | 'upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'published';
 
 export interface IEvent {
   title: string;
@@ -76,8 +76,8 @@ const EventSchema = new Schema<IEventDocument>(
     },
     status: {
       type: String,
-      enum: ['upcoming', 'ongoing', 'completed', 'cancelled'],
-      default: 'upcoming',
+      enum: ['draft', 'upcoming', 'ongoing', 'completed', 'cancelled', 'published'],
+      default: 'draft',
       required: true,
     },
     location: {

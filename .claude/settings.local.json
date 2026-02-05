@@ -18,7 +18,11 @@
       "Bash(git revert:*)",
       "mcp__plugin_serena_serena__initial_instructions",
       "mcp__plugin_serena_serena__get_current_config",
-      "Bash(npm run type-check:*)"
+      "Bash(npm run type-check:*)",
+      "WebSearch",
+      "Bash(timeout:*)",
+      "mcp__plugin_serena_serena__read_memory",
+      "Bash(dir \"app\\\\api\\\\admin\\\\content\"\")"
     ]
   }
 }

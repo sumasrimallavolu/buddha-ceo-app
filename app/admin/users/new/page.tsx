@@ -243,7 +243,7 @@ export default function NewUserPage() {
               </Link>
               <Button
                 type="submit"
-                className="bg-purple-600"
+                className="bg-amber-600"
                 disabled={loading}
               >
                 {loading ? (
@@ -276,7 +276,7 @@ export default function NewUserPage() {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold text-blue-700">Content Manager</h4>
+            <h4 className="font-semibold text-emerald-700">Content Manager</h4>
             <ul className="mt-2 space-y-1 text-sm text-gray-600">
               <li>• Create and edit content</li>
               <li>• Submit content for review</li>

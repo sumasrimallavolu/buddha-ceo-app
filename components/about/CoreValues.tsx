@@ -8,43 +8,43 @@ const coreValues = [
     label: 'Compassion in Action',
     description:
       'We cultivate kindness, empathy, and service in every program, interaction, and initiative.',
-    accent: 'from-pink-500 to-rose-500',
+    accent: 'from-blue-500 to-violet-500',
   },
   {
     icon: Lightbulb,
     label: 'Wisdom & Clarity',
     description:
       'We bridge ancient meditation wisdom with modern science to support clear thinking and right decisions.',
-    accent: 'from-amber-500 to-yellow-500',
+    accent: 'from-violet-500 to-purple-500',
   },
   {
     icon: Target,
     label: 'Inner Excellence',
     description:
       'We focus on inner transformation as the foundation for sustainable outer success and leadership.',
-    accent: 'from-purple-500 to-indigo-500',
+    accent: 'from-emerald-500 to-teal-500',
   },
   {
     icon: Globe2,
     label: 'One Global Family',
     description:
       'We honor all cultures and backgrounds, seeing the entire world as one connected family.',
-    accent: 'from-sky-500 to-cyan-500',
+    accent: 'from-blue-400 to-cyan-500',
   },
 ];
 
 export function CoreValues() {
   return (
-    <section className="py-20 bg-purple-50/60">
+    <section className="py-24 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <Badge variant="secondary" className="mb-4 px-4 py-1 rounded-full">
+          <Badge className="mb-4 px-4 py-1 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-md border-0">
             Core Values
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-purple-700">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
             What Guides Our Work
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             Inspired by meditation masters, transformational leaders, and
             contemporary research shared through books, blogs, and magazines.
           </p>
@@ -56,19 +56,14 @@ export function CoreValues() {
             return (
               <Card
                 key={index}
-                className="relative overflow-hidden border border-slate-100 bg-white shadow-sm hover:shadow-xl transition-all duration-300"
+                className="relative overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-[1.03] group"
               >
-                <div
-                  className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-purple-600"
-                />
-                <CardContent className="pt-8 pb-7">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50 mb-4 shadow-sm">
-                    <Icon className="h-7 w-7 text-purple-600" />
+                <CardContent className="p-6">
+                  <div className={`inline-flex p-3 rounded-full bg-gradient-to-br ${value.accent} mb-4 shadow-md group-hover:scale-110 transition-transform`}>
+                    <Icon className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{value.label}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {value.description}
-                  </p>
+                  <h3 className="font-bold text-lg mb-2 text-white">{value.label}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">{value.description}</p>
                 </CardContent>
               </Card>
             );
@@ -78,4 +73,3 @@ export function CoreValues() {
     </section>
   );
 }
-

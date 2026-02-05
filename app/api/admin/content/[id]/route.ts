@@ -64,35 +64,49 @@ export async function PUT(
     await connectDB();
 
     const body = await request.json();
-    const { title, type, content: contentData } = body;
+    const { title, type, content: contentData, status, autoPublish } = body;
 
-    const content = await Content.findById(id);
+    const contentItem = await Content.findById(id);
 
-    if (!content) {
+    if (!contentItem) {
       return NextResponse.json({ error: 'Content not found' }, { status: 404 });
     }
 
     // Only content managers can edit their own draft content
-    if (session.user.role === 'content_manager' && content.createdBy.toString() !== session.user.id) {
+    if (session.user.role === 'content_manager' && contentItem.createdBy.toString() !== session.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
     // Can only edit draft content
-    if (content.status !== 'draft') {
+    if (contentItem.status !== 'draft') {
       return NextResponse.json(
         { error: 'Can only edit draft content' },
         { status: 400 }
       );
     }
 
-    content.title = title;
-    content.type = type;
-    content.content = contentData;
-    await content.save();
+    // Determine status based on request
+    let newStatus: 'draft' | 'pending_review' | 'published' | 'archived' = contentItem.status as any;
+    if (status) {
+      newStatus = status;
+    } else if (autoPublish && (session.user.role === 'admin' || session.user.role === 'content_manager')) {
+      newStatus = 'published';
+    }
 
-    await content.populate('createdBy', 'name email');
+    contentItem.title = title;
+    contentItem.type = type;
+    contentItem.content = contentData;
+    contentItem.status = newStatus;
 
-    return NextResponse.json({ content });
+    if (newStatus === 'published') {
+      contentItem.publishedAt = new Date();
+    }
+
+    await contentItem.save();
+
+    await contentItem.populate('createdBy', 'name email');
+
+    return NextResponse.json({ content: contentItem });
   } catch (error) {
     console.error('Error updating content:', error);
     return NextResponse.json(

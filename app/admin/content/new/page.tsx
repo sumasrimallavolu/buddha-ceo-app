@@ -520,7 +520,7 @@ export default function NewContentPage() {
         return (
           <div className="space-y-4">
             <h3 className="text-xl font-bold">{formData.title || 'Video Content'}</h3>
-            {formData.category && <span className="text-sm bg-purple-100 px-2 py-1 rounded">{formData.category}</span>}
+            {formData.category && <span className="text-sm bg-amber-100 px-2 py-1 rounded">{formData.category}</span>}
             {formData.description && <p className="text-gray-600">{formData.description}</p>}
             <div className="aspect-video bg-gray-200 rounded flex items-center justify-center">
               {formData.videoUrl ? <p className="text-gray-500">Video will be embedded here</p> : <p className="text-gray-400">No video URL provided</p>}
@@ -698,7 +698,7 @@ export default function NewContentPage() {
               </Button>
               <Button
                 type="button"
-                className="bg-purple-600"
+                className="bg-amber-600"
                 onClick={() => handleSubmit(false)}
                 disabled={loading}
               >

@@ -54,15 +54,15 @@ export default function AdminDashboard() {
       title: 'Total Users',
       value: stats.users,
       icon: Users,
-      color: 'from-blue-500 to-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'from-emerald-500 to-emerald-600',
+      bgColor: 'bg-emerald-50',
     },
     {
       title: 'Content Items',
       value: stats.content,
       icon: FileText,
-      color: 'from-purple-500 to-purple-600',
-      bgColor: 'bg-purple-50',
+      color: 'from-amber-500 to-amber-600',
+      bgColor: 'bg-amber-50',
     },
     {
       title: 'Events',
@@ -82,15 +82,15 @@ export default function AdminDashboard() {
       title: 'Messages',
       value: stats.messages,
       icon: MessageSquare,
-      color: 'from-pink-500 to-pink-600',
-      bgColor: 'bg-pink-50',
+      color: 'from-orange-500 to-orange-600',
+      bgColor: 'bg-orange-50',
     },
     {
       title: 'Subscribers',
       value: stats.subscribers,
       icon: Mail,
-      color: 'from-indigo-500 to-indigo-600',
-      bgColor: 'bg-indigo-50',
+      color: 'from-amber-700 to-amber-800',
+      bgColor: 'bg-amber-100',
     },
   ];
 
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
                   {stat.title}
                 </CardTitle>
                 <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                  <Icon className="h-5 w-5 text-purple-600" />
+                  <Icon className="h-5 w-5 text-amber-700" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -141,14 +141,14 @@ export default function AdminDashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <TrendingUp className="mr-2 h-5 w-5 text-purple-600" />
+              <TrendingUp className="mr-2 h-5 w-5 text-amber-700" />
               Pending Content Reviews
             </CardTitle>
           </CardHeader>
           <CardContent>
             {stats.pendingReviews > 0 ? (
               <>
-                <div className="text-4xl font-bold text-purple-600 mb-2">
+                <div className="text-4xl font-bold text-amber-700 mb-2">
                   {stats.pendingReviews}
                 </div>
                 <p className="text-sm text-gray-600">
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
                 </p>
                 <a
                   href="/admin/content?status=pending_review"
-                  className="inline-block mt-4 text-sm text-purple-600 hover:text-purple-700 font-medium"
+                  className="inline-block mt-4 text-sm text-amber-700 hover:text-amber-800 font-medium"
                 >
                   Review Now →
                 </a>
@@ -196,57 +196,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link
-              href="/admin/content/new"
-              className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <FileText className="h-5 w-5 mr-3 text-purple-600" />
-              <div>
-                <div className="font-medium">Add Content</div>
-                <div className="text-sm text-gray-600">Create new content</div>
-              </div>
-            </Link>
-            <Link
-              href="/admin/events/new"
-              className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <Calendar className="h-5 w-5 mr-3 text-green-600" />
-              <div>
-                <div className="font-medium">Create Event</div>
-                <div className="text-sm text-gray-600">Schedule new event</div>
-              </div>
-            </Link>
-            <Link
-              href="/admin/users/new"
-              className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <Users className="h-5 w-5 mr-3 text-blue-600" />
-              <div>
-                <div className="font-medium">Add User</div>
-                <div className="text-sm text-gray-600">Create new user</div>
-              </div>
-            </Link>
-            <Link
-              href="/admin/resources/new"
-              className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <BookOpen className="h-5 w-5 mr-3 text-orange-600" />
-              <div>
-                <div className="font-medium">Add Resource</div>
-                <div className="text-sm text-gray-600">Upload resource</div>
-              </div>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

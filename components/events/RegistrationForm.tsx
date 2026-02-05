@@ -139,20 +139,20 @@ export function RegistrationForm({
         </DialogHeader>
 
         {/* Event Details */}
-        <div className="bg-purple-50 p-4 rounded-lg space-y-2">
+        <div className="bg-amber-50 p-4 rounded-lg space-y-2">
           <div className="flex items-center text-sm">
-            <Calendar className="mr-2 h-4 w-4 text-purple-600" />
+            <Calendar className="mr-2 h-4 w-4 text-amber-700" />
             <span className="font-medium">
               {formatDate(event.startDate)} - {formatDate(event.endDate)}
             </span>
           </div>
           <div className="flex items-center text-sm">
-            <Clock className="mr-2 h-4 w-4 text-purple-600" />
+            <Clock className="mr-2 h-4 w-4 text-amber-700" />
             <span>{event.timings}</span>
           </div>
           {availableSlots !== null && (
             <div className="flex items-center text-sm">
-              <Users className="mr-2 h-4 w-4 text-purple-600" />
+              <Users className="mr-2 h-4 w-4 text-amber-700" />
               <span>
                 {availableSlots > 0 ? (
                   <span className="text-green-600 font-medium">
@@ -264,7 +264,7 @@ export function RegistrationForm({
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-purple-600"
+                className="flex-1 bg-amber-600"
                 disabled={isSubmitting || availableSlots === 0}
               >
                 {isSubmitting ? (

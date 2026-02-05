@@ -49,6 +49,9 @@ export async function POST(request: NextRequest) {
       timings,
       imageUrl,
       maxParticipants,
+      location,
+      status,
+      autoPublish,
     } = body;
 
     if (!title || !description || !type || !startDate || !endDate || !timings) {
@@ -56,6 +59,12 @@ export async function POST(request: NextRequest) {
         { error: 'Missing required fields' },
         { status: 400 }
       );
+    }
+
+    // Determine status based on request and user role
+    let eventStatus = status || 'draft';
+    if (autoPublish && (session.user.role === 'admin' || session.user.role === 'content_manager')) {
+      eventStatus = 'upcoming';
     }
 
     const event = await Event.create({
@@ -68,7 +77,8 @@ export async function POST(request: NextRequest) {
       imageUrl,
       maxParticipants,
       currentRegistrations: 0,
-      status: 'upcoming',
+      status: eventStatus,
+      location,
     });
 
     return NextResponse.json(

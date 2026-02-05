@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Facebook, Instagram, Linkedin, Youtube, Mail } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Youtube, Mail, Leaf, Heart } from 'lucide-react';
 
 export function Footer() {
   const [email, setEmail] = useState('');
@@ -33,137 +33,137 @@ export function Footer() {
     }
   };
 
+  const socialLinks = [
+    { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
+    { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: Youtube, href: 'https://youtube.com/@BuddhaCEOQuantumFoundation', label: 'YouTube' },
+  ];
+
+  const quickLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'About Us', href: '/about' },
+    { name: 'Resources', href: '/resources' },
+    { name: 'Events & Programs', href: '/events' },
+    { name: 'Contact', href: '/contact' },
+  ];
+
+  const programLinks = [
+    { name: 'Beginner Online', href: '/events?type=beginner_online' },
+    { name: 'Beginner Physical', href: '/events?type=beginner_physical' },
+    { name: 'Advanced Online', href: '/events?type=advanced_online' },
+    { name: 'Advanced Physical', href: '/events?type=advanced_physical' },
+    { name: 'Conferences', href: '/events?type=conference' },
+  ];
+
   return (
-    <footer className="border-t border-slate-200 bg-slate-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t border-white/10 bg-slate-950">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* About */}
-          <div className="space-y-4">
-            <div className="flex flex-col space-y-2">
-              {/* Logo */}
-              <Link href="/" className="flex items-center justify-center lg:justify-start">
-                <img
-                  src="https://static.wixstatic.com/media/ea3b9d_245553e655454481beb6d6201be19c80~mv2.png/v1/fill/w_357,h_94,al_c,lg_1,q_85,enc_avif,quality_auto/255x69%20%20Pixel%20Header%20Logo.png"
-                  alt="Meditation Institute"
-                  className="h-12 w-auto object-contain"
-                />
-              </Link>
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed" style={{ fontFamily: 'var(--font-lora)' }}>
+          <div className="space-y-6">
+            <Link href="/" className="inline-block group">
+            <img
+              src="https://static.wixstatic.com/media/ea3b9d_245553e655454481beb6d6201be19c80~mv2.png/v1/fill/w_357,h_94,al_c,lg_1,q_85,enc_avif,quality_auto/255x69%20%20Pixel%20Header%20Logo.png"
+              alt="Meditation Institute"
+              className="h-14 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-sm brightness-0 invert"
+            />
+            </Link>
+            <p className="text-sm text-slate-400 leading-relaxed">
               Empowering leaders, professionals, and seekers with transformative
-              meditation wisdom and techniques.
+              meditation wisdom and techniques for inner peace and radiant health.
             </p>
-            <div className="flex space-x-4">
-              <Link
-                href="https://facebook.com"
-                className="text-slate-500 hover:text-slate-700 transition-colors"
-                target="_blank"
-              >
-                <Facebook className="h-5 w-5" />
-              </Link>
-              <Link
-                href="https://instagram.com"
-                className="text-slate-500 hover:text-slate-700 transition-colors"
-                target="_blank"
-              >
-                <Instagram className="h-5 w-5" />
-              </Link>
-              <Link
-                href="https://linkedin.com"
-                className="text-slate-500 hover:text-slate-700 transition-colors"
-                target="_blank"
-              >
-                <Linkedin className="h-5 w-5" />
-              </Link>
-              <Link
-                href="https://youtube.com/@BuddhaCEOQuantumFoundation"
-                className="text-slate-500 hover:text-slate-700 transition-colors"
-                target="_blank"
-              >
-                <Youtube className="h-5 w-5" />
-              </Link>
+            <div className="flex space-x-3">
+              {socialLinks.map((social) => (
+                <Link
+                  key={social.label}
+                  href={social.href}
+                  className="
+                    w-10 h-10 rounded-full bg-white/5
+                    flex items-center justify-center
+                    text-slate-400 hover:text-white
+                    hover:bg-gradient-to-br hover:from-blue-500 hover:to-violet-500
+                    transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25
+                    border border-white/10
+                  "
+                  target="_blank"
+                  aria-label={social.label}
+                >
+                  <social.icon className="h-5 w-5" />
+                </Link>
+              ))}
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4 text-slate-700">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/resources" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link href="/events" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Events & Programs
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Contact
-                </Link>
-              </li>
+            <h3 className="font-bold mb-6 text-white flex items-center text-lg">
+              <Leaf className="mr-2 h-5 w-5 text-emerald-400" />
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="
+                      text-slate-400 hover:text-blue-400 text-sm
+                      transition-all duration-300
+                      hover:pl-2 hover:translate-x-1
+                      inline-block
+                    "
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Programs */}
           <div>
-            <h3 className="font-semibold mb-4 text-slate-700">Programs</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/events?type=beginner_online" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Beginner Online
-                </Link>
-              </li>
-              <li>
-                <Link href="/events?type=beginner_physical" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Beginner Physical
-                </Link>
-              </li>
-              <li>
-                <Link href="/events?type=advanced_online" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Advanced Online
-                </Link>
-              </li>
-              <li>
-                <Link href="/events?type=advanced_physical" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Advanced Physical
-                </Link>
-              </li>
-              <li>
-                <Link href="/events?type=conference" className="text-slate-600 hover:text-slate-900 text-sm transition-colors">
-                  Conferences
-                </Link>
-              </li>
+            <h3 className="font-bold mb-6 text-white text-lg">Programs</h3>
+            <ul className="space-y-3">
+              {programLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="
+                      text-slate-400 hover:text-emerald-400 text-sm
+                      transition-all duration-300
+                      hover:pl-2 hover:translate-x-1
+                      inline-block
+                    "
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Newsletter */}
           <div>
-            <h3 className="font-semibold mb-4 flex items-center text-slate-700">
-              <Mail className="mr-2 h-4 w-4" />
+            <h3 className="font-bold mb-6 flex items-center text-white text-lg">
+              <Mail className="mr-2 h-5 w-5 text-violet-400" />
               Newsletter
             </h3>
-            <p className="text-sm text-slate-600 mb-4">
+            <p className="text-sm text-slate-400 mb-4">
               Subscribe to receive updates about events and resources.
             </p>
             {subscribed ? (
-              <div className="bg-slate-100 text-slate-700 p-3 rounded-md text-sm border border-slate-200">
-                ✓ Successfully subscribed!
+              <div className="
+                bg-emerald-500/10 text-emerald-400 p-4 rounded-2xl text-sm
+                border-2 border-emerald-500/30 shadow-md
+                animate-slide-up
+              ">
+                <div className="flex items-center">
+                  <Heart className="h-5 w-5 mr-2 text-emerald-400 animate-pulse" />
+                  Successfully subscribed!
+                </div>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="space-y-2">
+              <form onSubmit={handleSubscribe} className="space-y-3">
                 <Input
                   type="email"
                   placeholder="Your email"
@@ -171,11 +171,20 @@ export function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={loading}
-                  className="border-slate-300"
+                  className="
+                    bg-white/5 backdrop-blur-sm border-2 border-white/10
+                    focus:border-blue-400 focus:ring-blue-400/20
+                    rounded-xl transition-all duration-300 text-white placeholder:text-slate-500
+                  "
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-purple-900 hover:bg-purple-800 text-white"
+                  className="
+                    w-full bg-gradient-to-r from-blue-500 to-violet-500
+                    hover:from-blue-600 hover:to-violet-600
+                    text-white shadow-lg hover:shadow-xl hover:shadow-blue-500/25
+                    hover:scale-105 transition-all duration-300 rounded-full
+                  "
                   disabled={loading}
                 >
                   {loading ? 'Subscribing...' : 'Subscribe'}
@@ -185,11 +194,15 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-slate-200 text-center text-sm text-slate-600">
-          <p className="mb-2">© {new Date().getFullYear()} Meditation Institute. All rights reserved.</p>
-          <p className="text-xs text-slate-500" style={{ fontFamily: 'var(--font-lora)' }}>
-            Empowering through meditation • Transforming lives • Building conscious communities
-          </p>
+        <div className="mt-12 pt-8 border-t border-white/10">
+          <div className="text-center space-y-2">
+            <p className="text-sm text-slate-400">
+              © {new Date().getFullYear()} Meditation Institute. All rights reserved.
+            </p>
+            <p className="text-xs text-slate-500 flex items-center justify-center gap-1">
+              Made with <Heart className="h-3 w-3 text-blue-400 animate-pulse" /> for conscious communities
+            </p>
+          </div>
         </div>
       </div>
     </footer>

@@ -41,16 +41,16 @@ function getInitials(name: string) {
 export function FoundersTrustees() {
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
   return (
-    <section className="py-20 bg-purple-50/50">
+    <section className="py-24 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <Badge className="mb-4 px-4 py-1.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200">
+          <Badge className="mb-4 px-4 py-1.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
             Founders & Trustees
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-slate-800">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
             Visionary Leadership
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             Inspired by meditation teachings, our founding team brings together deep practice, corporate leadership, and heartfelt commitment to service.
           </p>
         </div>
@@ -59,19 +59,19 @@ export function FoundersTrustees() {
           {founders.map((person, index) => (
             <Card
               key={index}
-              className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
+              className="group relative overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]"
             >
               {/* Decorative background gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-slate-100 opacity-50" />
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-100 to-transparent rounded-bl-full opacity-30" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-violet-500/10 opacity-50" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-transparent rounded-bl-full opacity-30" />
 
               <CardContent className="relative pt-10 pb-8 px-8 flex flex-col items-center text-center">
                 {/* Profile Image with elegant border */}
                 <div className="relative mb-5">
-                  <div className="w-32 h-32 rounded-full bg-slate-200 p-1 shadow-xl">
-                    <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center overflow-hidden relative">
+                  <div className="w-32 h-32 rounded-full bg-blue-500/20 p-1 shadow-xl border border-blue-500/30">
+                    <div className="w-full h-full rounded-full bg-blue-500/10 flex items-center justify-center overflow-hidden relative">
                       {imageErrors[index] ? (
-                        <div className="w-full h-full rounded-full bg-purple-300 flex items-center justify-center">
+                        <div className="w-full h-full rounded-full bg-blue-500/30 flex items-center justify-center">
                           <span className="text-3xl font-bold text-white">{getInitials(person.name)}</span>
                         </div>
                       ) : (
@@ -87,26 +87,26 @@ export function FoundersTrustees() {
                     </div>
                   </div>
                   {/* Decorative ring */}
-                  <div className="absolute -inset-2 rounded-full border-2 border-dashed border-slate-300 opacity-40 animate-[spin_10s_linear_infinite]" />
+                  <div className="absolute -inset-2 rounded-full border-2 border-dashed border-blue-400/40 opacity-40 animate-[spin_10s_linear_infinite]" />
                 </div>
 
                 {/* Name and Role */}
                 <div className="mb-4">
-                  <h3 className="text-xl font-bold mb-1.5 text-slate-800">
+                  <h3 className="text-xl font-bold mb-1.5 text-white">
                     {person.name}
                   </h3>
-                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-medium tracking-wide border border-purple-200">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium tracking-wide border border-emerald-500/30">
                     {person.role}
                   </div>
                 </div>
 
                 {/* Description with subtle quote styling */}
                 <div className="relative">
-                  <div className="absolute -top-2 -left-3 text-4xl text-slate-200 font-serif">"</div>
-                  <p className="text-sm text-slate-600 leading-relaxed relative z-10">
+                  <div className="absolute -top-2 -left-3 text-4xl text-blue-400/30 font-serif">"</div>
+                  <p className="text-sm text-slate-400 leading-relaxed relative z-10">
                     {person.highlight}
                   </p>
-                  <div className="absolute -bottom-4 -right-3 text-4xl text-slate-200 font-serif">"</div>
+                  <div className="absolute -bottom-4 -right-3 text-4xl text-blue-400/30 font-serif">"</div>
                 </div>
               </CardContent>
             </Card>
@@ -114,24 +114,24 @@ export function FoundersTrustees() {
         </div>
 
         {/* Trustees Card */}
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-purple-50/30">
+        <Card className="border border-white/10 shadow-lg bg-gradient-to-br from-white/5 to-slate-900/40 backdrop-blur-md">
           <CardContent className="pt-10 pb-10 px-8 md:flex md:items-start md:gap-8">
             <div className="mb-6 md:mb-0 md:mt-1">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-100 to-pink-100 shadow-lg border border-purple-200">
-                <Sparkles className="h-8 w-8 text-purple-600" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 shadow-lg border border-blue-500/30">
+                <Sparkles className="h-8 w-8 text-blue-400" />
               </div>
             </div>
             <div className="flex-1">
-              <h3 className="text-2xl font-bold mb-3 text-slate-800">
+              <h3 className="text-2xl font-bold mb-3 text-white">
                 Board of Trustees
               </h3>
               <p className="text-sm text-slate-500 mb-5 font-medium">
                 Guiding our mission with wisdom and integrity
               </p>
-              <ul className="space-y-4 text-sm text-slate-600 leading-relaxed">
+              <ul className="space-y-4 text-sm text-slate-400 leading-relaxed">
                 {trusteesNotes.map((note, i) => (
                   <li key={i} className="flex gap-3 items-start">
-                    <span className="mt-1.5 h-2 w-2 rounded-full bg-purple-400 flex-shrink-0" />
+                    <span className="mt-1.5 h-2 w-2 rounded-full bg-blue-400 flex-shrink-0" />
                     <span className="flex-1">{note}</span>
                   </li>
                 ))}

@@ -19,11 +19,12 @@ export default function AboutPage() {
         <AboutHero />
         <CEOSection />
         <VisionMission />
-        <CoreValues />
-        <FoundersTrustees />
-        <SteeringCommittee />
+        {/* <CoreValues />
+         */}
+        {/* <FoundersTrustees /> */}
+        {/* <SteeringCommittee /> */}
         <Mentors />
-        <Inspiration />
+        {/* <Inspiration /> */}
         <TeamMembers />
         <Services />
       </main>

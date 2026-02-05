@@ -29,36 +29,36 @@ const inspirationPeople = [
 
 export function Inspiration() {
   return (
-    <section className="py-20 bg-purple-50/60">
+    <section className="py-24 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center mb-12">
-          <Badge variant="secondary" className="mb-4 px-4 py-1 rounded-full">
+          <Badge className="mb-4 px-4 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
             Inspiration
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
             Inspired by Masters, Leaders & Real Stories
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             The meditation institute draws inspiration from Buddha CEO programs,
             teachers, and a rich library of books, blogs, magazines, and
             multimedia resources.
           </p>
         </div>
 
-        <Card className="mb-12 bg-white border border-slate-100 shadow-sm">
+        <Card className="mb-12 bg-white/5 backdrop-blur-md border border-white/10 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
           <CardContent className="pt-8 pb-8 md:px-10">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div className="flex items-start gap-4">
-                <div className="mt-1 rounded-full bg-purple-50 p-3">
-                  <Quote className="h-7 w-7 text-purple-700" />
+                <div className="mt-1 rounded-full bg-emerald-500/20 p-3 border border-emerald-500/30">
+                  <Quote className="h-7 w-7 text-emerald-400" />
                 </div>
                 <div className="text-left">
-                  <p className="text-lg md:text-xl font-medium leading-relaxed text-slate-900">
-                    “Meditation awakens the inner CEO – the Conscious,
+                  <p className="text-lg md:text-xl font-medium leading-relaxed text-white">
+                    "Meditation awakens the inner CEO – the Conscious,
                     Enlightened, and Observant leader within. Our work is to
-                    help every seeker discover and live from that space.”
+                    help every seeker discover and live from that space."
                   </p>
-                  <p className="mt-3 text-sm text-slate-600">
+                  <p className="mt-3 text-sm text-slate-400">
                     – Inspired by Buddha CEO teachers and global meditation
                     leaders
                   </p>
@@ -72,7 +72,7 @@ export function Inspiration() {
           {inspirationPeople.map((person) => (
             <Card
               key={person.name}
-              className="overflow-hidden border border-slate-100 bg-white hover:shadow-xl transition-shadow duration-300"
+              className="overflow-hidden border border-white/10 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-white/5 backdrop-blur-md"
             >
               <div className="relative h-52 w-full">
                 <Image
@@ -83,14 +83,14 @@ export function Inspiration() {
                 />
               </div>
               <CardContent className="pt-5 pb-6">
-                <h3 className="text-base font-semibold text-slate-900">
+                <h3 className="text-base font-semibold text-white">
                   {person.name}
                 </h3>
-                <p className="text-xs text-purple-700 font-medium mb-3">
+                <p className="text-xs text-violet-400 font-medium mb-3 bg-violet-500/20 px-2 py-1 rounded-full border border-violet-500/30">
                   {person.role}
                 </p>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  “{person.quote}”
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  "{person.quote}"
                 </p>
               </CardContent>
             </Card>

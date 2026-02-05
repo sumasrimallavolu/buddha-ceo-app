@@ -95,14 +95,14 @@ export default function ImageUpload({
           {...getRootProps()}
           className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
             isDragActive
-              ? 'border-purple-500 bg-purple-50'
+              ? 'border-amber-500 bg-amber-50'
               : 'border-gray-300 hover:border-gray-400'
           } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <input {...getInputProps()} />
           <div className="flex flex-col items-center gap-3">
             {uploading ? (
-              <Loader2 className="h-10 w-10 text-purple-600 animate-spin" />
+              <Loader2 className="h-10 w-10 text-amber-700 animate-spin" />
             ) : (
               <Upload className="h-10 w-10 text-gray-400" />
             )}

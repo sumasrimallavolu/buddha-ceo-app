@@ -64,7 +64,7 @@ export default function VideoContent({
     <div className={`space-y-4 ${className}`}>
       <div className="space-y-2">
         {category && (
-          <span className="text-sm bg-purple-100 px-3 py-1 rounded-full">
+          <span className="text-sm bg-amber-100 px-3 py-1 rounded-full">
             {category}
           </span>
         )}
@@ -97,7 +97,7 @@ export default function VideoContent({
             )}
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
               <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Play className="h-8 w-8 text-purple-600 ml-1" />
+                <Play className="h-8 w-8 text-amber-700 ml-1" />
               </div>
             </div>
           </div>

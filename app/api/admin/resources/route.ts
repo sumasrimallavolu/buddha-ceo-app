@@ -50,6 +50,8 @@ export async function POST(request: NextRequest) {
       linkUrl,
       thumbnailUrl,
       order,
+      status,
+      autoPublish,
     } = body;
 
     if (!title || !type || !description || !category) {
@@ -57,6 +59,12 @@ export async function POST(request: NextRequest) {
         { error: 'Missing required fields' },
         { status: 400 }
       );
+    }
+
+    // Determine status based on request and user role
+    let resourceStatus = status || 'draft';
+    if (autoPublish && (session.user.role === 'admin' || session.user.role === 'content_manager')) {
+      resourceStatus = 'published';
     }
 
     const resource = await Resource.create({
@@ -69,6 +77,7 @@ export async function POST(request: NextRequest) {
       linkUrl,
       thumbnailUrl,
       order: order || 0,
+      status: resourceStatus,
     });
 
     return NextResponse.json(

@@ -42,7 +42,7 @@ const highlights = [
     icon: Trophy,
     title: 'Global Conference Success',
     description: '2nd Global Conference of Meditation Leaders 2025 brought together renowned teachers from around the world',
-    color: 'from-purple-500 to-indigo-500',
+    color: 'from-blue-500 to-violet-500',
   },
   {
     icon: Target,
@@ -105,102 +105,104 @@ const successStories = [
 
 export default function ProjectExcellencePage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-950">
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-slate-800">
-          <div className="absolute inset-0 overflow-hidden">
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-              poster="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920"
-            >
-              <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-business-people-working-together-in-a-modern-office-4223-large.mp4"
-                type="video/mp4"
-              />
-            </video>
-            <div className="absolute inset-0 bg-slate-900/20" />
-            <div className="absolute top-20 right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div className="absolute bottom-20 left-20 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-950">
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
-              <Trophy className="w-4 h-4 text-yellow-300" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md text-blue-400 text-sm font-medium border border-white/10 mb-6">
+              <Trophy className="w-4 h-4 text-amber-300" />
               <span>Our Excellence</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
-              Project{' '}
-              <span className="text-purple-300 drop-shadow-lg">
-                Excellence
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white mb-5 leading-tight">
+              A Calm Journey into{' '}
+              <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">
+                Project Excellence
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto border-l-4 border-purple-400/50 pl-6">
+            <p className="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto border-l-4 border-blue-500/40 pl-6">
               Showcasing transformative journeys, global conferences, and success stories from our meditation community
             </p>
           </div>
         </section>
 
         {/* Featured Programs Gallery */}
-        <section className="py-16 md:py-20 bg-purple-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-purple-600 mb-4">
+        <section className="py-24 md:py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-14">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 text-blue-400 text-xs font-medium mb-4 border border-white/10">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                <span>Programs that radiate peace</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-3 tracking-tight">
                 Featured Programs & Events
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Highlights from our transformative programs and global events
+              <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+                A gentle collage of retreats, youth journeys, and global gatherings
               </p>
             </div>
 
             {/* Featured Image - Large */}
             <div className="mb-8">
-              <Card className="group overflow-hidden border-2 border-purple-200 hover:border-purple-400 hover:shadow-3xl transition-all duration-500 bg-white/70 backdrop-blur-sm">
-                <div className="relative aspect-[16/9] md:aspect-[21/9]">
+              <Card className="group overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:scale-[1.01]">
+                <div className="relative aspect-[16/9] md:aspect-[21/9] rounded-[2rem] overflow-hidden">
                   <img
                     src={excellenceImages[0].url}
                     alt={excellenceImages[0].title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-70"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-                    <Badge className="mb-4 bg-purple-500 text-white border-0">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-9 text-white/95">
+                    <Badge className="mb-4 bg-gradient-to-r from-blue-600 to-violet-600 text-white border-0 backdrop-blur">
                       {excellenceImages[0].category}
                     </Badge>
-                    <h3 className="text-2xl md:text-3xl font-bold mb-3 drop-shadow-lg">{excellenceImages[0].title}</h3>
-                    <p className="text-white/90 text-base md:text-lg max-w-3xl">{excellenceImages[0].description}</p>
+                    <h3 className="text-2xl md:text-3xl font-semibold mb-3 drop-shadow-lg">
+                      {excellenceImages[0].title}
+                    </h3>
+                    <p className="text-white/90 text-base md:text-lg max-w-3xl">
+                      {excellenceImages[0].description}
+                    </p>
                   </div>
                 </div>
               </Card>
             </div>
 
             {/* Secondary Images - Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {excellenceImages.slice(1).map((img, index) => (
                 <Card
                   key={index}
-                  className="group overflow-hidden border-2 border-purple-100 hover:border-purple-300 hover:shadow-2xl transition-all duration-500 bg-white/70 backdrop-blur-sm hover:scale-[1.02]"
+                  className="group overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm shadow-lg hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-1"
                 >
-                  <div className="relative aspect-video overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
                     <img
                       src={img.url}
                       alt={img.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-70"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <Badge className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-purple-700 border-purple-200 text-xs">
-                      {img.category}
-                    </Badge>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                      <Badge className="mb-3 bg-white/10 backdrop-blur-sm text-blue-400 border border-white/20 text-[0.7rem]">
+                        {img.category}
+                      </Badge>
+                      <h3 className="text-base sm:text-lg font-semibold mb-1 text-white drop-shadow">
+                        {img.title}
+                      </h3>
+                      <p className="text-white/85 text-xs sm:text-sm line-clamp-2">
+                        {img.description}
+                      </p>
+                    </div>
                   </div>
-                  <CardContent className="p-5">
-                    <h3 className="text-lg font-bold mb-2 group-hover:text-purple-600 transition-colors">{img.title}</h3>
-                    <p className="text-gray-600 text-sm line-clamp-2">{img.description}</p>
-                  </CardContent>
                 </Card>
               ))}
             </div>
@@ -208,13 +210,15 @@ export default function ProjectExcellencePage() {
         </section>
 
         {/* Excellence Highlights */}
-        <section className="py-16 md:py-20 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-24 md:py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl animate-pulse" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-purple-600 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-3 tracking-tight">
                 Pillars of Excellence
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
                 What makes our programs truly exceptional
               </p>
             </div>
@@ -223,16 +227,18 @@ export default function ProjectExcellencePage() {
               {highlights.map((item, index) => (
                 <Card
                   key={index}
-                  className="group hover:shadow-2xl transition-all duration-500 border-2 border-purple-100 hover:border-purple-300 bg-white/70 backdrop-blur-sm hover:scale-105"
+                  className="group hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-500 border border-white/10 bg-white/5 backdrop-blur-sm rounded-3xl hover:-translate-y-1"
                 >
                   <CardContent className="p-6 md:p-8">
-                    <div className={`w-14 h-14 md:w-16 md:h-16 mb-6 rounded-2xl bg-gradient-to-r ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg`}>
+                    <div className={`w-14 h-14 md:w-16 md:h-16 mb-6 rounded-full bg-gradient-to-r ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg`}>
                       <item.icon className="h-7 w-7 text-white" />
                     </div>
-                    <h3 className="text-lg md:text-xl font-bold mb-4 text-gray-900 group-hover:text-purple-600 transition-colors">
+                    <h3 className="text-lg md:text-xl font-semibold mb-3 text-white group-hover:text-blue-400 transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-gray-700 leading-relaxed text-sm md:text-base">{item.description}</p>
+                    <p className="text-slate-400 leading-relaxed text-sm md:text-base">
+                      {item.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))}
@@ -240,43 +246,16 @@ export default function ProjectExcellencePage() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-16 md:py-20 bg-purple-900 relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl"></div>
-          </div>
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-              {[
-                { value: '50,000+', label: 'Lives Transformed', color: 'from-purple-300 to-pink-300' },
-                { value: '500+', label: 'Programs Conducted', color: 'from-pink-300 to-rose-300' },
-                { value: '2', label: 'Global Conferences', color: 'from-amber-300 to-orange-300' },
-                { value: '25+', label: 'Countries Reached', color: 'from-cyan-300 to-blue-300' },
-              ].map((stat, index) => (
-                <div
-                  key={index}
-                  className="text-center bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
-                >
-                  <div className="text-4xl md:text-5xl font-bold text-purple-200 mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-white/80 font-medium text-sm md:text-base">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Success Stories */}
-        <section className="py-16 md:py-20 bg-purple-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-24 md:py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl animate-pulse" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-purple-600 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-3 tracking-tight">
                 Stories of Transformation
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
                 Real people, real results, extraordinary transformations
               </p>
             </div>
@@ -285,42 +264,40 @@ export default function ProjectExcellencePage() {
               {successStories.map((story, index) => (
                 <Card
                   key={index}
-                  className={`group hover:shadow-2xl transition-all duration-500 border-2 backdrop-blur-sm hover:scale-[1.02] ${
-                    story.color === 'amber'
-                      ? 'border-amber-100 hover:border-amber-300 bg-amber-50'
-                      : story.color === 'pink'
-                      ? 'border-pink-100 hover:border-pink-300 bg-pink-50'
-                      : 'border-blue-100 hover:border-blue-300 bg-blue-50'
-                  }`}
+                  className="group hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-500 border border-white/10 bg-white/5 backdrop-blur-sm rounded-3xl hover:-translate-y-1"
                 >
                   <CardContent className="p-6 md:p-8">
                     <div className="flex flex-col items-center text-center mb-6">
                       <img
                         src={story.image}
                         alt={story.name}
-                        className="w-24 h-24 rounded-full object-cover ring-4 ring-white shadow-lg mb-4"
+                        className="w-24 h-24 rounded-full object-cover ring-4 ring-white/20 shadow-lg mb-4"
                       />
-                      <Badge className={`mb-3 text-xs ${
-                        story.color === 'amber'
-                          ? 'bg-amber-100 text-amber-700 border-amber-200'
-                          : story.color === 'pink'
-                          ? 'bg-pink-100 text-pink-700 border-pink-200'
-                          : 'bg-blue-100 text-blue-700 border-blue-200'
-                      }`}>
+                      <Badge
+                        className={`mb-3 text-xs border-0 ${
+                          story.color === 'amber'
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-400/30'
+                            : story.color === 'pink'
+                            ? 'bg-pink-500/20 text-pink-400 border border-pink-400/30'
+                            : 'bg-blue-500/20 text-blue-400 border border-blue-400/30'
+                        }`}
+                      >
                         {story.achievement}
                       </Badge>
-                      <h3 className="text-xl font-bold text-gray-900">{story.name}</h3>
-                      <p className={`text-sm font-medium mb-4 ${
-                        story.color === 'amber'
-                          ? 'text-amber-700'
-                          : story.color === 'pink'
-                          ? 'text-pink-700'
-                          : 'text-blue-700'
-                      }`}>
+                      <h3 className="text-xl font-semibold text-white">{story.name}</h3>
+                      <p
+                        className={`text-sm font-medium mb-4 ${
+                          story.color === 'amber'
+                            ? 'text-amber-400'
+                            : story.color === 'pink'
+                            ? 'text-pink-400'
+                            : 'text-blue-400'
+                        }`}
+                      >
                         {story.role}
                       </p>
                     </div>
-                    <p className="text-gray-700 leading-relaxed italic text-sm text-center line-clamp-4">
+                    <p className="text-slate-400 leading-relaxed italic text-sm text-center line-clamp-4">
                       "{story.quote}"
                     </p>
                     <div className="flex justify-center gap-0.5 mt-4">
@@ -336,27 +313,28 @@ export default function ProjectExcellencePage() {
         </section>
 
         {/* Featured Quote */}
-        <section className="py-16 md:py-20 bg-amber-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="bg-white border-2 border-amber-200 shadow-2xl">
+        <section className="py-16 md:py-20 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <Card className="bg-white/5 border border-white/10 shadow-xl backdrop-blur-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 rounded-3xl">
               <CardContent className="p-8 md:p-12">
                 <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                   <img
                     src="https://static.wixstatic.com/media/ea3b9d_9fbb22065652401f96ef1ad93fb50c0a~mv2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Padma%20Shri%20Dr_%20RV%20Ramani%20Founder%20and%20Man.jpg"
                     alt="Padma Shri Dr. RV Ramani"
-                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover ring-4 ring-amber-300 shadow-xl flex-shrink-0"
+                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover ring-4 ring-blue-400/30 shadow-xl flex-shrink-0"
                   />
                   <div className="flex-1 text-center md:text-left">
-                    <Badge className="mb-4 bg-amber-100 text-amber-700 border-amber-200">
+                    <Badge className="mb-4 bg-blue-500/20 text-blue-400 border border-blue-400/30">
                       Featured Endorsement
                     </Badge>
-                    <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    <h3 className="text-2xl md:text-3xl font-semibold text-white mb-2">
                       Padma Shri Dr. RV Ramani
                     </h3>
-                    <p className="text-amber-700 font-medium mb-4">
+                    <p className="text-blue-400 font-medium mb-4">
                       Founder and Managing Trustee, Sankara Eye Foundation
                     </p>
-                    <blockquote className="text-gray-700 italic text-lg md:text-xl leading-relaxed border-l-4 border-amber-400 pl-4 md:pl-6">
+                    <blockquote className="text-slate-400 italic text-lg md:text-xl leading-relaxed border-l-4 border-blue-500/40 pl-4 md:pl-6">
                       "We are that infinite energy with unlimited capability. The entire world is one big family. Meditation helps us to realize these concepts and live them. The 40-day meditation program is really transformative."
                     </blockquote>
                   </div>

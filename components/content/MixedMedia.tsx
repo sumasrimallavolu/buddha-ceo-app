@@ -29,7 +29,7 @@ export default function MixedMedia({
       {/* Header */}
       <div className="space-y-3">
         {category && (
-          <span className="text-sm bg-purple-100 px-3 py-1 rounded-full">
+          <span className="text-sm bg-amber-100 px-3 py-1 rounded-full">
             {category}
           </span>
         )}

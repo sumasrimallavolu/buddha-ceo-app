@@ -20,10 +20,17 @@ export async function PUT(
     await connectDB();
 
     const body = await request.json();
+    const { status, autoPublish, ...updateData } = body;
+
+    // Handle status changes
+    let eventStatus = status;
+    if (autoPublish && (session.user.role === 'admin' || session.user.role === 'content_manager')) {
+      eventStatus = 'upcoming';
+    }
 
     const event = await Event.findByIdAndUpdate(
       id,
-      { ...body },
+      { ...updateData, ...(eventStatus && { status: eventStatus }) },
       { new: true }
     );
 

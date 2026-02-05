@@ -67,17 +67,17 @@ const galleryPhotos = [
 
 export function PhotoGallery() {
   return (
-    <section className="py-20 bg-purple-50">
+    <section className="py-24 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-violet-500/20 text-blue-400 text-sm font-medium mb-4 border border-blue-500/30">
             <Images className="w-4 h-4" />
             <span>Photo Gallery</span>
           </div>
-          <h2 className="text-4xl font-bold text-purple-600 mb-4">
+          <h2 className="text-4xl font-bold text-white mb-4">
             Moments of Transformation
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-slate-400 max-w-2xl mx-auto">
             Capturing the journey of meditation, conferences, and success stories from our community
           </p>
         </div>
@@ -85,7 +85,7 @@ export function PhotoGallery() {
         {/* Masonry-style Photo Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 auto-rows-[100px]">
           {/* Large featured image - spans 2 columns, 2 rows */}
-          <Card className="md:col-span-2 md:row-span-2 group overflow-hidden border-2 border-purple-100 hover:border-purple-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/50 backdrop-blur-sm">
+          <Card className="md:col-span-2 md:row-span-2 group overflow-hidden border-2 border-white/10 hover:border-blue-500/50 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/5 backdrop-blur-md">
             <div className="relative w-full h-full">
               <img
                 src={galleryPhotos[0].url}
@@ -94,7 +94,7 @@ export function PhotoGallery() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <Badge className="mb-2 bg-purple-500 text-white border-0 text-xs">
+                <Badge className="mb-2 bg-gradient-to-r from-blue-500 to-violet-500 text-white border-0 text-xs">
                   {galleryPhotos[0].category}
                 </Badge>
                 <h3 className="text-lg font-bold drop-shadow-lg">{galleryPhotos[0].title}</h3>
@@ -103,7 +103,7 @@ export function PhotoGallery() {
           </Card>
 
           {/* Medium images */}
-          <Card className="group overflow-hidden border-2 border-pink-100 hover:border-pink-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/50 backdrop-blur-sm">
+          <Card className="group overflow-hidden border-2 border-white/10 hover:border-violet-500/50 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/5 backdrop-blur-md">
             <div className="relative w-full h-full">
               <img
                 src={galleryPhotos[1].url}
@@ -112,7 +112,7 @@ export function PhotoGallery() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <Badge className="mb-1.5 bg-pink-500 text-white border-0 text-xs">
+                <Badge className="mb-1.5 bg-gradient-to-r from-violet-500 to-purple-500 text-white border-0 text-xs">
                   {galleryPhotos[1].category}
                 </Badge>
                 <h3 className="text-sm font-bold drop-shadow-lg">{galleryPhotos[1].title}</h3>
@@ -120,7 +120,7 @@ export function PhotoGallery() {
             </div>
           </Card>
 
-          <Card className="group overflow-hidden border-2 border-indigo-100 hover:border-indigo-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/50 backdrop-blur-sm">
+          <Card className="group overflow-hidden border-2 border-white/10 hover:border-emerald-500/50 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/5 backdrop-blur-md">
             <div className="relative w-full h-full">
               <img
                 src={galleryPhotos[7].url}
@@ -129,7 +129,7 @@ export function PhotoGallery() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <Badge className="mb-1.5 bg-indigo-500 text-white border-0 text-xs">
+                <Badge className="mb-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white border-0 text-xs">
                   {galleryPhotos[7].category}
                 </Badge>
                 <h3 className="text-sm font-bold drop-shadow-lg">{galleryPhotos[7].title}</h3>
@@ -141,7 +141,7 @@ export function PhotoGallery() {
           {galleryPhotos.slice(2, 7).map((photo, index) => (
             <Card
               key={index}
-              className="group overflow-hidden border-2 border-purple-100 hover:border-purple-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/50 backdrop-blur-sm"
+              className="group overflow-hidden border-2 border-white/10 hover:border-blue-500/50 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/5 backdrop-blur-md"
             >
               <div className="relative w-full h-full">
                 <img
@@ -151,7 +151,7 @@ export function PhotoGallery() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-2 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <Badge className="mb-1 bg-purple-500 text-white border-0 text-xs">
+                  <Badge className="mb-1 bg-gradient-to-r from-blue-500 to-violet-500 text-white border-0 text-xs">
                     {photo.category}
                   </Badge>
                   <h3 className="text-xs font-bold drop-shadow-lg line-clamp-2">{photo.title}</h3>
@@ -164,7 +164,7 @@ export function PhotoGallery() {
           {galleryPhotos.slice(8).map((photo, index) => (
             <Card
               key={`extra-${index}`}
-              className="group overflow-hidden border-2 border-purple-100 hover:border-purple-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/50 backdrop-blur-sm"
+              className="group overflow-hidden border-2 border-white/10 hover:border-blue-500/50 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/5 backdrop-blur-md"
             >
               <div className="relative w-full h-full">
                 <img
@@ -174,7 +174,7 @@ export function PhotoGallery() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-2 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                  <Badge className="mb-1 bg-purple-500 text-white border-0 text-xs">
+                  <Badge className="mb-1 bg-gradient-to-r from-blue-500 to-violet-500 text-white border-0 text-xs">
                     {photo.category}
                   </Badge>
                   <h3 className="text-xs font-bold drop-shadow-lg line-clamp-2">{photo.title}</h3>
@@ -184,7 +184,7 @@ export function PhotoGallery() {
           ))}
 
           {/* Featured testimonial card */}
-          <Card className="md:col-span-2 group overflow-hidden border-2 border-amber-100 hover:border-amber-300 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-amber-50">
+          <Card className="md:col-span-2 group overflow-hidden border-2 border-white/10 hover:border-emerald-500/50 hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-gradient-to-br from-emerald-500/10 to-blue-500/10 backdrop-blur-md">
             <CardContent className="p-8 h-full flex flex-col justify-center">
               <div className="flex items-center gap-4 mb-6">
                 <img
@@ -193,11 +193,11 @@ export function PhotoGallery() {
                   className="h-12 object-contain"
                 />
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">Buddha-CEO Quantum Foundation</h3>
-                  <p className="text-sm text-amber-700 font-medium">Empowering Leaders Through Meditation</p>
+                  <h3 className="text-xl font-bold text-white">Buddha-CEO Quantum Foundation</h3>
+                  <p className="text-sm text-emerald-400 font-medium">Empowering Leaders Through Meditation</p>
                 </div>
               </div>
-              <blockquote className="text-gray-700 italic text-base leading-relaxed border-l-4 border-amber-400 pl-4">
+              <blockquote className="text-slate-300 italic text-base leading-relaxed border-l-4 border-emerald-400 pl-4">
                 "Empowering leaders, professionals, and individuals with transformative meditation wisdom and techniques, fostering personal growth, organizational excellence, and social responsibility."
               </blockquote>
             </CardContent>
@@ -210,7 +210,7 @@ export function PhotoGallery() {
             href="https://www.buddhaceo.org/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
             <Images className="mr-2 h-5 w-5" />
             View More on Buddha-CEO.org

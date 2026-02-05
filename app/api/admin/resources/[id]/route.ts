@@ -20,10 +20,17 @@ export async function PUT(
     await connectDB();
 
     const body = await request.json();
+    const { status, autoPublish, ...updateData } = body;
+
+    // Handle status changes
+    let resourceStatus = status;
+    if (autoPublish && (session.user.role === 'admin' || session.user.role === 'content_manager')) {
+      resourceStatus = 'published';
+    }
 
     const resource = await Resource.findByIdAndUpdate(
       id,
-      { ...body },
+      { ...updateData, ...(resourceStatus && { status: resourceStatus }) },
       { new: true }
     );
 

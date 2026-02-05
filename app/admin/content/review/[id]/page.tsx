@@ -167,7 +167,7 @@ export default function ReviewContentPage() {
           <div className="space-y-4">
             <h3 className="text-2xl font-bold">{content.title}</h3>
             {content.content?.category && (
-              <span className="text-sm bg-purple-100 px-3 py-1 rounded-full">
+              <span className="text-sm bg-amber-100 px-3 py-1 rounded-full">
                 {content.content.category}
               </span>
             )}
@@ -182,7 +182,7 @@ export default function ReviewContentPage() {
                     href={content.content.videoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-purple-600 underline"
+                    className="text-amber-600 underline"
                   >
                     {content.content.videoUrl}
                   </a>
@@ -215,7 +215,7 @@ export default function ReviewContentPage() {
                 <p className="text-lg text-gray-600 mt-2">By {content.content.author}</p>
               )}
               {content.content?.category && (
-                <span className="text-sm bg-purple-100 px-3 py-1 rounded-full inline-block mt-2">
+                <span className="text-sm bg-amber-100 px-3 py-1 rounded-full inline-block mt-2">
                   {content.content.category}
                 </span>
               )}
@@ -239,7 +239,7 @@ export default function ReviewContentPage() {
           <div className="space-y-4">
             <h3 className="text-2xl font-bold">{content.title}</h3>
             {content.content?.category && (
-              <span className="text-sm bg-purple-100 px-3 py-1 rounded-full">
+              <span className="text-sm bg-amber-100 px-3 py-1 rounded-full">
                 {content.content.category}
               </span>
             )}
@@ -258,10 +258,10 @@ export default function ReviewContentPage() {
           <div className="space-y-4">
             <h3 className="text-2xl font-bold">{content.title}</h3>
             {content.content?.subtitle && (
-              <p className="text-purple-600 font-medium">{content.content.subtitle}</p>
+              <p className="text-amber-600 font-medium">{content.content.subtitle}</p>
             )}
             {content.content?.quote && (
-              <blockquote className="text-lg italic text-gray-700 border-l-4 border-purple-600 pl-4">
+              <blockquote className="text-lg italic text-gray-700 border-l-4 border-amber-600 pl-4">
                 "{content.content.quote}"
               </blockquote>
             )}
@@ -271,7 +271,7 @@ export default function ReviewContentPage() {
                   href={content.content.videoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-purple-600 underline"
+                  className="text-amber-600 underline"
                 >
                   Watch Video
                 </a>
@@ -298,7 +298,7 @@ export default function ReviewContentPage() {
             <div className="flex-1">
               <h3 className="text-2xl font-bold">{content.title}</h3>
               {content.content?.role && (
-                <p className="text-purple-600 font-medium">{content.content.role}</p>
+                <p className="text-amber-600 font-medium">{content.content.role}</p>
               )}
               {content.content?.bio && (
                 <p className="text-gray-600 mt-4">{content.content.bio}</p>
@@ -330,7 +330,7 @@ export default function ReviewContentPage() {
                   </span>
                 )}
                 {content.content?.category && (
-                  <span className="text-sm bg-purple-100 px-3 py-1 rounded-full ml-2">
+                  <span className="text-sm bg-amber-100 px-3 py-1 rounded-full ml-2">
                     {content.content.category}
                   </span>
                 )}
@@ -364,7 +364,7 @@ export default function ReviewContentPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
       </div>
     );
   }
@@ -488,8 +488,8 @@ export default function ReviewContentPage() {
               </div>
 
               {content.isFeatured && (
-                <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                  <p className="text-sm font-medium text-purple-700">
+                <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p className="text-sm font-medium text-amber-700">
                     ⭐ This content is marked as featured and will appear on the homepage
                   </p>
                 </div>

@@ -26,9 +26,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { FilePlus, MoreVertical, Eye, Edit, Send, Check, X } from 'lucide-react';
+import { FilePlus, MoreVertical, Eye, Edit, Send, Check, X, Trash } from 'lucide-react';
 import { Alert } from '@/components/ui/alert';
-import Link from 'next/link';
+import { ContentCreateModal, ContentEditModal } from '@/components/admin';
 
 interface Content {
   _id: string;
@@ -71,6 +71,10 @@ export default function ContentPage() {
   const [filterType, setFilterType] = useState('all');
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
+  const canReview = session?.user?.role === 'admin' || session?.user?.role === 'content_reviewer';
+  const canEdit = session?.user?.role === 'admin' || session?.user?.role === 'content_manager';
+  const canDelete = session?.user?.role === 'admin'; // Only admins can delete content
+
   useEffect(() => {
     fetchContent();
   }, [filterStatus, filterType]);
@@ -79,7 +83,14 @@ export default function ContentPage() {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (filterStatus !== 'all') params.append('status', filterStatus);
+
+      // Content reviewers should only see pending_review content by default
+      if (session?.user?.role === 'content_reviewer' && filterStatus === 'all') {
+        params.append('status', 'pending_review');
+      } else if (filterStatus !== 'all') {
+        params.append('status', filterStatus);
+      }
+
       if (filterType !== 'all') params.append('type', filterType);
 
       const response = await fetch(`/api/admin/content?${params.toString()}`);
@@ -164,6 +175,29 @@ export default function ContentPage() {
     }
   };
 
+  const handleDelete = async (contentId: string) => {
+    if (!confirm('Are you sure you want to delete this content?')) {
+      return;
+    }
+
+    setActionLoading(contentId);
+    try {
+      const response = await fetch(`/api/admin/content/${contentId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setContent(content.filter((c) => c._id !== contentId));
+      } else {
+        setError('Failed to delete content');
+      }
+    } catch (error) {
+      setError('An error occurred');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'draft':
@@ -185,8 +219,10 @@ export default function ContentPage() {
     ).join(' ');
   };
 
-  const canReview = session?.user.role === 'admin' || session?.user.role === 'content_reviewer';
-  const canEdit = session?.user.role === 'admin' || session?.user.role === 'content_manager';
+  // Content reviewers only see pending review, admins can filter
+  const availableStatusOptions = session?.user?.role === 'content_reviewer'
+    ? statusOptions.filter(s => s.value === 'all' || s.value === 'pending_review')
+    : statusOptions;
 
   return (
     <div className="space-y-6">
@@ -194,16 +230,22 @@ export default function ContentPage() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Content Management</h1>
           <p className="mt-2 text-gray-600">
-            Manage and review all website content
+            {canReview ? 'Review and approve website content' : 'Manage and review all website content'}
+            {session?.user?.role === 'content_reviewer' && (
+              <span className="ml-2 text-sm text-amber-600">(Showing pending review only)</span>
+            )}
           </p>
         </div>
         {canEdit && (
-          <Link href="/admin/content/new">
-            <Button className="bg-purple-600">
-              <FilePlus className="mr-2 h-4 w-4" />
-              Add Content
-            </Button>
-          </Link>
+          <ContentCreateModal
+            trigger={
+              <Button className="bg-amber-600">
+                <FilePlus className="mr-2 h-4 w-4" />
+                Add Content
+              </Button>
+            }
+            onSuccess={fetchContent}
+          />
         )}
       </div>
 
@@ -224,7 +266,7 @@ export default function ContentPage() {
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {statusOptions.map((option) => (
+                  {availableStatusOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
@@ -281,7 +323,11 @@ export default function ContentPage() {
               ) : content.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8">
-                    <p className="text-gray-500">No content found</p>
+                    <p className="text-gray-500">
+                      {session?.user?.role === 'content_reviewer'
+                        ? 'No pending content to review'
+                        : 'No content found'}
+                    </p>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -307,17 +353,25 @@ export default function ContentPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild>
-                            <Link href={`/admin/content/review/${item._id}`}>
+                            <a href={`/admin/content/review/${item._id}`}>
                               <Eye className="mr-2 h-4 w-4" />
                               {item.status === 'pending_review' ? 'Review' : 'View'}
-                            </Link>
+                            </a>
                           </DropdownMenuItem>
+
                           {canEdit && item.status === 'draft' && (
-                            <DropdownMenuItem>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
+                            <ContentEditModal
+                              contentId={item._id}
+                              trigger={
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                              }
+                              onSuccess={fetchContent}
+                            />
                           )}
+
                           {canEdit && item.status === 'draft' && (
                             <DropdownMenuItem
                               onClick={() => handleSubmitForReview(item._id)}
@@ -327,6 +381,7 @@ export default function ContentPage() {
                               {actionLoading === item._id ? 'Submitting...' : 'Submit for Review'}
                             </DropdownMenuItem>
                           )}
+
                           {canReview && item.status === 'pending_review' && (
                             <>
                               <DropdownMenuItem
@@ -345,6 +400,17 @@ export default function ContentPage() {
                                 {actionLoading === item._id ? 'Rejecting...' : 'Reject'}
                               </DropdownMenuItem>
                             </>
+                          )}
+
+                          {canDelete && (
+                            <DropdownMenuItem
+                              className="text-red-600"
+                              onClick={() => handleDelete(item._id)}
+                              disabled={actionLoading === item._id}
+                            >
+                              <Trash className="mr-2 h-4 w-4" />
+                              {actionLoading === item._id ? 'Deleting...' : 'Delete'}
+                            </DropdownMenuItem>
                           )}
                         </DropdownMenuContent>
                       </DropdownMenu>

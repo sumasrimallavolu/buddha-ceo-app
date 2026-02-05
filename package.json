@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit",
     "pre-deploy": "bash scripts/pre-deploy.sh",
     "deploy": "bash scripts/watch-and-deploy.sh",
-    "db:seed": "tsx scripts/seed.ts"
+    "db:seed": "tsx scripts/seed.ts",
+    "db:import-buddhaceo": "tsx scripts/import-buddhaceo-data.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

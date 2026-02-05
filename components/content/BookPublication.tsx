@@ -49,13 +49,13 @@ export default function BookPublication({
       <div className="flex-1 space-y-4">
         <div>
           {category && (
-            <span className="text-sm bg-purple-100 px-3 py-1 rounded-full inline-block mb-2">
+            <span className="text-sm bg-amber-100 px-3 py-1 rounded-full inline-block mb-2">
               {category}
             </span>
           )}
           <h3 className="text-2xl font-bold">{title}</h3>
           {author && (
-            <p className="text-lg text-purple-600 font-medium">By {author}</p>
+            <p className="text-lg text-amber-700 font-medium">By {author}</p>
           )}
         </div>
 

@@ -111,77 +111,67 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-950">
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-800">
-          <div className="absolute inset-0 overflow-hidden">
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-              poster="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920"
-            >
-              <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-sitting-on-the-grass-4382-large.mp4"
-                type="video/mp4"
-              />
-            </video>
-            <div className="absolute inset-0 bg-slate-900/20" />
-            <div className="absolute top-20 right-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-950">
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
           </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 mb-6">
-              <Users className="w-4 h-4 text-purple-900" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md text-blue-400 text-sm font-medium border border-white/10 mb-6">
+              <Users className="w-4 h-4 text-amber-300" />
               <span>Join Our Family</span>
             </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
               Our{' '}
-              <span className="text-purple-900 drop-shadow-lg">
+              <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">
                 Community
               </span>
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto border-l-4 border-indigo-400/50 pl-6">
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto border-l-4 border-blue-500/40 pl-6">
               Connect with fellow meditators, share experiences, and grow together on this transformative journey
             </p>
 
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold text-indigo-300">
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold text-blue-400">
                   50,000+
                 </div>
-                <div className="text-white/80 text-sm mt-1">Members</div>
+                <div className="text-slate-400 text-sm mt-1">Members</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold text-purple-300">
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold text-violet-400">
                   500+
                 </div>
-                <div className="text-white/80 text-sm mt-1">Events</div>
+                <div className="text-slate-400 text-sm mt-1">Events</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-                <div className="text-3xl font-bold text-pink-300">
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all hover:scale-105">
+                <div className="text-3xl font-bold text-emerald-400">
                   25+
                 </div>
-                <div className="text-white/80 text-sm mt-1">Countries</div>
+                <div className="text-slate-400 text-sm mt-1">Countries</div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-20 bg-indigo-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-indigo-600 mb-4">
+              <h2 className="text-4xl font-bold text-white mb-4">
                 Community Stories
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-slate-400 max-w-2xl mx-auto">
                 Hear from our members about their transformational journeys
               </p>
             </div>
@@ -190,20 +180,20 @@ export default function CommunityPage() {
               {testimonials.map((testimonial) => (
                 <Card
                   key={testimonial.id}
-                  className="group hover:shadow-2xl transition-all duration-500 border-2 border-indigo-100 hover:border-indigo-300 bg-white/50 backdrop-blur-sm hover:scale-105"
+                  className="group hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 border border-white/10 hover:border-white/20 bg-white/5 backdrop-blur-sm hover:scale-105"
                 >
                   <CardHeader className="text-center pb-4">
                     <div className="relative inline-block mb-4">
                       <img
                         src={testimonial.image}
                         alt={testimonial.name}
-                        className="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-indigo-200 group-hover:ring-indigo-400 transition-all"
+                        className="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-white/10 group-hover:ring-blue-400 transition-all"
                       />
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-indigo-500 text-white text-xs px-3 py-1 rounded-full">
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-violet-500 text-white text-xs px-3 py-1 rounded-full">
                         {testimonial.role}
                       </div>
                     </div>
-                    <CardTitle className="text-xl">{testimonial.name}</CardTitle>
+                    <CardTitle className="text-xl text-white">{testimonial.name}</CardTitle>
                     <div className="flex justify-center gap-0.5 mt-2">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -211,10 +201,10 @@ export default function CommunityPage() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                    <p className="text-slate-400 text-sm leading-relaxed mb-4">
                       "{testimonial.content}"
                     </p>
-                    <p className="text-xs text-gray-500 text-center">{testimonial.date}</p>
+                    <p className="text-xs text-slate-500 text-center">{testimonial.date}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -223,13 +213,15 @@ export default function CommunityPage() {
         </section>
 
         {/* Upcoming Events */}
-        <section className="py-20 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl animate-pulse" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-purple-600 mb-4">
+              <h2 className="text-4xl font-bold text-white mb-4">
                 Upcoming Community Events
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-slate-400 max-w-2xl mx-auto">
                 Join us for group meditations and community gatherings
               </p>
             </div>
@@ -238,40 +230,40 @@ export default function CommunityPage() {
               {upcomingEvents.map((event) => (
                 <Card
                   key={event.id}
-                  className="group hover:shadow-2xl transition-all duration-500 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm hover:scale-105"
+                  className="group hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 border border-white/10 hover:border-white/20 bg-white/5 backdrop-blur-sm hover:scale-105"
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between mb-4">
                       <Badge
                         className={
                           event.type === 'online'
-                            ? 'bg-blue-500 text-white border-0'
-                            : 'bg-purple-500 text-white border-0'
+                            ? 'bg-emerald-500 text-white border-0'
+                            : 'bg-blue-500 text-white border-0'
                         }
                       >
                         {event.type === 'online' ? '🌐 Online' : '📍 Offline'}
                       </Badge>
                     </div>
-                    <CardTitle className="text-xl mb-2 group-hover:text-purple-600 transition-colors">
+                    <CardTitle className="text-xl mb-2 group-hover:text-blue-400 transition-colors text-white">
                       {event.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <div className="flex items-center text-sm text-gray-700">
-                        <Calendar className="mr-2 h-4 w-4 text-purple-600" />
+                      <div className="flex items-center text-sm text-slate-400">
+                        <Calendar className="mr-2 h-4 w-4 text-blue-400" />
                         <span>{event.date}</span>
                       </div>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <MessageCircle className="mr-2 h-4 w-4 text-purple-600" />
+                      <div className="flex items-center text-sm text-slate-400">
+                        <MessageCircle className="mr-2 h-4 w-4 text-violet-400" />
                         <span>{event.time}</span>
                       </div>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <Users className="mr-2 h-4 w-4 text-purple-600" />
+                      <div className="flex items-center text-sm text-slate-400">
+                        <Users className="mr-2 h-4 w-4 text-emerald-400" />
                         <span>{event.attendees} attending</span>
                       </div>
                     </div>
-                    <Button className="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                    <Button className="w-full mt-6 bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white shadow-lg hover:shadow-xl hover:shadow-blue-500/25 transition-all hover:scale-105">
                       <Heart className="mr-2 h-4 w-4" />
                       Join Event
                     </Button>
@@ -283,13 +275,14 @@ export default function CommunityPage() {
         </section>
 
         {/* Community Forum */}
-        <section className="py-20 bg-purple-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-indigo-600 mb-4">
+              <h2 className="text-4xl font-bold text-white mb-4">
                 Community Discussions
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-slate-400 max-w-2xl mx-auto">
                 Join the conversation, ask questions, and share your experiences
               </p>
             </div>
@@ -298,20 +291,20 @@ export default function CommunityPage() {
               {forumPosts.map((post) => (
                 <Card
                   key={post.id}
-                  className="hover:shadow-xl transition-all duration-300 border-2 border-purple-100 hover:border-purple-300 bg-white/50 backdrop-blur-sm cursor-pointer hover:scale-[1.02]"
+                  className="hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 border border-white/10 hover:border-white/20 bg-white/5 backdrop-blur-sm cursor-pointer hover:scale-[1.02]"
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <Badge className="mb-3 bg-gradient-to-r from-purple-500 to-blue-500 text-white border-0">
+                        <Badge className="mb-3 bg-gradient-to-r from-blue-500 to-violet-500 text-white border-0">
                           {post.category}
                         </Badge>
-                        <h3 className="text-lg font-semibold mb-2 group-hover:text-purple-600 transition-colors">
+                        <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors text-white">
                           {post.title}
                         </h3>
-                        <p className="text-sm text-gray-600">by {post.author}</p>
+                        <p className="text-sm text-slate-500">by {post.author}</p>
                       </div>
-                      <div className="flex gap-4 text-sm text-gray-500">
+                      <div className="flex gap-4 text-sm text-slate-500">
                         <div className="flex items-center gap-1">
                           <MessageCircle className="h-4 w-4" />
                           <span>{post.replies}</span>
@@ -330,7 +323,7 @@ export default function CommunityPage() {
             <div className="text-center mt-12">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-xl hover:shadow-2xl transition-all hover:scale-105"
+                className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white shadow-xl hover:shadow-2xl hover:shadow-blue-500/25 transition-all hover:scale-105"
               >
                 View All Discussions
               </Button>

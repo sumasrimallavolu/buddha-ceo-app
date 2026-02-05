@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Sparkles, Heart, Users } from 'lucide-react';
+import { Sparkles, Heart, Users, Leaf } from 'lucide-react';
 
 export function AboutHero() {
   const [scrollY, setScrollY] = useState(0);
@@ -13,7 +13,15 @@ export function AboutHero() {
   }, []);
 
   return (
-    <section className="relative min-h-[70vh] flex items-center overflow-hidden bg-slate-800">
+    <section className="relative min-h-[70vh] flex items-center overflow-hidden bg-slate-950">
+      {/* Ambient Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Animated Nature Orbs */}
+        <div className="absolute top-20 left-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
+      </div>
+
       {/* Video Background */}
       <div className="absolute inset-0 overflow-hidden">
         <video
@@ -21,7 +29,7 @@ export function AboutHero() {
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-50"
           poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920"
         >
           <source
@@ -30,24 +38,20 @@ export function AboutHero() {
           />
         </video>
 
-        {/* Light Overlay */}
-        <div className="absolute inset-0 bg-slate-900/20" />
-
-        {/* Animated Orbs */}
-        <div className="absolute top-20 left-20 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-900/70 to-slate-950/80" />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-24">
         {/* Icons */}
         <div className="flex justify-center gap-6 mb-8">
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition-all hover:scale-110">
-            <Heart className="w-8 h-8 text-pink-400" />
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition-all hover:scale-110 shadow-lg">
+            <Heart className="w-8 h-8 text-rose-400" />
           </div>
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition-all hover:scale-110">
-            <Sparkles className="w-8 h-8 text-yellow-400" />
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition-all hover:scale-110 shadow-lg">
+            <Leaf className="w-8 h-8 text-emerald-400" />
           </div>
-          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition-all hover:scale-110">
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition-all hover:scale-110 shadow-lg">
             <Users className="w-8 h-8 text-blue-400" />
           </div>
         </div>
@@ -61,14 +65,14 @@ export function AboutHero() {
           }}
         >
           About{' '}
-          <span className="text-purple-300">
+          <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">
             Us
           </span>
         </h1>
 
         {/* Description */}
         <p
-          className="text-xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed border-l-4 border-purple-400/50 pl-6"
+          className="text-xl text-slate-300 max-w-3xl mx-auto mb-12 leading-relaxed border-l-4 border-blue-500/40 pl-6 bg-white/5 backdrop-blur-sm py-4 rounded-r-lg"
           style={{
             transform: `translateY(${scrollY * 0.15}px)`,
             opacity: 1 - scrollY / 600,
@@ -78,41 +82,6 @@ export function AboutHero() {
           meditation wisdom and techniques, backed by ancient wisdom and modern
           science.
         </p>
-
-        {/* Stats */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto"
-          style={{
-            transform: `translateY(${scrollY * 0.1}px)`,
-            opacity: 1 - scrollY / 700,
-          }}
-        >
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-            <div className="text-4xl font-bold text-purple-300 mb-2">
-              15+
-            </div>
-            <div className="text-white/80">Years of Service</div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-            <div className="text-4xl font-bold text-blue-300 mb-2">
-              100K+
-            </div>
-            <div className="text-white/80">Lives Transformed</div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all hover:scale-105">
-            <div className="text-4xl font-bold text-pink-300 mb-2">
-              500+
-            </div>
-            <div className="text-white/80">Programs Conducted</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
-          <div className="w-1 h-3 bg-white/70 rounded-full animate-pulse"></div>
-        </div>
       </div>
     </section>
   );

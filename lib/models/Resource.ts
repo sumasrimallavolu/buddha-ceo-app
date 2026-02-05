@@ -1,6 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export type ResourceType = 'book' | 'video' | 'magazine' | 'link';
+export type ResourceStatus = 'draft' | 'published';
 
 export interface IResource {
   title: string;
@@ -12,6 +13,7 @@ export interface IResource {
   linkUrl?: string; // for external links
   category: string;
   order: number;
+  status?: ResourceStatus;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -58,6 +60,11 @@ const ResourceSchema = new Schema<IResourceDocument>(
     order: {
       type: Number,
       default: 0,
+    },
+    status: {
+      type: String,
+      enum: ['draft', 'published'],
+      default: 'draft',
     },
   },
   {

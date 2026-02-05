@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { BookOpen, MoreVertical, Edit, Trash, Download } from 'lucide-react';
 import { Alert } from '@/components/ui/alert';
+import { ResourceCreateModal, ResourceEditModal } from '@/components/admin';
 
 interface Resource {
   _id: string;
@@ -32,6 +33,7 @@ interface Resource {
 }
 
 export default function ResourcesPage() {
+  const { data: session } = useSession();
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -42,6 +44,7 @@ export default function ResourcesPage() {
   }, []);
 
   const fetchResources = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/admin/resources');
       if (response.ok) {
@@ -83,17 +86,19 @@ export default function ResourcesPage() {
   const getTypeBadgeColor = (type: string) => {
     switch (type) {
       case 'book':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-emerald-100 text-emerald-800';
       case 'video':
         return 'bg-red-100 text-red-800';
       case 'magazine':
         return 'bg-green-100 text-green-800';
       case 'link':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-amber-100 text-stone-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
+
+  const canEdit = session?.user?.role === 'admin' || session?.user?.role === 'content_manager';
 
   return (
     <div className="space-y-6">
@@ -104,10 +109,17 @@ export default function ResourcesPage() {
             Manage books, videos, magazines, and links
           </p>
         </div>
-        <Button className="bg-purple-600">
-          <BookOpen className="mr-2 h-4 w-4" />
-          Add Resource
-        </Button>
+        {canEdit && (
+          <ResourceCreateModal
+            trigger={
+              <Button className="bg-amber-600">
+                <BookOpen className="mr-2 h-4 w-4" />
+                Add Resource
+              </Button>
+            }
+            onSuccess={fetchResources}
+          />
+        )}
       </div>
 
       {error && (
@@ -163,24 +175,34 @@ export default function ResourcesPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
+                          {canEdit && (
+                            <ResourceEditModal
+                              resourceId={resource._id}
+                              trigger={
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                              }
+                              onSuccess={fetchResources}
+                            />
+                          )}
                           {(resource.type === 'book' || resource.type === 'magazine') && (
                             <DropdownMenuItem>
                               <Download className="mr-2 h-4 w-4" />
                               Download
                             </DropdownMenuItem>
                           )}
-                          <DropdownMenuItem
-                            className="text-red-600"
-                            onClick={() => handleDelete(resource._id)}
-                            disabled={deleting === resource._id}
-                          >
-                            <Trash className="mr-2 h-4 w-4" />
-                            {deleting === resource._id ? 'Deleting...' : 'Delete'}
-                          </DropdownMenuItem>
+                          {canEdit && (
+                            <DropdownMenuItem
+                              className="text-red-600"
+                              onClick={() => handleDelete(resource._id)}
+                              disabled={deleting === resource._id}
+                            >
+                              <Trash className="mr-2 h-4 w-4" />
+                              {deleting === resource._id ? 'Deleting...' : 'Delete'}
+                            </DropdownMenuItem>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

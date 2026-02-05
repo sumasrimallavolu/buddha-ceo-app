@@ -63,19 +63,25 @@ const formatDate = (date: Date) => {
 
 export function RecentEvents() {
   return (
-    <section className="py-20 bg-purple-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-12">
+    <section className="py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+      {/* Background Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl animate-pulse" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex justify-between items-center mb-16 flex-wrap gap-4">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-2 text-purple-600">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3 text-white">
               Upcoming Events
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-slate-400">
               Join our transformative meditation programs
             </p>
           </div>
           <Link href="/events">
-            <Button variant="outline" className="border-purple-300 text-purple-700 hover:bg-purple-100">View All Events</Button>
+            <Button variant="outline" className="bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 hover:border-white/30 shadow-sm hover:shadow-lg hover:shadow-blue-500/10">
+              View All Events
+            </Button>
           </Link>
         </div>
 
@@ -83,43 +89,46 @@ export function RecentEvents() {
           {recentEvents.map((event) => (
             <Card
               key={event.id}
-              className="group overflow-hidden hover:shadow-xl transition-shadow border-purple-100 bg-white/60 backdrop-blur-sm"
+              className="group overflow-hidden transition-all duration-500 border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:shadow-2xl hover:shadow-blue-500/10 hover:scale-[1.03]"
             >
-              <div className="relative aspect-video bg-purple-200/50">
+              <div className="relative aspect-video bg-gradient-to-br from-blue-500/20 to-violet-500/20">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-6xl">🧘</div>
                 </div>
                 <Badge
-                  className="absolute top-4 right-4 bg-purple-500/80 hover:bg-purple-600 text-white"
+                  className="absolute top-4 right-4 bg-gradient-to-r from-blue-500/90 to-violet-500/90 backdrop-blur-sm hover:from-blue-600 hover:to-violet-600 text-white shadow-md border-0"
                   variant={event.status === 'completed' ? 'secondary' : 'default'}
                 >
                   {getEventTypeLabel(event.type)}
                 </Badge>
               </div>
-              <CardHeader>
-                <h3 className="font-bold text-xl mb-2 group-hover:text-purple-600 transition-colors text-gray-800">
+              <CardHeader className="pb-4">
+                <h3 className="font-bold text-xl mb-3 group-hover:text-blue-400 transition-colors text-white">
                   {event.title}
                 </h3>
-                <div className="space-y-2 text-sm text-gray-600">
+                <div className="space-y-2 text-sm text-slate-400">
                   <div className="flex items-center">
-                    <Calendar className="mr-2 h-4 w-4 text-purple-500" />
+                    <Calendar className="mr-2 h-4 w-4 text-blue-400" />
                     {formatDate(event.startDate)} - {formatDate(event.endDate)}
                   </div>
                   <div>{event.timings}</div>
                   <div className="flex items-center">
-                    <Users className="mr-2 h-4 w-4 text-pink-500" />
+                    <Users className="mr-2 h-4 w-4 text-emerald-400" />
                     {event.currentRegistrations} / {event.maxParticipants}{' '}
                     registered
                   </div>
                 </div>
               </CardHeader>
-              <CardFooter>
+              <CardFooter className="pt-0">
                 {event.status !== 'completed' && (
-                  <Link href={`/events/${event.id}`} className="w-full">
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  <Button
+                    asChild
+                    className="w-full shadow-md hover:shadow-lg hover:shadow-blue-500/25 transition-shadow bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600"
+                  >
+                    <Link href={`/events/${event.id}`}>
                       Register Now
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 )}
               </CardFooter>
             </Card>
