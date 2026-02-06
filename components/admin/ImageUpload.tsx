@@ -58,15 +58,12 @@ export default function ImageUpload({
         let uploadedImages: UploadedImage[] = [];
 
         // Use PUT endpoint for multiple files, POST for single file
-        const endpoint = acceptedFiles.length === 1 ? '/api/admin/upload' : '/api/admin/upload';
-        const method = acceptedFiles.length === 1 ? 'POST' : 'PUT';
-
         if (acceptedFiles.length === 1) {
           // Single file upload - use POST
           const formData = new FormData();
           formData.append('file', acceptedFiles[0]);
 
-          const response = await fetch(endpoint, {
+          const response = await fetch('/api/admin/upload', {
             method: 'POST',
             body: formData,
           });
@@ -85,7 +82,7 @@ export default function ImageUpload({
             formData.append(`file${index}`, file);
           });
 
-          const response = await fetch(endpoint, {
+          const response = await fetch('/api/admin/upload', {
             method: 'PUT',
             body: formData,
           });
@@ -330,190 +327,6 @@ export default function ImageUpload({
               </div>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* Hidden input to store URLs for form submission */}
-      {images.length > 0 && (
-        <div className="hidden">
-          {images.map((image, index) => (
-            <input
-              key={index}
-              type="hidden"
-              name={`image-${index}`}
-              value={image.url}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}>
-      {/* Upload Area */}
-      {images.length < maxImages && (
-        <Card
-          {...getRootProps()}
-          className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
-            isDragActive
-              ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/20'
-              : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600'
-          } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          <input {...getInputProps()} />
-          <div className="flex flex-col items-center gap-3">
-            {uploading ? (
-              <Loader2 className="h-10 w-10 text-amber-700 dark:text-amber-500 animate-spin" />
-            ) : (
-              <Upload className="h-10 w-10 text-gray-400 dark:text-gray-600" />
-            )}
-            <div>
-              <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
-                {uploading ? 'Uploading...' : isDragActive ? 'Drop images here' : 'Drag & drop images here'}
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                or click to browse ({images.length}/{maxImages} uploaded)
-              </p>
-            </div>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
-              Supports: JPEG, PNG, WebP, GIF (max 5MB each)
-            </p>
-          </div>
-        </Card>
-      )}
-
-      {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-        </div>
-      )}
-
-      {/* Uploaded Images Preview */}
-      {images.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {images.map((image, index) => (
-            <div key={index} className="relative group">
-              <Card className="overflow-hidden">
-                <div className="aspect-square relative">
-                  <Image
-                    src={image.url}
-                    alt={`Upload ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                  />
-                </div>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="icon"
-                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => handleRemove(index)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-                <div className="p-2">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
-                    {image.filename}
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    {(image.size / 1024).toFixed(1)} KB
-                  </p>
-                </div>
-              </Card>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Hidden input to store URLs for form submission */}
-      {images.length > 0 && (
-        <div className="hidden">
-          {images.map((image, index) => (
-            <input
-              key={index}
-              type="hidden"
-              name={`image-${index}`}
-              value={image.url}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}>
-      {/* Upload Area */}
-      {images.length < maxImages && (
-        <Card
-          {...getRootProps()}
-          className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
-            isDragActive
-              ? 'border-amber-500 bg-amber-50'
-              : 'border-gray-300 hover:border-gray-400'
-          } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          <input {...getInputProps()} />
-          <div className="flex flex-col items-center gap-3">
-            {uploading ? (
-              <Loader2 className="h-10 w-10 text-amber-700 animate-spin" />
-            ) : (
-              <Upload className="h-10 w-10 text-gray-400" />
-            )}
-            <div>
-              <p className="text-lg font-medium text-gray-700">
-                {uploading ? 'Uploading...' : isDragActive ? 'Drop images here' : 'Drag & drop images here'}
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                or click to browse ({images.length}/{maxImages} uploaded)
-              </p>
-            </div>
-            <p className="text-xs text-gray-400">
-              Supports: JPEG, PNG, WebP, GIF (max 5MB each)
-            </p>
-          </div>
-        </Card>
-      )}
-
-      {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-600">{error}</p>
-        </div>
-      )}
-
-      {/* Uploaded Images Preview */}
-      {images.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {images.map((image, index) => (
-            <div key={index} className="relative group">
-              <Card className="overflow-hidden">
-                <div className="aspect-square relative">
-                  <Image
-                    src={image.url}
-                    alt={`Upload ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                  />
-                </div>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="icon"
-                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => handleRemove(index)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-                <div className="p-2">
-                  <p className="text-xs text-gray-600 truncate">
-                    {image.filename}
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    {(image.size / 1024).toFixed(1)} KB
-                  </p>
-                </div>
-              </Card>
-            </div>
-          ))}
         </div>
       )}
 
