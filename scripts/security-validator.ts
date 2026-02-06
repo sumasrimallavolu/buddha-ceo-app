@@ -593,4 +593,5 @@ if (require.main === module) {
   main().catch(console.error);
 }
 
-export { SecurityValidator, SecurityReport, SecurityIssue };
+export type { SecurityReport, SecurityIssue };
+export { SecurityValidator };
