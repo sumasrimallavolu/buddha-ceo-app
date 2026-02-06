@@ -46,6 +46,7 @@ export function RequiredLabel({ htmlFor, children, required = false, tooltip }: 
 
 interface FormFieldProps {
   label: string;
+  htmlFor?: string;
   required?: boolean;
   error?: string;
   children: React.ReactNode;
@@ -55,10 +56,10 @@ interface FormFieldProps {
 /**
  * Wrapper for form fields with consistent spacing and error display
  */
-export function FormField({ label, required = false, error, children, tooltip }: FormFieldProps) {
+export function FormField({ label, htmlFor, required = false, error, children, tooltip }: FormFieldProps) {
   return (
     <div className="space-y-2">
-      <RequiredLabel required={required} tooltip={tooltip}>
+      <RequiredLabel htmlFor={htmlFor || label.toLowerCase().replace(/\s+/g, '-')} required={required} tooltip={tooltip}>
         {label}
       </RequiredLabel>
       {children}

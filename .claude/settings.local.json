@@ -32,7 +32,8 @@
       "mcp__plugin_serena_serena__create_text_file",
       "Bash(git push:*)",
       "Bash(npx shadcn@latest add:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(tee:*)"
     ]
   }
 }
