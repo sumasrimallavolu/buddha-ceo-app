@@ -1,0 +1,169 @@
+Tool Category,Tool Name,Purpose/Use Cases,How It Works (Issues Noticed)
+MCP Servers,plugin:serena:serena,Semantic code analysis and editing operations,Provides intelligent code navigation, symbol finding, refactoring tools. Uses LSP (Language Server Protocol) for code understanding. ISSUE: Initial setup requires onboarding, permissions need to be configured in settings.local.json for each tool
+MCP Servers,plugin:context7:context7,Documentation and code example queries,Retrieves up-to-date documentation for any library/framework. Requires resolve-library-id first to get the correct library ID, then query-docs to fetch information. ISSUE: Can only be called 3 times per question, limited to certain libraries
+MCP Servers,plugin:greptile:greptile,Code review and PR analysis,Automated code review for pull requests. Analyzes PR comments, provides review feedback, tracks addressed/unaddressed comments. ISSUE: Requires repository configuration (name, remote, branch, PR number)
+MCP Servers,plugin:playwright:playwright,Browser automation and testing,Web browser control for testing, scraping, UI interactions. Can navigate, click, type, take screenshots, run JavaScript. ISSUE: Browser must be installed first, may need browser_install command
+MCP Servers,mcp__4_5v_mcp__analyze_image,Image analysis with AI vision,Analyzes images from remote URLs using advanced AI vision models. ISSUE: Only supports remote URLs (PNG, JPG, JPEG), not local file paths
+MCP Servers,mcp__web_reader__webReader,Web scraping and content extraction,Fetches web pages and converts to readable markdown/text format. ISSUE: Default 20s timeout may not be enough for slow sites, cache can be disabled with no_cache parameter
+Skills,keybindings-help,Customize keyboard shortcuts,Manage ~/.claude/keybindings.json for custom keybindings and chord shortcuts. USE CASE: Rebinding keys, adding chord bindings
+Skills,architect:README,System architecture commands,Access architecture-related commands and tools. USE CASE: Reviewing and designing system architectures
+Skills,architect:review,Review system architectures,Analyze existing architectures, identify patterns, assess risks, provide improvement recommendations. ISSUE: Requires existing architecture to review
+Skills,architect:architect,Design system architectures,Design complete architectures from requirements with interactive dialogue and documentation. ISSUE: Can be time-consuming for complex systems
+Skills,sc:design,Design system architecture/APIs,Design system architecture, APIs, component interfaces with specifications. ISSUE: Requires clear requirements upfront
+Skills,sc:cleanup,Clean up codebase,Remove dead code, optimize project structure systematically. ISSUE: May break functionality if not tested after cleanup
+Skills,sc:build,Build and compile projects,Intelligent error handling and optimization during build process. USE CASE: Running npm run build, compiling code
+Skills,sc:brainstorm,Requirements discovery,Interactive Socratic dialogue for exploring requirements. ISSUE: Can be lengthy for simple projects
+Skills,sc:analyze,Comprehensive code analysis,Analyze code quality, security, performance, architecture across multiple domains. ISSUE: May produce large output for complex codebases
+Skills,sc:agent,Agent management,Coordinate sub-agents and workflows (alias for sc:pm). USE CASE: Task delegation and orchestration
+Skills,sc:git,Git operations,Intelligent commit messages and workflow optimization. USE CASE: Creating commits, managing git workflow
+Skills,sc:explain,Code/concept explanation,Educational explanations of code, concepts, system behavior. USE CASE: Understanding complex code
+Skills,sc:estimate,Development estimates,Provide time/effort estimates for tasks/features. ISSUE: Estimates are approximate, not guaranteed
+Skills,sc:document,Generate documentation,Focused documentation for components, functions, APIs, features. USE CASE: Auto-generating docs
+Skills,sc:implement,Feature implementation,Implement features with intelligent persona and MCP integration. USE CASE: Coding new features
+Skills,sc:help,List SuperClaude commands,Show all available /sc commands and functionality. USE CASE: Discovering available commands
+Skills,sc:index-repo,Repository indexing,Reduce token usage by indexing repository (94% reduction: 58K → 3K). ISSUE: Takes time to index initially
+Skills,sc:improve,Code quality improvements,Apply systematic improvements to code quality, performance, maintainability. ISSUE: May introduce changes that need testing
+Skills,sc:index,Project documentation/knowledge base,Generate comprehensive project documentation with intelligent organization. ISSUE: Large output for big projects
+Skills,sc:load,Session lifecycle management,Load project context using Serena MCP for session restoration. USE CASE: Resuming work
+Skills,sc:README,SuperClaude commands,Documentation for all SuperClaude commands. USE CASE: Reference guide
+Skills,sc:pm,Project Manager Agent,Default orchestration agent coordinating all sub-agents and workflows. USE CASE: Complex task management
+Skills,sc:recommend,Command recommendation engine,Recommends most suitable SuperClaude commands for any input. USE CASE: Discovering right command
+Skills,sc:reflect,Task reflection and validation,Validate tasks using Serena MCP analysis capabilities. USE CASE: Quality assurance
+Skills,sc:save,Session context persistence,Save session context using Serena MCP for later restoration. USE CASE: Saving work state
+Skills,sc:research,Deep web research,Adaptive planning and intelligent web search for research. ISSUE: Can be time-consuming
+Skills,sc:sc,SuperClaude dispatcher,Access all SuperClaude features via /sc [command]. USE CASE: Command routing
+Skills,sc:task,Execute complex tasks,Intelligent workflow management and delegation. USE CASE: Multi-step tasks
+Skills,sc:spec-panel,Specification review,Multi-expert specification review using renowned experts. USE CASE: PRD/specification improvement
+Skills,sc:spawn,Task orchestration,Meta-system task orchestration with intelligent breakdown. USE CASE: Parallel task execution
+Skills,sc:select-tool,Intelligent MCP tool selection,Select tools based on complexity scoring. USE CASE: Auto-tool selection
+Skills,sc:troubleshoot,Diagnose and resolve issues,Debug code, builds, deployments, system behavior. USE CASE: Problem diagnosis
+Skills,sc:test,Execute tests,Run tests with coverage analysis and quality reporting. USE CASE: Test execution
+Skills,sc:workflow,Generate implementation workflows,Create structured workflows from PRDs and requirements. USE CASE: Planning implementation
+Skills,gsd:audit-milestone,Audit milestone completion,Verify milestone completion against original intent before archiving. USE CASE: Milestone review
+Skills,gsd:add-todo,Capture idea/task,Capture todos from conversation context. USE CASE: Quick task capture
+Skills,gsd:analyze-codebase,Scan codebase,Populate .planning/intel/ with file index, conventions, semantic entities. ISSUE: Takes time for large codebases
+Skills,gsd:add-phase,Add phase to roadmap,Add phase to end of current milestone in roadmap. USE CASE: Project planning
+Skills,gsd:complete-milestone,Archive completed milestone,Archive milestone and prepare for next version. USE CASE: Milestone management
+Skills,gsd:debug,Systematic debugging,Persistent debugging state across context resets. USE CASE: Complex debugging sessions
+Skills,gsd:check-todos,List pending todos,List and select pending todos to work on. USE CASE: Task management
+Skills,gsd:insert-phase,Insert urgent phase,Insert decimal phase (e.g., 72.1) between existing phases. USE CASE: Urgent work insertion
+Skills,gsd:help,Show GSD commands,Available GSD commands and usage guide. USE CASE: Help reference
+Skills,gsd:execute-phase,Execute phase plans,Execute all plans in phase with wave-based parallelization. USE CASE: Phase execution
+Skills,gsd:discuss-phase,Gather phase context,Adaptive questioning before phase planning. USE CASE: Requirements gathering
+Skills,gsd:new-milestone,Start new milestone,Update PROJECT.md and route to requirements. USE CASE: Milestone creation
+Skills,gsd:map-codebase,Analyze codebase,Produce .planning/codebase/ documents with mapper agents. ISSUE: Can be lengthy
+Skills,gsd:list-phase-assumptions,Surface phase assumptions,Show assumptions before planning. USE CASE: Planning transparency
+Skills,gsd:new-project,Initialize new project,Deep context gathering and PROJECT.md creation. USE CASE: Project setup
+Skills,gsd:pause-work,Create context handoff,Handoff context when pausing mid-phase. USE CASE: Work pause
+Skills,gsd:research-phase,Research phase implementation,Research how to implement phase (standalone). USE CASE: Phase research
+Skills,gsd:remove-phase,Remove future phase,Remove phase and renumber subsequent phases. USE CASE: Planning adjustment
+Skills,gsd:quick,Execute quick task,GSD guarantees without optional agents. USE CASE: Quick tasks
+Skills,gsd:query-intel,Query codebase intelligence,Query dependencies and hotspots in codebase. USE CASE: Codebase queries
+Skills,gsd:progress,Check project progress,Show context and route to next action. USE CASE: Progress tracking
+Skills,gsd:plan-phase,Create phase plan,Create detailed PLAN.md with verification loop. USE CASE: Phase planning
+Skills,gsd:plan-milestone-gaps,Close milestone gaps,Create phases to close identified gaps. USE CASE: Gap closure
+Skills,gsd:settings,Configure GSD,Configure workflow toggles and model profile. USE CASE: GSD configuration
+Skills,gsd:set-profile,Switch model profile,Switch model quality/balanced/budget for GSD agents. USE CASE: Performance tuning
+Skills,gsd:resume-work,Resume previous session,Restore full context from previous session. USE CASE: Session restoration
+Skills,gsd:verify-work,Validate features,Conversational UAT for built features. USE CASE: Feature validation
+Skills,gsd:update,Update GSD,Update to latest version with changelog. USE CASE: GSD upgrades
+Skills,gsd:whats-new,See GSD changes,Show what's new since installed version. USE CASE: Feature discovery
+Skills,ralph-loop:cancel-ralph,Cancel Ralph Loop,Stop active Ralph Loop session. USE CASE: Loop cancellation
+Skills,ralph-loop:help,Ralph Loop help,Explain Ralph Loop plugin and commands. USE CASE: Help reference
+Skills,ralph-loop:ralph-loop,Start Ralph Loop,Start Ralph Loop in current session. USE CASE: Iterative improvement
+Skills,code-review:code-review,Review pull requests,Comprehensive PR code review. USE CASE: PR review
+Skills,feature-dev:feature-dev,Guided feature development,Feature development with codebase understanding. USE CASE: Building features
+Skills,vercel:deploy,Deploy to Vercel,Deploy application to Vercel platform. USE CASE: Production deployment
+Skills,vercel:logs,View deployment logs,View Vercel deployment logs. USE CASE: Troubleshooting deployments
+Skills,vercel:setup,Set up Vercel,Configure Vercel CLI and project. USE CASE: Initial Vercel setup
+Skills,commit-commands:clean_gone,Clean git branches,Remove branches marked as [gone] and worktrees. USE CASE: Branch cleanup
+Skills,commit-commands:commit-push-pr,Commit push and PR,Combined git commit, push, and PR creation. USE CASE: Quick PR workflow
+Skills,commit-commands:commit,Create git commit,Create git commit with message generation. USE CASE: Version control
+NPM Packages,next,Next.js framework,React framework for production-grade applications. ISSUE: Version 16.1.6 is cutting edge, may have compatibility issues with some packages
+NPM Packages,react,React library,UI library for building user interfaces. VERSION: 19.2.3. ISSUE: React 19 is very new, some libraries may not support it yet
+NPM Packages,react-dom,React DOM,React DOM renderer for web. VERSION: 19.2.3
+NPM Packages,next-auth,Authentication for Next.js,Complete authentication solution for Next.js. VERSION: 4.24.10. ISSUE: Using v4 while v5 (Auth.js) is available
+NPM Packages,mongodb,MongoDB driver,Native MongoDB driver for Node.js. VERSION: 7.0.0. ISSUE: Major version changes can have breaking changes
+NPM Packages,mongoose,MongoDB ODM,Object Data Modeling library for MongoDB. VERSION: 9.1.5. ISSUE: Recent version, check documentation changes
+NPM Packages,@vercel/blob,Vercel Blob Storage,File upload and storage solution. USE CASE: Image/file uploads to Vercel
+NPM Packages,bcryptjs,Password hashing,Library for hashing passwords. USE CASE: User password security. ISSUE: async version (bcrypt) is faster but native
+NPM Packages,zod,Schema validation,TypeScript-first schema validation. USE CASE: Form validation, API schemas
+NPM Packages,react-hook-form,Form management,Performform form library for React. USE CASE: Form handling
+NPM Packages,@tiptap/react,Rich text editor,Modern rich text editor based on ProseMirror. USE CASE: Admin content editing
+NPM Packages,recharts,Chart library,React charting library. USE CASE: Analytics dashboard
+NPM Packages,framer-motion,Animation library,Production-ready motion library for React. USE CASE: UI animations
+NPM Packages,lucide-react,Icon library,Beautiful icon library. USE CASE: UI icons
+NPM Packages,react-dropzone,File dropzone,React dropzone for file uploads. USE CASE: Drag-and-drop file uploads
+NPM Packages,react-player,Media player,React player for audio/video. USE CASE: Media playback
+NPM Packages,date-fns,Date utilities,Modern date utility library. USE CASE: Date formatting
+NPM Packages,tailwindcss,CSS framework,Utility-first CSS framework. VERSION: 4. ISSUE: Tailwind 4 is very new, some plugins may not work
+NPM Packages,typescript,TypeScript,TypeScript language support. VERSION: 5. USE CASE: Type safety
+NPM Packages,eslint,Code linting,JavaScript/TypeScript linter. USE CASE: Code quality
+NPM Packages,@playwright/test,E2E testing,End-to-end testing framework. USE CASE: Browser automation testing
+Dev Scripts,npm run dev,Start development server,Start Next.js dev server on port 3000. USE CASE: Local development
+Dev Scripts,npm run build,Build for production,Create optimized production build. USE CASE: Production deployment preparation
+Dev Scripts,npm run start,Start production server,Start production Next.js server. USE CASE: Running production build locally
+Dev Scripts,npm run lint,Run ESLint,Check code quality with ESLint. USE CASE: Code quality checks
+Dev Scripts,npm run type-check,TypeScript type checking,Run TypeScript compiler without emitting files. USE CASE: Type safety validation
+Dev Scripts,npm run db:seed,Seed database,Populate database with initial data (lib/seed.ts). USE CASE: Initial data setup. ISSUE: Creates default admin credentials, should change in production
+Dev Scripts,npm run db:import-buddhaceo,Import Buddha CEO data,Import Buddha CEO content from scripts/import-buddhaceo-data.ts. USE CASE: Content migration
+Dev Scripts,npm run db:import-about,Import about page data,Import about content from scripts/import-about-data.ts. USE CASE: About page content setup
+Dev Scripts,npm run db:import-resources,Import resources data,Import resources from scripts/import-resources-data.ts. USE CASE: Resources content setup
+Dev Scripts,npm run security:check,Security validation,Bash script for security validation (scripts/security-validation.sh). USE CASE: Pre-deployment security checks
+Dev Scripts,npm run security:audit,NPM audit,Run npm audit with moderate level. USE CASE: Dependency vulnerability check
+Dev Scripts,npm run security:fix,Fix security issues,Run npm audit fix. USE CASE: Automatic security patching
+Dev Scripts,npm run pre-deploy,Pre-deployment checks,Bash script (scripts/pre-deploy.sh). USE CASE: Pre-deployment validation
+Dev Scripts,npm run deploy,Watch and deploy,Bash script (scripts/watch-and-deploy.sh). USE CASE: Continuous deployment monitoring
+GitHub Actions,ci-cd.yml,CI/CD pipeline,6-job pipeline: validate, theme-check, build, test, security, deploy. USE CASE: Automated testing and deployment. ISSUE: Jobs can be slow, theme-check script may need adjustment
+GitHub Actions,security-validation.yml,Security scanning,Runs security validation script on push/PR. USE CASE: Security checks in CI
+GitHub Actions,pr-validation.yml,PR validation,Validates pull requests with build and tests. USE CASE: PR quality checks
+API Routes,/api/auth/[...nextauth],Authentication endpoint,NextAuth.js authentication handler. USE CASE: User login/logout
+API Routes,/api/admin/content,Content management (admin),CRUD operations for content management. ISSUE: Requires admin/manager role
+API Routes,/api/admin/content/[id]/approve,Approve content,Approve submitted content for publication. USE CASE: Content review workflow
+API Routes,/api/admin/content/[id]/reject,Reject content,Reject submitted content. USE CASE: Content moderation
+API Routes,/api/admin/upload,File upload,Handle file uploads to Vercel Blob. USE CASE: Image/file uploads. ISSUE: Requires BLOB_READ_WRITE_TOKEN
+API Routes,/api/admin/users,User management (admin),Manage user accounts and roles. USE CASE: Admin user management
+API Routes,/api/admin/stats,Dashboard statistics,Get dashboard stats including visitor analytics. USE CASE: Admin dashboard data
+API Routes,/api/admin/activity-logs,Activity logs,Get filtered admin activity logs. USE CASE: Audit trail
+API Routes,/api/tracking,Visitor tracking,Track page views and visitor sessions. USE CASE: Analytics. ISSUE: Logs IP addresses (privacy concern)
+API Routes,/api/contact,Contact form,Handle contact form submissions. USE CASE: User inquiries
+API Routes,/api/subscribers,Newsletter subscription,Handle newsletter subscriptions. USE CASE: Email list building
+API Routes,/api/events/public,Public events,Get published events. USE CASE: Display events on website
+API Routes,/api/resources/public,Public resources,Get published resources. USE CASE: Display resources on website
+API Routes,/api/photos,Photos API,Get photo gallery images. USE CASE: Photo display
+API Routes,/api/teacher-enrollment,Teacher enrollment,Handle teacher training enrollment. USE CASE: Education program signup
+API Routes,/api/teacher-application,Teacher application,Handle teacher training applications. USE CASE: Application submission
+API Routes,/api/volunteer-application,Volunteer application,Handle volunteer applications. USE CASE: Volunteer signup
+Configuration,next.config.ts,Next.js configuration,Configure Next.js runtime, images, env vars. ISSUE: NEXTAUTH_URL fix needed for Vercel
+Configuration,eslint.config.mjs,ESLint configuration,Configure ESLint rules for TypeScript/React. USE CASE: Code linting
+Configuration,postcss.config.mjs,PostCSS configuration,Configure PostCSS and Tailwind. USE CASE: CSS processing
+Configuration,.env.example,Environment variables template,Template for required environment variables. ISSUE: Contains default credentials that should be changed
+Configuration,.claude/settings.local.json,Claude Code permissions,Configure allowed MCP tools and bash commands. USE CASE: Tool access control. ISSUE: Must be updated when adding new MCP tools
+Security Scripts,scripts/security-validation.sh,Security validation,Bash script for security checks. USE CASE: Pre-deployment security
+Security Scripts,scripts/security-validator.ts,Security validator (Node),TypeScript security validation. USE CASE: Security checks in Node environment
+Utility Scripts,scripts/check-theme-consistency.sh,Theme consistency check,Verify theme classes are consistent. USE CASE: UI consistency validation. ISSUE: May need updates for new theme patterns
+Utility Scripts,scripts/setup-ci-cd.sh,CI/CD setup,Initialize GitHub Actions workflows. USE CASE: Project setup
+Utility Scripts,scripts/pre-deploy.sh,Pre-deployment checks,Run checks before deployment. USE CASE: Deployment safety
+Utility Scripts,scripts/watch-and-deploy.sh,Watch and deploy,Monitor changes and auto-deploy. USE CASE: Continuous deployment
+Database Models,User,User authentication model,Mongoose model for users with roles (admin, manager, reviewer). ISSUE: Default credentials in seed
+Database Models,Content,Content management model,Store and manage CMS content with approval workflow. ISSUE: Draft/approved workflow complexity
+Database Models,Event,Events model,Store meditation events and registrations. USE CASE: Event management
+Database Models,Resource,Resources model,Store meditation resources (audio, video, articles). USE CASE: Resource library
+Database Models,VisitorLog,Visitor tracking model,Track page views and sessions. USE CASE: Analytics. ISSUE: Privacy concerns with IP logging
+Database Models,ActivityLog,Admin activity model,Log admin actions for audit. USE CASE: Security audit trail
+Database Models,Subscriber,Newsletter model,Store email subscribers. USE CASE: Newsletter management
+Database Models,ContactMessage,Contact form model,Store contact form submissions. USE CASE: User inquiries
+Database Models,TeacherApplication,Teacher applications,Store teacher training applications. USE CASE: Education programs
+Database Models,VolunteerApplication,Volunteer applications,Store volunteer applications. USE CASE: Volunteer management
+UI Components,VisitorTracker,Analytics component,Auto-track page views across site. USE CASE: Visitor analytics. ISSUE: Privacy concern - tracks all visitors
+UI Components,AdminLayout,Admin dashboard layout,Sidebar navigation with role-based menu. USE CASE: Admin UI structure
+UI Components,DarkThemeUI,Dark theme components,Consistent dark theme across admin. USE CASE: Modern UI design
+Features,Role-Based Access Control (RBAC),Permission system,Three-tier permission system (Admin, Content Manager, Content Reviewer). USE CASE: Access control. ISSUE: Complex permission management
+Features,Visitor Analytics,Analytics dashboard,Track page views, unique visitors, top pages. USE CASE: Website analytics. ISSUE: GDPR compliance concerns
+Features,Content Approval Workflow,Content moderation,Draft → Submitted → Approved/Published workflow. USE CASE: Content quality control. ISSUE: Multiple states can be confusing
+Features,Dark Theme,UI theming,Modern dark theme with glassmorphism. USE CASE: User experience. ISSUE: Light theme not available
+Features,Security Validation,Security checks,Comprehensive security validation system. USE CASE: Pre-deployment safety. ISSUE: Can be slow
+Deployment,Vercel,Hosting platform,Deployed on Vercel with automatic previews. USE CASE: Production hosting. ISSUE: Environment variable management
+Deployment,CI/CD,Continuous deployment,GitHub Actions for automated testing and deployment. USE CASE: DevOps automation. ISSUE: Pipeline can be slow
+Documentation,docs/,Project documentation,Comprehensive project documentation. USE CASE: Knowledge base. ISSUE: Must be kept in sync with code
+Testing,Playwright,E2E testing,End-to-end testing framework. USE CASE: Browser testing. ISSUE: Tests not yet implemented (optional in CI)

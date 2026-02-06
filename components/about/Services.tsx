@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Loader2, ArrowRight, Lightbulb } from 'lucide-react';
+import { ArrowRight, Lightbulb } from 'lucide-react';
 
 interface Service {
   _id?: string;
@@ -13,46 +12,29 @@ interface Service {
   order: number;
 }
 
-export function Services() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
+interface ServicesProps {
+  data: Service[] | null;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/about?section=services');
-        const result = await response.json();
+export function Services({ data }: ServicesProps) {
+  const services = data ? data.sort((a, b) => a.order - b.order) : [];
 
-        if (result.success && result.data) {
-          const servicesData = result.data.sort(
-            (a: Service, b: Service) => a.order - b.order
-          );
-          setServices(servicesData);
-        }
-      } catch (error) {
-        console.error('Error fetching services:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (services.length === 0) {
     return (
       <section className="py-16 bg-slate-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Lightbulb className="w-8 h-8 text-blue-400" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                What We Do
+              </h2>
+            </div>
+            <p className="text-slate-500">No services information available</p>
           </div>
         </div>
       </section>
     );
-  }
-
-  if (services.length === 0) {
-    return null;
   }
 
   return (

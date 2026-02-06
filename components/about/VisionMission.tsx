@@ -1,50 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Eye, Target, Loader2 } from 'lucide-react';
+import { Eye, Target } from 'lucide-react';
 
 interface VisionMission {
   vision: string;
   mission: string;
 }
 
-export function VisionMission() {
-  const [data, setData] = useState<VisionMission | null>(null);
-  const [loading, setLoading] = useState(true);
+interface VisionMissionProps {
+  data: VisionMission | null;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/about?section=visionMission');
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error('Error fetching vision/mission:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+export function VisionMission({ data }: VisionMissionProps) {
+  if (!data) {
     return (
       <section className="py-16 bg-slate-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-slate-500">No vision/mission data available</p>
           </div>
         </div>
       </section>
     );
-  }
-
-  if (!data) {
-    return null;
   }
 
   return (

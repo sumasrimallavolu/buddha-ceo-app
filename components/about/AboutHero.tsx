@@ -1,45 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Heart, Users, Leaf, Loader2 } from 'lucide-react';
+import { Heart, Users, Leaf } from 'lucide-react';
 
 interface WhoWeAre {
   title: string;
   description: string;
 }
 
-export function AboutHero() {
-  const [data, setData] = useState<WhoWeAre | null>(null);
-  const [loading, setLoading] = useState(true);
+interface AboutHeroProps {
+  data: WhoWeAre | null;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/about?section=whoWeAre');
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error('Error fetching who we are:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="relative py-16 overflow-hidden bg-slate-950">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto" />
-        </div>
-      </section>
-    );
-  }
+export function AboutHero({ data }: AboutHeroProps) {
 
   const title = data?.title || 'About Us';
   const description = data?.description ||

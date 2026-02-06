@@ -109,7 +109,7 @@ export function ProgramsServices() {
   }
 
   return (
-    <section className="py-24 bg-slate-900 relative overflow-hidden">
+    <section className="py-24 bg-slate-900 relative overflow-hidden" aria-labelledby="programs-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
@@ -122,7 +122,7 @@ export function ProgramsServices() {
           <span className="inline-block px-4 py-2 rounded-full bg-blue-600/20 text-blue-400 text-sm font-semibold mb-4">
             🎯 Our Programs
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+          <h2 id="programs-heading" className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
             Transformative Programs & Services
           </h2>
           <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
@@ -136,11 +136,13 @@ export function ProgramsServices() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-16"
+            role="status"
+            aria-live="polite"
           >
             <div className="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6">
-              <Calendar className="w-10 h-10 text-slate-600" />
+              <Calendar className="w-10 h-10 text-slate-600" aria-hidden="true" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-3">No Programs Available</h3>
+            <p className="text-2xl font-bold text-white mb-3">No Programs Available</p>
             <p className="text-slate-400 mb-6">Check back soon for new upcoming programs!</p>
             <Link href="/events">
               <motion.button

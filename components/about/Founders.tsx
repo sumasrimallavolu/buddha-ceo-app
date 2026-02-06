@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Loader2, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 interface TeamMember {
   _id: string;
@@ -14,48 +13,31 @@ interface TeamMember {
   order?: number;
 }
 
-export function Founders() {
-  const [founders, setFounders] = useState<TeamMember[]>([]);
-  const [loading, setLoading] = useState(true);
+interface FoundersProps {
+  data: TeamMember[];
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/about?section=teamMembers');
-        const result = await response.json();
+export function Founders({ data: teamMembers }: FoundersProps) {
+  const founders = teamMembers
+    .filter((member) => member.role === 'founder' || member.role === 'co_founder')
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-        if (result.success && result.data) {
-          const foundersData = result.data
-            .filter(
-              (member: TeamMember) => member.role === 'founder' || member.role === 'co_founder'
-            )
-            .sort((a: TeamMember, b: TeamMember) => (a.order || 0) - (b.order || 0));
-          setFounders(foundersData);
-        }
-      } catch (error) {
-        console.error('Error fetching founders:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (founders.length === 0) {
     return (
       <section className="py-16 bg-slate-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Users className="w-8 h-8 text-violet-400" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                Leadership
+              </h2>
+            </div>
+            <p className="text-slate-500">No leadership information available</p>
           </div>
         </div>
       </section>
     );
-  }
-
-  if (founders.length === 0) {
-    return null;
   }
 
   return (

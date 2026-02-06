@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface Inspiration {
   name: string;
@@ -12,43 +11,27 @@ interface Inspiration {
   order: number;
 }
 
-export function Inspiration() {
-  const [data, setData] = useState<Inspiration | null>(null);
-  const [loading, setLoading] = useState(true);
+interface InspirationProps {
+  data: Inspiration | null;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/about?section=inspiration');
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error('Error fetching inspiration:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+export function Inspiration({ data }: InspirationProps) {
+  if (!data) {
     return (
       <section className="py-16 bg-slate-950">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Sparkles className="w-8 h-8 text-amber-400" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                Our Inspiration
+              </h2>
+            </div>
+            <p className="text-slate-500">No inspiration data available</p>
           </div>
         </div>
       </section>
     );
-  }
-
-  if (!data) {
-    return null;
   }
 
   return (

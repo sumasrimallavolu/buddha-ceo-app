@@ -195,7 +195,7 @@ function DonatePage() {
 
               {/* Main Heading - Creative Typography */}
               <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-white mb-4 leading-tight animate-[fadeInUp_0.8s_ease-out]">
-                Make a
+                Donate to Make a
                 <span className="block bg-gradient-to-r from-blue-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent">
                   Difference
                 </span>
@@ -225,7 +225,7 @@ function DonatePage() {
                 className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-full px-12 py-6 text-lg font-semibold shadow-2xl shadow-blue-500/25 transition-all hover:scale-105 hover:shadow-blue-500/40 animate-[fadeInUp_0.8s_ease-out_0.6s]"
                 onClick={() => document.getElementById('donation-section')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                Start Giving
+                Donate Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
@@ -237,7 +237,7 @@ function DonatePage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-                Choose Your <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Impact</span>
+                Choose Your <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Donation Amount</span>
               </h2>
               <p className="text-slate-400 text-lg">Select an amount that feels right for you</p>
             </div>
@@ -306,7 +306,7 @@ function DonatePage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-                Your <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">Impact</span>
+                Your Donation <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">Impact</span>
               </h2>
               <p className="text-slate-400 text-lg">See the difference your donation makes</p>
             </div>
@@ -438,7 +438,7 @@ function DonatePage() {
           <div className="fixed right-0 top-0 h-full w-full sm:w-[450px] bg-slate-950 border-l border-white/10 z-50 shadow-2xl animate-[slideInRight_0.3s_ease-out] overflow-y-auto">
             <div className="sticky top-0 bg-slate-950/95 backdrop-blur-sm border-b border-white/10 p-4 z-10">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-white">Complete Donation</h3>
+                <h2 className="text-xl font-bold text-white">Complete Your Donation</h2>
                 <button
                   onClick={closeSidebar}
                   className="p-2 rounded-lg hover:bg-white/10 transition-colors"

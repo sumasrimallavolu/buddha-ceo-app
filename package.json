@@ -10,6 +10,7 @@
     "type-check": "tsc --noEmit",
     "pre-deploy": "bash scripts/pre-deploy.sh",
     "deploy": "bash scripts/watch-and-deploy.sh",
+    "db:seed": "tsx lib/seed.ts",
     "db:import-buddhaceo": "tsx scripts/import-buddhaceo-data.ts",
     "db:import-about": "tsx scripts/import-about-data.ts",
     "db:import-resources": "tsx scripts/import-resources-data.ts",

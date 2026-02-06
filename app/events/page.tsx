@@ -116,7 +116,7 @@ export default function EventsPage() {
       <Header />
       <main className="flex-1">
         {/* Hero Section - Golden Ratio: 1:1.618 */}
-        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-slate-950">
+        <section className="relative min-h-[35vh] flex items-center overflow-hidden bg-slate-950">
           {/* Background */}
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
@@ -124,16 +124,13 @@ export default function EventsPage() {
             <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30 mb-6">
               <Calendar className="w-4 h-4" />
               <span>Transformative Programs</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Events &{' '}
-              <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">
-                Programs
-              </span>
+              Events & Programs
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
               Discover our meditation programs designed for your transformation journey
@@ -142,11 +139,14 @@ export default function EventsPage() {
         </section>
 
         {/* Filters Section */}
-        <section className="py-8 bg-slate-900/50 border-y border-white/5">
+        <section className="py-8 bg-slate-900/50 border-y border-white/5" aria-labelledby="filter-heading">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="filter-heading" className="sr-only">
+              Filter Programs by Type
+            </h2>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-2 text-white">
-                <Filter className="h-5 w-5 text-blue-400" />
+                <Filter className="h-5 w-5 text-blue-400" aria-hidden="true" />
                 <span className="font-semibold">
                   {filterType === 'all' ? 'All Programs' : getEventTypeLabel(filterType)}
                 </span>
@@ -182,11 +182,14 @@ export default function EventsPage() {
         </section>
 
         {/* Events Grid - Golden Ratio Layout */}
-        <section className="py-16 bg-slate-950">
+        <section className="py-16 bg-slate-950" aria-labelledby="events-heading">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="events-heading" className="sr-only">
+              Available Events and Programs
+            </h2>
             {filteredEvents.length === 0 ? (
               <div className="text-center py-20">
-                <Calendar className="w-16 h-16 text-slate-700 mx-auto mb-4" />
+                <Calendar className="w-16 h-16 text-slate-700 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-2xl font-bold text-white mb-2">No Events Found</h3>
                 <p className="text-slate-400">Check back soon for new programs!</p>
               </div>

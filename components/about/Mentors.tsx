@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Loader2, Award } from 'lucide-react';
+import { Award } from 'lucide-react';
 
 interface TeamMember {
   _id: string;
@@ -14,46 +13,31 @@ interface TeamMember {
   order?: number;
 }
 
-export function Mentors() {
-  const [mentors, setMentors] = useState<TeamMember[]>([]);
-  const [loading, setLoading] = useState(true);
+interface MentorsProps {
+  data: TeamMember[];
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/about?section=teamMembers');
-        const result = await response.json();
+export function Mentors({ data: teamMembers }: MentorsProps) {
+  const mentors = teamMembers
+    .filter((member) => member.role === 'mentor')
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-        if (result.success && result.data) {
-          const mentorData = result.data
-            .filter((member: TeamMember) => member.role === 'mentor')
-            .sort((a: TeamMember, b: TeamMember) => (a.order || 0) - (b.order || 0));
-          setMentors(mentorData);
-        }
-      } catch (error) {
-        console.error('Error fetching mentors:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (mentors.length === 0) {
     return (
       <section className="py-16 bg-slate-950">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Award className="w-8 h-8 text-blue-400" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                Mentors
+              </h2>
+            </div>
+            <p className="text-slate-500">No mentor information available</p>
           </div>
         </div>
       </section>
     );
-  }
-
-  if (mentors.length === 0) {
-    return null;
   }
 
   return (

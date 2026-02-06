@@ -3,10 +3,14 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { put } from '@vercel/blob';
 
-// Maximum file size: 5MB
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+// Maximum file size: 5MB for images, 50MB for videos
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 // Allowed image types
-const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+const IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+// Allowed video types
+const VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime'];
+const ALLOWED_TYPES = [...IMAGE_TYPES, ...VIDEO_TYPES];
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,18 +27,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    // Determine if file is image or video
+    const isImage = IMAGE_TYPES.includes(file.type);
+    const isVideo = VIDEO_TYPES.includes(file.type);
+
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
+      const allowedTypes = [...IMAGE_TYPES, ...VIDEO_TYPES].map(type => type.split('/')[1].toUpperCase()).join(', ');
       return NextResponse.json(
-        { error: 'Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.' },
+        { error: `Invalid file type. Only ${allowedTypes} are allowed.` },
         { status: 400 }
       );
     }
 
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
+    // Validate file size based on type
+    const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+    if (file.size > maxSize) {
+      const maxSizeMB = (maxSize / (1024 * 1024)).toFixed(0);
       return NextResponse.json(
-        { error: 'File size exceeds 5MB limit' },
+        { error: `File size exceeds ${maxSizeMB}MB limit` },
         { status: 400 }
       );
     }
@@ -105,6 +116,11 @@ export async function PUT(request: NextRequest) {
     const uploads = [];
 
     for (const file of files) {
+      // Determine if file is image or video
+      const isImage = IMAGE_TYPES.includes(file.type);
+      const isVideo = VIDEO_TYPES.includes(file.type);
+      const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+
       // Validate file type
       if (!ALLOWED_TYPES.includes(file.type)) {
         uploads.push({
@@ -115,10 +131,11 @@ export async function PUT(request: NextRequest) {
       }
 
       // Validate file size
-      if (file.size > MAX_FILE_SIZE) {
+      if (file.size > maxSize) {
+        const maxSizeMB = (maxSize / (1024 * 1024)).toFixed(0);
         uploads.push({
           filename: file.name,
-          error: 'File size exceeds 5MB limit',
+          error: `File size exceeds ${maxSizeMB}MB limit`,
         });
         continue;
       }

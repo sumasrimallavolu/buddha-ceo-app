@@ -178,6 +178,11 @@ export default function ResourcesPage() {
         {/* Resources Section */}
         <section className="py-16 bg-slate-950">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">
+              <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
+                Browse Our Collection
+              </span>
+            </h2>
             {resources && (
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="flex flex-wrap justify-center bg-white/5 p-3 rounded-xl border border-white/10 max-w-4xl mx-auto h-auto gap-2">
@@ -220,6 +225,7 @@ export default function ResourcesPage() {
 
                 {/* Books Tab */}
                 <TabsContent value="books" className="mt-8">
+                  <h3 className="text-2xl font-bold text-white mb-6 sr-only">Books</h3>
                   {resources.books.length === 0 ? (
                     <EmptyState icon={Book} message="No books available" />
                   ) : (
@@ -265,6 +271,7 @@ export default function ResourcesPage() {
 
                 {/* Videos Tab */}
                 <TabsContent value="videos" className="mt-8">
+                  <h3 className="text-2xl font-bold text-white mb-6 sr-only">Videos</h3>
                   {resources.videos.length === 0 ? (
                     <EmptyState icon={Video} message="No videos available" />
                   ) : (
@@ -317,6 +324,7 @@ export default function ResourcesPage() {
 
                 {/* Magazines Tab */}
                 <TabsContent value="magazines" className="mt-8">
+                  <h3 className="text-2xl font-bold text-white mb-6 sr-only">Magazines</h3>
                   {resources.magazines.length === 0 ? (
                     <EmptyState icon={FileText} message="No magazines available" />
                   ) : (
@@ -359,6 +367,7 @@ export default function ResourcesPage() {
 
                 {/* Links Tab */}
                 <TabsContent value="links" className="mt-8">
+                  <h3 className="text-2xl font-bold text-white mb-6 sr-only">Links</h3>
                   {resources.links.length === 0 ? (
                     <EmptyState icon={ExternalLink} message="No links available" />
                   ) : (
@@ -400,6 +409,7 @@ export default function ResourcesPage() {
 
                 {/* Testimonials Tab */}
                 <TabsContent value="testimonials" className="mt-8">
+                  <h3 className="text-2xl font-bold text-white mb-6 sr-only">Testimonials</h3>
                   {testimonials.length === 0 ? (
                     <EmptyState icon={Quote} message="No testimonials available" />
                   ) : (
@@ -442,7 +452,7 @@ function EmptyState({ icon: Icon, message }: { icon: any; message: string }) {
   return (
     <div className="text-center py-20">
       <Icon className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-      <h3 className="text-xl font-bold text-white mb-2">{message}</h3>
+      <h2 className="text-xl font-bold text-white mb-2">{message}</h2>
       <p className="text-slate-400">Check back soon for new content!</p>
     </div>
   );

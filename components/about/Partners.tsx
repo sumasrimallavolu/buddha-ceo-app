@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Loader2, Building2 } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 
 interface Partner {
   _id?: string;
@@ -12,46 +11,29 @@ interface Partner {
   order: number;
 }
 
-export function Partners() {
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [loading, setLoading] = useState(true);
+interface PartnersProps {
+  data: Partner[] | null;
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/about?section=partners');
-        const result = await response.json();
+export function Partners({ data }: PartnersProps) {
+  const partners = data ? data.sort((a, b) => a.order - b.order) : [];
 
-        if (result.success && result.data) {
-          const partnersData = result.data.sort(
-            (a: Partner, b: Partner) => a.order - b.order
-          );
-          setPartners(partnersData);
-        }
-      } catch (error) {
-        console.error('Error fetching partners:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (partners.length === 0) {
     return (
       <section className="py-16 bg-slate-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Building2 className="w-8 h-8 text-blue-400" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                Partner Organizations
+              </h2>
+            </div>
+            <p className="text-slate-500">No partner information available</p>
           </div>
         </div>
       </section>
     );
-  }
-
-  if (partners.length === 0) {
-    return null;
   }
 
   return (
