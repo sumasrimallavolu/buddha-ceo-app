@@ -12,7 +12,10 @@
     "deploy": "bash scripts/watch-and-deploy.sh",
     "db:import-buddhaceo": "tsx scripts/import-buddhaceo-data.ts",
     "db:import-about": "tsx scripts/import-about-data.ts",
-    "db:import-resources": "tsx scripts/import-resources-data.ts"
+    "db:import-resources": "tsx scripts/import-resources-data.ts",
+    "security:check": "bash scripts/security-validation.sh",
+    "security:audit": "npm audit --audit-level=moderate",
+    "security:fix": "npm audit fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

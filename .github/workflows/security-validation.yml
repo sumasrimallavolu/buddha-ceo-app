@@ -1,0 +1,217 @@
+name: Security Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security validation script
+        id: security-check
+        run: |
+          chmod +x scripts/security-validation.sh
+          bash scripts/security-validation.sh
+        continue-on-error: true
+
+      - name: Run TypeScript security validator
+        id: ts-security
+        run: npx tsx scripts/security-validator.ts
+        continue-on-error: true
+
+      - name: npm audit
+        id: npm-audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run TruffleHog (Secret Scanner)
+        id: trufflehog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+        continue-on-error: true
+
+      - name: Check for hardcoded secrets in .env files
+        run: |
+          echo "Checking for secrets in .env files..."
+          if find . -name ".env*" -not -name ".env.example" -exec grep -l "SECRET\|KEY\|PASSWORD\|TOKEN" {} \; 2>/dev/null; then
+            echo "⚠️  Warning: .env files may contain secrets"
+            echo "Ensure .env files are in .gitignore"
+          fi
+
+      - name: Check for insecure dependencies
+        run: |
+          echo "Checking for outdated packages with known vulnerabilities..."
+          npm outdated || true
+
+      - name: Generate security report
+        if: always()
+        run: |
+          echo "# 🔒 Security Scan Report" > security-report.md
+          echo "" >> security-report.md
+          echo "**Date:** $(date)" >> security-report.md
+          echo "**Commit:** ${{ github.sha }}" >> security-report.md
+          echo "**Branch:** ${{ github.ref_name }}" >> security-report.md
+          echo "" >> security-report.md
+          echo "## Scan Results" >> security-report.md
+          echo "" >> security-report.md
+          echo "- Bash Script: ${{ steps.security-check.outcome }}" >> security-report.md
+          echo "- TypeScript Validator: ${{ steps.ts-security.outcome }}" >> security-report.md
+          echo "- npm audit: ${{ steps.npm-audit.outcome }}" >> security-report.md
+          echo "- TruffleHog: ${{ steps.trufflehog.outcome }}" >> security-report.md
+
+      - name: Upload security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: security-report.md
+          retention-days: 30
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const scriptOutcome = '${{ steps.ts-security.outcome }}';
+            const auditOutcome = '${{ steps.npm-audit.outcome }}';
+            const trufflehogOutcome = '${{ steps.trufflehog.outcome }}';
+
+            let emoji = '✅';
+            if (scriptOutcome === 'failure' || auditOutcome === 'failure') {
+              emoji = '❌';
+            } else if (scriptOutcome === 'success' && auditOutcome === 'success') {
+              emoji = '✅';
+            }
+
+            const message = `${emoji} **Security Validation Complete**
+
+            - TypeScript Security Check: ${scriptOutcome === 'success' ? '✅ Passed' : '❌ Issues found'}
+            - npm audit: ${auditOutcome === 'success' ? '✅ Passed' : '⚠️ Vulnerabilities found'}
+            - Secret Scanner: ${trufflehogOutcome === 'success' ? '✅ No secrets' : '⚠️ Check results'}
+
+            ${scriptOutcome === 'failure' || auditOutcome === 'failure' ? '\n⚠️ **Security issues detected. Please review before merging.**' : '\n✅ No critical security issues found.'}
+
+            See [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+
+      - name: Fail on critical issues
+        if: steps.security-check.outcome == 'failure'
+        run: |
+          echo "❌ Critical security issues found!"
+          exit 1
+
+  dependency-check:
+    name: 📦 Dependency Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Snyk security check
+        continue-on-error: true
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+      - name: Check for high-severity vulnerabilities
+        run: |
+          echo "Checking for high/critical severity vulnerabilities..."
+          npm audit --audit-level=high || echo "⚠️  High severity vulnerabilities found"
+
+  code-quality-check:
+    name: 🎯 Code Quality Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for console.log in production code
+        run: |
+          echo "Checking for console.log statements..."
+          OUTPUT=$(git grep -n "console\\.log" -- '*.ts' '*.tsx' | grep -v "node_modules" | grep -v ".next" || true)
+          if [ -n "$OUTPUT" ]; then
+            echo "⚠️  Found console.log in code:"
+            echo "$OUTPUT"
+            echo "Consider removing console.log from production code"
+          fi
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          echo "Checking for TODO/FIXME comments..."
+          OUTPUT=$(git grep -n "TODO\\|FIXME" -- '*.ts' '*.tsx' | grep -v "node_modules" || true)
+          if [ -n "$OUTPUT" ]; then
+            echo "⚠️  Found TODO/FIXME comments:"
+            echo "$OUTPUT"
+          fi
+
+      - name: Check for any-type usage
+        run: |
+          echo "Checking for 'any' type usage..."
+          OUTPUT=$(git grep -n ": any" -- '*.ts' '*.tsx' | grep -v "node_modules" || true)
+          if [ -n "$OUTPUT" ]; then
+            echo "⚠️  Found 'any' type usage (consider specific types):"
+            echo "$OUTPUT" | head -10
+          fi
+
+      - name: Check for debugger statements
+        run: |
+          echo "Checking for debugger statements..."
+          if git grep -n "debugger" -- '*.ts' '*.tsx'; then
+            echo "❌ ERROR: debugger statement found in code"
+            exit 1
+          fi

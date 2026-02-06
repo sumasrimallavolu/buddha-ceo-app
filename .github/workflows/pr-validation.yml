@@ -66,6 +66,25 @@ jobs:
           fi
           echo "✅ API routes use correct patterns"
 
+      - name: Quick security check
+        run: |
+          echo "Checking for common security issues..."
+          # Check for hardcoded secrets
+          if git grep -i "api.*key.*=.*['\"]" -- '*.ts' '*.tsx' | grep -v "process.env" | head -5; then
+            echo "⚠️  Warning: Possible hardcoded API keys detected"
+          fi
+          # Check for eval usage
+          if git grep "eval(" -- '*.ts' '*.tsx'; then
+            echo "❌ ERROR: eval() detected - security risk"
+            exit 1
+          fi
+          # Check for dangerouslySetInnerHTML without sanitization
+          if git grep "dangerouslySetInnerHTML" -- '*.tsx' | grep -v "DOMPurify"; then
+            echo "❌ ERROR: dangerouslySetInnerHTML without sanitization"
+            exit 1
+          fi
+          echo "✅ No critical security issues found"
+
       - name: Comment validation results
         if: always()
         uses: actions/github-script@v7
@@ -81,6 +100,7 @@ jobs:
             - Theme check: ${{ job.status === 'success' ? '✅ Passed' : '⚠️ Warnings' }}
             - Analytics check: ${{ job.status === 'success' ? '✅ Passed' : '⚠️ Warnings' }}
             - API patterns: ${{ job.status === 'success' ? '✅ Passed' : '❌ Failed' }}
+            - Security check: ${{ job.status === 'success' ? '✅ Passed' : '❌ Failed' }}
 
             See [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`;
 
