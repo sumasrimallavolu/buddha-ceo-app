@@ -26,13 +26,9 @@ export function Header() {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Project Excellence', href: '/project-excellence' },
-    { name: 'Events & Programs', href: '/events' },
-    { name: 'Register', href: '/register' },
+    { name: 'Programs', href: '/events' },
     { name: 'Resources', href: '/resources' },
-    { name: 'Donate', href: '/donate' },
-    { name: 'Community', href: '/community' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Donate', href: '/donate' }
   ];
 
   return (

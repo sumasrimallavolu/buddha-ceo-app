@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -12,15 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { BookOpen, MoreVertical, Edit, Trash, Download } from 'lucide-react';
-import { Alert } from '@/components/ui/alert';
+import { BookOpen, MoreVertical, Edit, Trash, Download, Book, Video, FileText, Link } from 'lucide-react';
 import { ResourceCreateModal, ResourceEditModal } from '@/components/admin';
 
 interface Resource {
@@ -83,36 +80,57 @@ export default function ResourcesPage() {
     }
   };
 
-  const getTypeBadgeColor = (type: string) => {
+  const getTypeBadge = (type: string) => {
     switch (type) {
       case 'book':
-        return 'bg-emerald-100 text-emerald-800';
+        return {
+          label: 'Book',
+          className: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+          icon: Book,
+        };
       case 'video':
-        return 'bg-red-100 text-red-800';
+        return {
+          label: 'Video',
+          className: 'bg-red-500/20 text-red-400 border-red-500/30',
+          icon: Video,
+        };
       case 'magazine':
-        return 'bg-green-100 text-green-800';
+        return {
+          label: 'Magazine',
+          className: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+          icon: FileText,
+        };
       case 'link':
-        return 'bg-amber-100 text-stone-800';
+        return {
+          label: 'Link',
+          className: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+          icon: Link,
+        };
       default:
-        return 'bg-gray-100 text-gray-800';
+        return {
+          label: type,
+          className: 'bg-slate-500/20 text-slate-400 border-slate-500/30',
+          icon: BookOpen,
+        };
     }
   };
 
-  const canEdit = session?.user?.role === 'admin' || session?.user?.role === 'content_manager';
+  const canEdit = session?.user?.role === 'content_manager';
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Resource Management</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-white mb-2">Resource Management</h1>
+          <p className="text-slate-400">
             Manage books, videos, magazines, and links
           </p>
         </div>
         {canEdit && (
           <ResourceCreateModal
             trigger={
-              <Button className="bg-amber-600">
+              <Button className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-xl shadow-lg shadow-blue-500/25 transition-all hover:scale-105">
                 <BookOpen className="mr-2 h-4 w-4" />
                 Add Resource
               </Button>
@@ -122,97 +140,111 @@ export default function ResourcesPage() {
         )}
       </div>
 
+      {/* Error Alert */}
       {error && (
-        <Alert variant="destructive">
-          {error}
-        </Alert>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400">
+          <p>{error}</p>
+        </div>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Resources ({resources.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
+      {/* Resources Table */}
+      <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 overflow-hidden">
+        <div className="p-6 border-b border-white/10">
+          <h2 className="text-lg font-semibold text-white">
+            All Resources ({resources.length})
+          </h2>
+        </div>
+
+        <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Order</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="border-white/10 hover:bg-white/5">
+                <TableHead className="text-slate-400 font-medium">Title</TableHead>
+                <TableHead className="text-slate-400 font-medium">Type</TableHead>
+                <TableHead className="text-slate-400 font-medium">Category</TableHead>
+                <TableHead className="text-slate-400 font-medium">Order</TableHead>
+                <TableHead className="text-slate-400 font-medium text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8">
-                    <p className="text-gray-500">Loading...</p>
+                  <TableCell colSpan={5} className="text-center py-12">
+                    <div className="inline-block w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
                   </TableCell>
                 </TableRow>
               ) : resources.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8">
-                    <p className="text-gray-500">No resources found</p>
+                  <TableCell colSpan={5} className="text-center py-12">
+                    <BookOpen className="h-12 w-12 text-slate-600 mx-auto mb-3" />
+                    <p className="text-slate-400">No resources found</p>
                   </TableCell>
                 </TableRow>
               ) : (
-                resources.map((resource) => (
-                  <TableRow key={resource._id}>
-                    <TableCell className="font-medium">{resource.title}</TableCell>
-                    <TableCell>
-                      <Badge className={getTypeBadgeColor(resource.type)}>
-                        {resource.type}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{resource.category}</TableCell>
-                    <TableCell>{resource.order}</TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          {canEdit && (
-                            <ResourceEditModal
-                              resourceId={resource._id}
-                              trigger={
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                  <Edit className="mr-2 h-4 w-4" />
-                                  Edit
-                                </DropdownMenuItem>
-                              }
-                              onSuccess={fetchResources}
-                            />
-                          )}
-                          {(resource.type === 'book' || resource.type === 'magazine') && (
-                            <DropdownMenuItem>
-                              <Download className="mr-2 h-4 w-4" />
-                              Download
-                            </DropdownMenuItem>
-                          )}
-                          {canEdit && (
-                            <DropdownMenuItem
-                              className="text-red-600"
-                              onClick={() => handleDelete(resource._id)}
-                              disabled={deleting === resource._id}
-                            >
-                              <Trash className="mr-2 h-4 w-4" />
-                              {deleting === resource._id ? 'Deleting...' : 'Delete'}
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
+                resources.map((resource) => {
+                  const typeBadge = getTypeBadge(resource.type);
+                  const TypeIcon = typeBadge.icon;
+
+                  return (
+                    <TableRow key={resource._id} className="border-white/10 hover:bg-white/5">
+                      <TableCell className="font-medium text-white">{resource.title}</TableCell>
+                      <TableCell>
+                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${typeBadge.className}`}>
+                          <TypeIcon className="h-3 w-3" />
+                          {typeBadge.label}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-slate-400">{resource.category}</TableCell>
+                      <TableCell className="text-slate-400">{resource.order}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
+                            {canEdit && (
+                              <ResourceEditModal
+                                resourceId={resource._id}
+                                trigger={
+                                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10">
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit
+                                  </DropdownMenuItem>
+                                }
+                                onSuccess={fetchResources}
+                              />
+                            )}
+
+                            {(resource.type === 'book' || resource.type === 'magazine') && (
+                              <DropdownMenuItem className="text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10">
+                                <Download className="mr-2 h-4 w-4" />
+                                Download
+                              </DropdownMenuItem>
+                            )}
+
+                            {canEdit && (
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(resource._id)}
+                                disabled={deleting === resource._id}
+                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10 focus:bg-red-500/10"
+                              >
+                                <Trash className="mr-2 h-4 w-4" />
+                                {deleting === resource._id ? 'Deleting...' : 'Delete'}
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

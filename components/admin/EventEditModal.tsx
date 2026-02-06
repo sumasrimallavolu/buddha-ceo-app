@@ -17,14 +17,14 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, CheckCircle2, Edit, Save } from 'lucide-react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import ImageUpload from './ImageUpload';
 
 interface EventEditModalProps {
@@ -161,29 +161,29 @@ export function EventEditModal({
 
   if (fetching) {
     return (
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-        <DialogContent>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+        <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10">
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     );
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Edit Event</DialogTitle>
-          <DialogDescription>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+      <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10 overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle className="text-white">Edit Event</SheetTitle>
+          <SheetDescription className="text-slate-400">
             Update event details
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="space-y-6 py-8 px-6">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
@@ -191,7 +191,7 @@ export function EventEditModal({
           )}
 
           {success && (
-            <Alert className="border-green-500 bg-green-50 text-green-700">
+            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 Event updated successfully!
@@ -392,7 +392,7 @@ export function EventEditModal({
           )}
         </div>
 
-        <DialogFooter className="gap-2">
+        <SheetFooter className="gap-3 pt-6 px-6">
           <Button
             type="button"
             variant="outline"
@@ -437,8 +437,8 @@ export function EventEditModal({
               </>
             )}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }

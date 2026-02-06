@@ -138,9 +138,9 @@ export default function ReviewContentPage() {
       case 'photo_collage':
         return (
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">{content.title}</h3>
+            <h3 className="text-2xl font-bold text-white">{content.title}</h3>
             {content.content?.description && (
-              <p className="text-gray-600">{content.content.description}</p>
+              <p className="text-slate-300">{content.content.description}</p>
             )}
             <div className={`grid gap-4 ${
               content.layout === 'masonry' ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2 md:grid-cols-3'
@@ -154,7 +154,7 @@ export default function ReviewContentPage() {
                     className="object-cover rounded"
                   />
                   {img.caption && (
-                    <p className="text-sm mt-2 text-gray-600">{img.caption}</p>
+                    <p className="text-sm mt-2 text-slate-400">{img.caption}</p>
                   )}
                 </div>
               ))}
@@ -165,30 +165,30 @@ export default function ReviewContentPage() {
       case 'video_content':
         return (
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">{content.title}</h3>
+            <h3 className="text-2xl font-bold text-white">{content.title}</h3>
             {content.content?.category && (
-              <span className="text-sm bg-amber-100 px-3 py-1 rounded-full">
+              <span className="text-sm bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full">
                 {content.content.category}
               </span>
             )}
             {content.content?.description && (
-              <p className="text-gray-600 mt-4">{content.content.description}</p>
+              <p className="text-slate-300 mt-4">{content.content.description}</p>
             )}
-            <div className="aspect-video bg-gray-200 rounded flex items-center justify-center">
+            <div className="aspect-video bg-white/5 rounded flex items-center justify-center border border-white/10">
               {content.content?.videoUrl ? (
                 <div className="text-center">
-                  <p className="text-gray-600 mb-2">Video Preview</p>
+                  <p className="text-slate-400 mb-2">Video Preview</p>
                   <a
                     href={content.content.videoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-amber-600 underline"
+                    className="text-blue-400 underline"
                   >
                     {content.content.videoUrl}
                   </a>
                 </div>
               ) : (
-                <p className="text-gray-400">No video URL provided</p>
+                <p className="text-slate-500">No video URL provided</p>
               )}
             </div>
           </div>
@@ -210,24 +210,24 @@ export default function ReviewContentPage() {
               </div>
             )}
             <div className="flex-1">
-              <h3 className="text-2xl font-bold">{content.title}</h3>
+              <h3 className="text-2xl font-bold text-white">{content.title}</h3>
               {content.content?.author && (
-                <p className="text-lg text-gray-600 mt-2">By {content.content.author}</p>
+                <p className="text-lg text-slate-300 mt-2">By {content.content.author}</p>
               )}
               {content.content?.category && (
-                <span className="text-sm bg-amber-100 px-3 py-1 rounded-full inline-block mt-2">
+                <span className="text-sm bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full inline-block mt-2">
                   {content.content.category}
                 </span>
               )}
               {content.content?.description && (
-                <p className="text-gray-600 mt-4">{content.content.description}</p>
+                <p className="text-slate-300 mt-4">{content.content.description}</p>
               )}
               <div className="flex gap-4 mt-6">
                 {content.content?.downloadUrl && (
-                  <Button>Download</Button>
+                  <Button className="bg-white/5 hover:bg-white/10 border border-white/20 text-white">Download</Button>
                 )}
                 {content.content?.purchaseUrl && (
-                  <Button variant="outline">Purchase</Button>
+                  <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">Purchase</Button>
                 )}
               </div>
             </div>
@@ -237,17 +237,17 @@ export default function ReviewContentPage() {
       case 'mixed_media':
         return (
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">{content.title}</h3>
+            <h3 className="text-2xl font-bold text-white">{content.title}</h3>
             {content.content?.category && (
-              <span className="text-sm bg-amber-100 px-3 py-1 rounded-full">
+              <span className="text-sm bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full">
                 {content.content.category}
               </span>
             )}
-            <div className="prose max-w-none">
+            <div className="prose prose-invert max-w-none">
               {content.content?.content ? (
                 <div dangerouslySetInnerHTML={{ __html: content.content.content }} />
               ) : (
-                <p className="text-gray-400">No content added yet</p>
+                <p className="text-slate-500">No content added yet</p>
               )}
             </div>
           </div>
@@ -256,22 +256,22 @@ export default function ReviewContentPage() {
       case 'testimonial':
         return (
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">{content.title}</h3>
+            <h3 className="text-2xl font-bold text-white">{content.title}</h3>
             {content.content?.subtitle && (
-              <p className="text-amber-600 font-medium">{content.content.subtitle}</p>
+              <p className="text-blue-400 font-medium">{content.content.subtitle}</p>
             )}
             {content.content?.quote && (
-              <blockquote className="text-lg italic text-gray-700 border-l-4 border-amber-600 pl-4">
+              <blockquote className="text-lg italic text-slate-300 border-l-4 border-amber-500 pl-4">
                 "{content.content.quote}"
               </blockquote>
             )}
             {content.content?.videoUrl && (
-              <div className="aspect-video bg-gray-200 rounded flex items-center justify-center">
+              <div className="aspect-video bg-white/5 rounded flex items-center justify-center border border-white/10">
                 <a
                   href={content.content.videoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-amber-600 underline"
+                  className="text-blue-400 underline"
                 >
                   Watch Video
                 </a>
@@ -296,15 +296,15 @@ export default function ReviewContentPage() {
               </div>
             )}
             <div className="flex-1">
-              <h3 className="text-2xl font-bold">{content.title}</h3>
+              <h3 className="text-2xl font-bold text-white">{content.title}</h3>
               {content.content?.role && (
-                <p className="text-amber-600 font-medium">{content.content.role}</p>
+                <p className="text-blue-400 font-medium">{content.content.role}</p>
               )}
               {content.content?.bio && (
-                <p className="text-gray-600 mt-4">{content.content.bio}</p>
+                <p className="text-slate-300 mt-4">{content.content.bio}</p>
               )}
               {content.content?.quote && (
-                <blockquote className="text-sm italic text-gray-600 mt-4 border-l-2 border-gray-300 pl-3">
+                <blockquote className="text-sm italic text-slate-400 mt-4 border-l-2 border-white/20 pl-3">
                   "{content.content.quote}"
                 </blockquote>
               )}
@@ -323,26 +323,26 @@ export default function ReviewContentPage() {
                 {content.content?.icon === 'target' && '🎯'}
               </div>
               <div className="flex-1">
-                <h3 className="text-2xl font-bold">{content.title}</h3>
+                <h3 className="text-2xl font-bold text-white">{content.title}</h3>
                 {content.content?.year && (
-                  <span className="text-sm bg-gray-100 px-3 py-1 rounded-full">
+                  <span className="text-sm bg-white/10 text-slate-300 border border-white/20 px-3 py-1 rounded-full">
                     {content.content.year}
                   </span>
                 )}
                 {content.content?.category && (
-                  <span className="text-sm bg-amber-100 px-3 py-1 rounded-full ml-2">
+                  <span className="text-sm bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full ml-2">
                     {content.content.category}
                   </span>
                 )}
               </div>
             </div>
             {content.content?.description && (
-              <p className="text-gray-600">{content.content.description}</p>
+              <p className="text-slate-300">{content.content.description}</p>
             )}
             {content.content?.highlights?.length > 0 && (
               <ul className="list-disc list-inside space-y-2">
                 {content.content.highlights.map((highlight: string, i: number) => (
-                  <li key={i} className="text-gray-700">{highlight}</li>
+                  <li key={i} className="text-slate-300">{highlight}</li>
                 ))}
               </ul>
             )}
@@ -352,8 +352,8 @@ export default function ReviewContentPage() {
       default:
         return (
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">{content.title}</h3>
-            <p className="text-gray-600">
+            <h3 className="text-2xl font-bold text-white">{content.title}</h3>
+            <p className="text-slate-300">
               {content.content?.description || 'No description provided'}
             </p>
           </div>
@@ -364,7 +364,7 @@ export default function ReviewContentPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
       </div>
     );
   }
@@ -372,62 +372,64 @@ export default function ReviewContentPage() {
   if (!content) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Content not found</p>
+        <p className="text-slate-500">Content not found</p>
         <Link href="/admin/content">
-          <Button className="mt-4">Back to Content</Button>
+          <Button className="mt-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white">Back to Content</Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-8 max-w-5xl px-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/admin/content?status=pending_review">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-gray-900">Review Content</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-white">Review Content</h1>
+          <p className="mt-2 text-slate-400">
             Review and approve or reject this content
           </p>
         </div>
       </div>
 
       {error && (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="border-red-500/50 bg-red-500/10 text-red-400">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
       {success && (
-        <Alert className="border-green-500 bg-green-50 text-green-700">
+        <Alert className="border-emerald-500/50 bg-emerald-500/10 text-emerald-400">
           <CheckCircle2 className="h-4 w-4" />
           <AlertDescription>{success}</AlertDescription>
         </Alert>
       )}
 
       <Tabs defaultValue="preview" className="w-full">
-        <TabsList className="w-full">
-          <TabsTrigger value="preview" className="flex-1">
+        <TabsList className="w-full bg-slate-900/50 border border-white/10 p-1">
+          <TabsTrigger value="preview" className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-violet-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-blue-500/30 text-slate-400 hover:text-slate-300 transition-all">
             <Eye className="h-4 w-4 mr-2" />
             Preview
           </TabsTrigger>
-          <TabsTrigger value="details" className="flex-1">
+          <TabsTrigger value="details" className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-violet-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-blue-500/30 text-slate-400 hover:text-slate-300 transition-all">
             <FileText className="h-4 w-4 mr-2" />
             Details
           </TabsTrigger>
-          <TabsTrigger value="review" className="flex-1">
-            <CheckCircle2 className="h-4 w-4 mr-2" />
-            Review
-          </TabsTrigger>
+          {userRole === 'content_reviewer' && (
+            <TabsTrigger value="review" className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-violet-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-blue-500/30 text-slate-400 hover:text-slate-300 transition-all">
+              <CheckCircle2 className="h-4 w-4 mr-2" />
+              Review
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="preview" className="mt-6">
-          <Card>
+          <Card className="bg-white/5 border-white/10">
             <CardContent className="p-6">
               {renderContentPreview()}
             </CardContent>
@@ -435,49 +437,49 @@ export default function ReviewContentPage() {
         </TabsContent>
 
         <TabsContent value="details" className="mt-6">
-          <Card>
+          <Card className="bg-white/5 border-white/10">
             <CardHeader>
-              <CardTitle>Content Metadata</CardTitle>
-              <CardDescription>View all details about this content</CardDescription>
+              <CardTitle className="text-white">Content Metadata</CardTitle>
+              <CardDescription className="text-slate-400">View all details about this content</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-muted-foreground">Title</Label>
-                  <p className="font-medium">{content.title}</p>
+                  <Label className="text-slate-400">Title</Label>
+                  <p className="font-medium text-white">{content.title}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Type</Label>
-                  <p className="font-medium capitalize">{content.type.replace('_', ' ')}</p>
+                  <Label className="text-slate-400">Type</Label>
+                  <p className="font-medium capitalize text-slate-300">{content.type.replace('_', ' ')}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Status</Label>
+                  <Label className="text-slate-400">Status</Label>
                   <span className={`inline-block px-2 py-1 rounded-full text-sm font-medium ${
-                    content.status === 'published' ? 'bg-green-100 text-green-700' :
-                    content.status === 'pending_review' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-gray-100 text-gray-700'
+                    content.status === 'published' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                    content.status === 'pending_review' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                    'bg-slate-500/20 text-slate-400 border border-slate-500/30'
                   }`}>
                     {content.status.replace('_', ' ')}
                   </span>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Layout</Label>
-                  <p className="font-medium capitalize">{content.layout || 'N/A'}</p>
+                  <Label className="text-slate-400">Layout</Label>
+                  <p className="font-medium capitalize text-slate-300">{content.layout || 'N/A'}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground flex items-center gap-2">
+                  <Label className="text-slate-400 flex items-center gap-2">
                     <User className="h-4 w-4" />
                     Created By
                   </Label>
-                  <p className="font-medium">{content.createdBy?.name || 'Unknown'}</p>
-                  <p className="text-sm text-muted-foreground">{content.createdBy?.email}</p>
+                  <p className="font-medium text-white">{content.createdBy?.name || 'Unknown'}</p>
+                  <p className="text-sm text-slate-500">{content.createdBy?.email}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground flex items-center gap-2">
+                  <Label className="text-slate-400 flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
                     Created Date
                   </Label>
-                  <p className="font-medium">
+                  <p className="font-medium text-slate-300">
                     {new Date(content.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -488,16 +490,16 @@ export default function ReviewContentPage() {
               </div>
 
               {content.isFeatured && (
-                <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <p className="text-sm font-medium text-amber-700">
+                <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                  <p className="text-sm font-medium text-amber-400">
                     ⭐ This content is marked as featured and will appear on the homepage
                   </p>
                 </div>
               )}
 
-              <div className="mt-4 pt-4 border-t">
-                <Label className="text-muted-foreground">Raw Content Data</Label>
-                <pre className="mt-2 p-4 bg-gray-50 rounded-lg text-xs overflow-x-auto">
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <Label className="text-slate-400">Raw Content Data</Label>
+                <pre className="mt-2 p-4 bg-white/5 border border-white/10 rounded-lg text-xs overflow-x-auto text-slate-300">
                   {JSON.stringify(content.content, null, 2)}
                 </pre>
               </div>
@@ -506,15 +508,15 @@ export default function ReviewContentPage() {
         </TabsContent>
 
         <TabsContent value="review" className="mt-6">
-          <Card>
+          <Card className="bg-white/5 border-white/10">
             <CardHeader>
-              <CardTitle>Review Decision</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-white">Review Decision</CardTitle>
+              <CardDescription className="text-slate-400">
                 Approve to publish on the website, or reject with feedback
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="prose max-w-none text-sm text-gray-600">
+              <div className="prose prose-invert max-w-none text-sm text-slate-400">
                 <p>
                   Review the content carefully before making a decision. Once approved,
                   this content will be immediately visible on the public website.
@@ -522,15 +524,15 @@ export default function ReviewContentPage() {
               </div>
 
               <div className="space-y-4 pt-4">
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <h4 className="font-medium text-green-900 mb-2">✓ Approve</h4>
-                  <p className="text-sm text-green-700">
+                <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+                  <h4 className="font-medium text-emerald-400 mb-2">✓ Approve</h4>
+                  <p className="text-sm text-emerald-300">
                     Content will be published immediately and visible to all visitors
                   </p>
                   <Button
                     onClick={handleApprove}
                     disabled={submitting}
-                    className="mt-3 bg-green-600 hover:bg-green-700"
+                    className="mt-3 bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     {submitting ? (
                       <>
@@ -546,25 +548,25 @@ export default function ReviewContentPage() {
                   </Button>
                 </div>
 
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <h4 className="font-medium text-red-900 mb-2">✗ Reject</h4>
-                  <p className="text-sm text-red-700">
+                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                  <h4 className="font-medium text-red-400 mb-2">✗ Reject</h4>
+                  <p className="text-sm text-red-300">
                     Content will be returned to the content manager with feedback
                   </p>
                   <div className="mt-3 space-y-2">
-                    <Label htmlFor="rejectionReason">Reason for rejection (required)</Label>
+                    <Label htmlFor="rejectionReason" className="text-slate-300">Reason for rejection (required)</Label>
                     <Textarea
                       id="rejectionReason"
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
                       placeholder="Explain what needs to be improved..."
                       rows={4}
-                      className="bg-white"
                     />
                     <Button
                       onClick={handleReject}
                       disabled={submitting || !rejectionReason.trim()}
                       variant="destructive"
+                      className="bg-red-600 hover:bg-red-700"
                     >
                       {submitting ? (
                         <>

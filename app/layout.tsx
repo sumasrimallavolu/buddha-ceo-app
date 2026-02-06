@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Lora } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import { VisitorTracker } from "@/components/analytics/VisitorTracker";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,7 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.variable} ${lora.variable} font-sans antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <VisitorTracker />
+          {children}
+        </Providers>
       </body>
     </html>
   );

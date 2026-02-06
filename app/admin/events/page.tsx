@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -12,16 +11,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CalendarPlus, MoreVertical, Edit, Trash, Users } from 'lucide-react';
-import { Alert } from '@/components/ui/alert';
-import { EventCreateModal, EventEditModal, EventRegistrationsModal } from '@/components/admin';
+import { CalendarPlus, MoreVertical, Edit, Trash, Users, Clock, CheckCircle, XCircle, Calendar } from 'lucide-react';
+import Link from 'next/link';
+import { EventCreateModal, EventEditModal } from '@/components/admin';
 
 interface Event {
   _id: string;
@@ -41,7 +39,6 @@ export default function EventsPage() {
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [showRegistrations, setShowRegistrations] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -87,18 +84,38 @@ export default function EventsPage() {
     }
   };
 
-  const getStatusBadgeColor = (status: string) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'upcoming':
-        return 'bg-green-100 text-green-800';
+        return {
+          label: 'Upcoming',
+          className: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+          icon: Calendar,
+        };
       case 'ongoing':
-        return 'bg-emerald-100 text-emerald-800';
+        return {
+          label: 'Ongoing',
+          className: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+          icon: Clock,
+        };
       case 'completed':
-        return 'bg-gray-100 text-gray-800';
+        return {
+          label: 'Completed',
+          className: 'bg-slate-500/20 text-slate-400 border-slate-500/30',
+          icon: CheckCircle,
+        };
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return {
+          label: 'Cancelled',
+          className: 'bg-red-500/20 text-red-400 border-red-500/30',
+          icon: XCircle,
+        };
       default:
-        return 'bg-gray-100 text-gray-800';
+        return {
+          label: status,
+          className: 'bg-slate-500/20 text-slate-400 border-slate-500/30',
+          icon: Calendar,
+        };
     }
   };
 
@@ -108,21 +125,22 @@ export default function EventsPage() {
     ).join(' ');
   };
 
-  const canEdit = session?.user?.role === 'admin' || session?.user?.role === 'content_manager';
+  const canEdit = session?.user?.role === 'content_manager';
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Event Management</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-white mb-2">Event Management</h1>
+          <p className="text-slate-400">
             Manage meditation programs and events
           </p>
         </div>
         {canEdit && (
           <EventCreateModal
             trigger={
-              <Button className="bg-amber-600">
+              <Button className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-xl shadow-lg shadow-blue-500/25 transition-all hover:scale-105">
                 <CalendarPlus className="mr-2 h-4 w-4" />
                 Add Event
               </Button>
@@ -132,122 +150,123 @@ export default function EventsPage() {
         )}
       </div>
 
+      {/* Error Alert */}
       {error && (
-        <Alert variant="destructive">
-          {error}
-        </Alert>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400">
+          <p>{error}</p>
+        </div>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Events ({events.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
+      {/* Events Table */}
+      <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 overflow-hidden">
+        <div className="p-6 border-b border-white/10">
+          <h2 className="text-lg font-semibold text-white">
+            All Events ({events.length})
+          </h2>
+        </div>
+
+        <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Dates</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Registrations</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="border-white/10 hover:bg-white/5">
+                <TableHead className="text-slate-400 font-medium">Title</TableHead>
+                <TableHead className="text-slate-400 font-medium">Type</TableHead>
+                <TableHead className="text-slate-400 font-medium">Dates</TableHead>
+                <TableHead className="text-slate-400 font-medium">Status</TableHead>
+                <TableHead className="text-slate-400 font-medium">Registrations</TableHead>
+                <TableHead className="text-slate-400 font-medium text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
-                    <p className="text-gray-500">Loading...</p>
+                  <TableCell colSpan={6} className="text-center py-12">
+                    <div className="inline-block w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
                   </TableCell>
                 </TableRow>
               ) : events.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
-                    <p className="text-gray-500">No events found</p>
+                  <TableCell colSpan={6} className="text-center py-12">
+                    <Calendar className="h-12 w-12 text-slate-600 mx-auto mb-3" />
+                    <p className="text-slate-400">No events found</p>
                   </TableCell>
                 </TableRow>
               ) : (
-                events.map((event) => (
-                  <TableRow key={event._id}>
-                    <TableCell className="font-medium">{event.title}</TableCell>
-                    <TableCell>{getTypeLabel(event.type)}</TableCell>
-                    <TableCell>
-                      {new Date(event.startDate).toLocaleDateString()} - {' '}
-                      {new Date(event.endDate).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getStatusBadgeColor(event.status)}>
-                        {event.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-2 text-gray-500" />
-                        {event.currentRegistrations}
-                        {event.maxParticipants && ` / ${event.maxParticipants}`}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => {
-                              setSelectedEvent(event);
-                              setShowRegistrations(true);
-                            }}
-                          >
-                            <Users className="mr-2 h-4 w-4" />
-                            View Registrations
-                          </DropdownMenuItem>
+                events.map((event) => {
+                  const statusBadge = getStatusBadge(event.status);
+                  const StatusIcon = statusBadge.icon;
 
-                          {canEdit && (
-                            <EventEditModal
-                              eventId={event._id}
-                              trigger={
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                  <Edit className="mr-2 h-4 w-4" />
-                                  Edit
-                                </DropdownMenuItem>
-                              }
-                              onSuccess={fetchEvents}
-                            />
-                          )}
-
-                          {canEdit && (
-                            <DropdownMenuItem
-                              className="text-red-600"
-                              onClick={() => handleDelete(event._id)}
-                              disabled={deleting === event._id}
-                            >
-                              <Trash className="mr-2 h-4 w-4" />
-                              {deleting === event._id ? 'Deleting...' : 'Delete'}
+                  return (
+                    <TableRow key={event._id} className="border-white/10 hover:bg-white/5">
+                      <TableCell className="font-medium text-white">{event.title}</TableCell>
+                      <TableCell className="text-slate-400">{getTypeLabel(event.type)}</TableCell>
+                      <TableCell className="text-slate-400">
+                        {new Date(event.startDate).toLocaleDateString()} - {' '}
+                        {new Date(event.endDate).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${statusBadge.className}`}>
+                          <StatusIcon className="h-3 w-3" />
+                          {statusBadge.label}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-slate-400">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4" />
+                          {event.currentRegistrations}
+                          {event.maxParticipants && ` / ${event.maxParticipants}`}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
+                            <DropdownMenuItem asChild className="text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10">
+                              <Link href={`/admin/events/${event._id}/registrations`} className="flex items-center w-full">
+                                <Users className="mr-2 h-4 w-4" />
+                                View Registrations
+                              </Link>
                             </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
+
+                            {canEdit && (
+                              <EventEditModal
+                                eventId={event._id}
+                                trigger={
+                                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10">
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Edit
+                                  </DropdownMenuItem>
+                                }
+                                onSuccess={fetchEvents}
+                              />
+                            )}
+
+                            {canEdit && (
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(event._id)}
+                                disabled={deleting === event._id}
+                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10 focus:bg-red-500/10"
+                              >
+                                <Trash className="mr-2 h-4 w-4" />
+                                {deleting === event._id ? 'Deleting...' : 'Delete'}
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {selectedEvent && (
-        <EventRegistrationsModal
-          eventId={selectedEvent._id}
-          eventTitle={selectedEvent.title}
-          open={showRegistrations}
-          onOpenChange={setShowRegistrations}
-        />
-      )}
     </div>
   );
 }

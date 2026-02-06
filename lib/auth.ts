@@ -2,7 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import connectDB from './mongodb';
-import { User } from './models';
+import { User, logActivity } from './models';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -22,6 +22,16 @@ export const authOptions: NextAuthOptions = {
         const user = await User.findOne({ email: credentials.email });
 
         if (!user) {
+          // Log failed login attempt - user not found
+          await logActivity({
+            userId: 'unknown',
+            userName: 'Unknown',
+            userEmail: credentials.email,
+            action: 'login_attempt',
+            resource: 'authentication',
+            details: { reason: 'User not found' },
+            status: 'failure',
+          });
           throw new Error('Invalid email or password');
         }
 
@@ -31,8 +41,29 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isPasswordValid) {
+          // Log failed login attempt - invalid password
+          await logActivity({
+            userId: user._id.toString(),
+            userName: user.name,
+            userEmail: user.email,
+            action: 'login_attempt',
+            resource: 'authentication',
+            details: { reason: 'Invalid password' },
+            status: 'failure',
+          });
           throw new Error('Invalid email or password');
         }
+
+        // Log successful login
+        await logActivity({
+          userId: user._id.toString(),
+          userName: user.name,
+          userEmail: user.email,
+          action: 'login',
+          resource: 'authentication',
+          details: { role: user.role },
+          status: 'success',
+        });
 
         return {
           id: user._id.toString(),
@@ -46,6 +77,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   pages: {
     signIn: '/login',

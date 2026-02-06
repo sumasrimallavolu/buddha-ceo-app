@@ -2,17 +2,69 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Play, Sparkles, Star } from 'lucide-react';
+import { ArrowRight, Play, Sparkles, Star, Loader2, Calendar, Clock } from 'lucide-react';
 import { useState, useEffect } from 'react';
+
+interface Event {
+  _id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  timings: string;
+  imageUrl: string;
+  status: string;
+}
+
+interface EventResponse {
+  success: boolean;
+  events?: Event[];
+}
 
 export function HeroSection() {
   const [scrollY, setScrollY] = useState(0);
+  const [upcomingEvent, setUpcomingEvent] = useState<Event | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    fetchUpcomingEvent();
+  }, []);
+
+  const fetchUpcomingEvent = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/events/public?priority=upcoming&limit=1');
+      const data: EventResponse = await response.json();
+
+      if (data.success && data.events && data.events.length > 0) {
+        setUpcomingEvent(data.events[0]);
+      }
+    } catch (error) {
+      console.error('Error fetching upcoming event:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  const formatEndDate = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+  };
+
+  // Show event card only if we have an upcoming event
+  const showEventCard = !loading && upcomingEvent;
 
   return (
     <section className="relative overflow-hidden min-h-[90vh] flex items-center bg-slate-950">
@@ -44,11 +96,11 @@ export function HeroSection() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center max-w-7xl mx-auto">
+        <div className={`grid gap-6 lg:gap-12 items-center max-w-7xl mx-auto grid-cols-1 max-w-4xl`}>
           {/* Left Content */}
-          <div className="space-y-6 sm:space-y-8" style={{ opacity: 1 - scrollY / 500 }}>
+          <div className={`space-y-6 sm:space-y-8 text-center mx-auto`} style={{ opacity: 1 - scrollY / 500 }}>
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 backdrop-blur-sm text-blue-400 text-sm font-medium border border-white/10 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+            <div className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 backdrop-blur-sm text-blue-400 text-sm font-medium border border-white/10 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all ${!showEventCard ? 'mx-auto' : ''}`}>
               <Sparkles className="w-4 h-4 text-amber-400" />
               <span>Transform Your Life Through Meditation</span>
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
@@ -81,14 +133,14 @@ export function HeroSection() {
             </h1>
 
             {/* Description */}
-            <p className="text-base sm:text-lg text-slate-400 max-w-2xl leading-relaxed border-l-4 border-blue-500/60 pl-5 bg-white/5 backdrop-blur-sm py-3 rounded-r-lg">
+            <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed border-l-4 border-blue-500/60 pl-5 bg-white/5 backdrop-blur-sm py-3 rounded-r-lg">
               Join our scientifically designed meditation programs. Experience
               transformation through ancient wisdom combined with modern understanding.
               Perfect for leaders, professionals, and seekers on the path of self-discovery.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+            <div className={`flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center`}>
               <Link href="/events" className="flex-1 sm:flex-none">
                 <Button
                   size="lg"
@@ -111,7 +163,7 @@ export function HeroSection() {
             </div>
 
             {/* Social Proof */}
-            <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 pt-6">
+            <div className={`flex flex-col sm:flex-row items-center gap-6 sm:gap-8 pt-6 justify-center`}>
               <div className="flex -space-x-3 sm:-space-x-4">
                 <img
                   src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
@@ -159,54 +211,6 @@ export function HeroSection() {
                   15+
                 </div>
                 <div className="text-sm text-slate-400 mt-1">Years</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Side - Enrollment Card */}
-          <div className="relative order-first lg:order-last">
-            <div
-              className="aspect-[4/3] w-full max-w-lg mx-auto lg:max-w-xl rounded-3xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 p-[10px] shadow-2xl border border-white/10 backdrop-blur-sm hover:scale-105 transition-transform duration-500"
-              style={{ transform: `translateY(${scrollY * 0.1}px)` }}
-            >
-              <div className="w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-br from-slate-900 to-slate-800">
-                <img
-                  src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80"
-                  alt="Peaceful meditation in nature"
-                  className="w-full h-full object-cover opacity-60"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent" />
-
-                {/* Content Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 text-white">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-xs font-bold mb-4 shadow-lg border border-blue-400/30">
-                    <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                    NOW ENROLLING
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl font-bold mb-3 drop-shadow-lg">
-                    Vibe - Meditation for Confidence
-                  </h3>
-                  <p className="text-slate-200 mb-4 text-base sm:text-lg max-w-md drop-shadow">
-                    40-Day Online Program for Youth & Students
-                  </p>
-                  <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-slate-300 mb-6">
-                    <span className="bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20">
-                      📅 Feb 15 - Mar 28, 2025
-                    </span>
-                    <span className="bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20">
-                      ⏰ 7-8 AM IST
-                    </span>
-                  </div>
-                  <Link href="/events" className="block">
-                    <Button
-                      size="lg"
-                      className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white w-full shadow-2xl text-base sm:text-lg py-6 border border-emerald-400/30"
-                    >
-                      <Play className="mr-2 h-5 w-5" />
-                      Register Now - FREE
-                    </Button>
-                  </Link>
-                </div>
               </div>
             </div>
           </div>

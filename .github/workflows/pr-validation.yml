@@ -1,0 +1,92 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  quick-validation:
+    name: ⚡ Quick Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npm run type-check
+
+      - name: ESLint check
+        run: npm run lint
+
+      - name: Check for permission violations
+        run: |
+          echo "Checking for admin permission violations..."
+          if git grep -n "session?.user?.role === 'admin'" -- '*.tsx' '*.ts' | grep -E "(edit|delete|create).*content\|edit.*event\|edit.*resource"; then
+            echo "❌ ERROR: Admin role should not have edit/delete permissions for content, events, or resources"
+            exit 1
+          fi
+          echo "✅ No permission violations found"
+
+      - name: Check for dark theme violations
+        run: |
+          echo "Checking for light theme classes in components..."
+          if git grep -n "bg-white\|border-gray" -- 'components/**/*.tsx' | grep -v "bg-white/[0-9]"; then
+            echo "⚠️  Warning: Light theme classes detected. Use dark theme (bg-white/5, border-white/10)"
+          fi
+
+      - name: Check for admin analytics filtering
+        run: |
+          echo "Checking analytics exclude admin pages..."
+          if git grep -n "VisitorLog.countDocuments\|VisitorLog.find" -- '**/*.ts' | grep -v "page:.*not.*admin"; then
+            echo "⚠️  Warning: Analytics queries should exclude admin pages with: page: { \$not: /^\/admin/ }"
+          fi
+
+      - name: Check for Next.js 15 patterns
+        run: |
+          echo "Checking for Next.js 14 DELETE/PUT patterns..."
+          if git grep -n "params.*{ params }" -- 'app/api/**/*.ts'; then
+            echo "❌ ERROR: Using Next.js 14 params pattern. Use query parameters instead."
+            exit 1
+          fi
+          echo "✅ API routes use correct patterns"
+
+      - name: Comment validation results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ job.status }}';
+            const emoji = status === 'success' ? '✅' : '❌';
+            const message = `${emoji} **PR Validation Complete**
+
+            - TypeScript: ${{ job.status === 'success' ? '✅ Passed' : '❌ Failed' }}
+            - ESLint: ${{ job.status === 'success' ? '✅ Passed' : '❌ Failed' }}
+            - Permissions check: ${{ job.status === 'success' ? '✅ Passed' : '❌ Failed' }}
+            - Theme check: ${{ job.status === 'success' ? '✅ Passed' : '⚠️ Warnings' }}
+            - Analytics check: ${{ job.status === 'success' ? '✅ Passed' : '⚠️ Warnings' }}
+            - API patterns: ${{ job.status === 'success' ? '✅ Passed' : '❌ Failed' }}
+
+            See [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });

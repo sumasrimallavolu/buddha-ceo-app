@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import {
   LayoutDashboard,
   Users,
@@ -15,6 +16,7 @@ import {
   Mail,
   LogOut,
   Menu,
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,6 +27,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { signOut } from 'next-auth/react';
+import { useState } from 'react';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, roles: ['admin', 'content_manager', 'content_reviewer'] },
@@ -33,7 +36,7 @@ const navigation = [
   { name: 'Events', href: '/admin/events', icon: Calendar, roles: ['admin', 'content_manager', 'content_reviewer'] },
   { name: 'Resources', href: '/admin/resources', icon: BookOpen, roles: ['admin', 'content_manager', 'content_reviewer'] },
   { name: 'Messages', href: '/admin/contact-messages', icon: MessageSquare, roles: ['admin', 'content_manager', 'content_reviewer'] },
-  { name: 'Subscribers', href: '/admin/subscribers', icon: Mail, roles: ['admin', 'content_manager', 'content_reviewer'] },
+  { name: 'People', href: '/admin/people', icon: Users, roles: ['admin', 'content_manager', 'content_reviewer'] },
 ];
 
 export default function AdminLayout({
@@ -44,6 +47,7 @@ export default function AdminLayout({
   const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -53,8 +57,11 @@ export default function AdminLayout({
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <div className="inline-block w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mb-4" />
+          <p className="text-slate-400">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -67,98 +74,160 @@ export default function AdminLayout({
     item.roles.includes(session.user.role)
   );
 
-  const NavLinks = () => (
-    <>
-      <div className="px-3 py-4">
-        <div className="flex items-center space-x-2 px-3 mb-6">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-600">
-            <span className="text-sm font-bold text-white">MI</span>
-          </div>
-          <span className="font-bold">Admin Panel</span>
-        </div>
+  const NavLink = ({ item }: { item: typeof navigation[0] }) => {
+    const isActive = item.href === '/admin'
+      ? pathname === item.href
+      : pathname.startsWith(item.href);
 
-        <div className="space-y-1">
-          {filteredNavigation.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-amber-50 text-amber-700'
-                    : 'text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                <Icon className="h-5 w-5" />
-                <span>{item.name}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+    const Icon = item.icon;
 
-      <div className="border-t p-3">
-        <div className="flex items-center space-x-3 px-3 mb-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
-            <span className="text-sm font-semibold text-amber-700">
-              {session.user.name?.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{session.user.name}</p>
-            <p className="text-xs text-gray-500 capitalize">{session.user.role.replace('_', ' ')}</p>
-          </div>
-        </div>
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={() => signOut({ callbackUrl: '/' })}
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
-        </Button>
-      </div>
-    </>
-  );
+    return (
+      <Link
+        href={item.href}
+        onClick={() => setMobileMenuOpen(false)}
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+          isActive
+            ? 'bg-gradient-to-r from-blue-500/20 to-violet-500/20 text-blue-400 border border-blue-500/30'
+            : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+        }`}
+      >
+        <Icon className="h-5 w-5 flex-shrink-0" />
+        <span>{item.name}</span>
+      </Link>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950">
       {/* Desktop Sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r bg-white px-6 pb-4 shadow-sm">
-          <NavLinks />
+      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
+        <div className="flex grow flex-col border-r border-white/10 bg-slate-950/50 backdrop-blur-xl">
+          {/* Logo */}
+          <div className="flex h-20 items-center justify-between px-6 border-b border-white/10">
+            <Link href="/admin" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <Image
+                src="https://static.wixstatic.com/media/ea3b9d_245553e655454481beb6d6201be19c80~mv2.png/v1/fill/w_200,h_53,al_c,lg_1,q_85,enc_avif,quality_auto/255x69%20%20Pixel%20Header%20Logo.png"
+                alt="Meditation Institute"
+                width={160}
+                height={42}
+                className="hover:scale-105 transition-transform duration-300 brightness-0 invert"
+              />
+            </Link>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex flex-1 flex-col gap-2 px-4 py-6 overflow-y-auto">
+            <div className="space-y-1">
+              {filteredNavigation.map((item) => (
+                <NavLink key={item.name} item={item} />
+              ))}
+            </div>
+          </div>
+
+          {/* User Profile & Logout */}
+          <div className="border-t border-white/10 p-4">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 mb-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-500/30">
+                <span className="text-sm font-semibold text-blue-400">
+                  {session.user.name?.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">{session.user.name}</p>
+                <p className="text-xs text-slate-500 capitalize">
+                  {session.user.role.replace('_', ' ')}
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-slate-400 hover:text-white hover:bg-white/5 gap-3"
+              onClick={() => signOut({ callbackUrl: '/' })}
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 z-50 w-full bg-white border-b">
+      <div className="lg:hidden fixed top-0 z-50 w-full bg-slate-950/80 backdrop-blur-xl border-b border-white/10">
         <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-600">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-500">
               <span className="text-sm font-bold text-white">MI</span>
             </div>
-            <span className="font-bold">Admin</span>
+            <div>
+              <h1 className="font-bold text-white text-sm">Admin</h1>
+              <p className="text-[10px] text-slate-500">Management Portal</p>
+            </div>
           </div>
-          <Sheet>
+
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
+              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0">
-              <SheetHeader className="p-6 border-b">
-                <SheetTitle>Navigation</SheetTitle>
-              </SheetHeader>
-              <NavLinks />
+            <SheetContent side="left" className="w-80 bg-slate-950 border-white/10 p-0">
+              <div className="flex flex-col h-full">
+                {/* Mobile Logo */}
+                <div className="flex items-center gap-3 p-6 border-b border-white/10">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-500">
+                    <span className="text-lg font-bold text-white">MI</span>
+                  </div>
+                  <div>
+                    <h1 className="font-bold text-white">Admin Panel</h1>
+                    <p className="text-xs text-slate-500">Management Portal</p>
+                  </div>
+                </div>
+
+                {/* Mobile Navigation */}
+                <div className="flex-1 overflow-y-auto p-4">
+                  <div className="space-y-1">
+                    {filteredNavigation.map((item) => (
+                      <NavLink key={item.name} item={item} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobile User Profile */}
+                <div className="border-t border-white/10 p-4">
+                  <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 mb-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-violet-500/20">
+                      <span className="text-sm font-semibold text-blue-400">
+                        {session.user.name?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-white truncate">{session.user.name}</p>
+                      <p className="text-xs text-slate-500 capitalize">
+                        {session.user.role.replace('_', ' ')}
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start text-slate-400 hover:text-white hover:bg-white/5 gap-3"
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </Button>
+                </div>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="lg:pl-64">
+      <div className="lg:pl-72">
         <main className="min-h-screen">
           {/* Mobile Spacer */}
           <div className="lg:hidden h-14" />

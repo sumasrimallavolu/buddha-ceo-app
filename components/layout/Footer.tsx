@@ -45,7 +45,6 @@ export function Footer() {
     { name: 'About Us', href: '/about' },
     { name: 'Resources', href: '/resources' },
     { name: 'Events & Programs', href: '/events' },
-    { name: 'Contact', href: '/contact' },
   ];
 
   const programLinks = [

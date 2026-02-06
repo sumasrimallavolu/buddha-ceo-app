@@ -22,7 +22,11 @@
       "WebSearch",
       "Bash(timeout:*)",
       "mcp__plugin_serena_serena__read_memory",
-      "Bash(dir \"app\\\\api\\\\admin\\\\content\"\")"
+      "Bash(dir \"app\\\\api\\\\admin\\\\content\"\")",
+      "Bash(npm run db:import-about:*)",
+      "mcp__plugin_serena_serena__read_file",
+      "mcp__plugin_serena_serena__replace_content",
+      "mcp__plugin_serena_serena__search_for_pattern"
     ]
   }
 }

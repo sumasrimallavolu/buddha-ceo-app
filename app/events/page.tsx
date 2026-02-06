@@ -3,12 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RegistrationForm } from '@/components/events/RegistrationForm';
-import { NearbyEventsMap } from '@/components/events/NearbyEventsMap';
-import { Calendar, Users, Filter, Loader2, Sparkles } from 'lucide-react';
+import { Calendar, Users, Filter, Loader2, MapPin, Clock, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface Event {
   _id: string;
@@ -22,28 +21,29 @@ interface Event {
   maxParticipants?: number;
   currentRegistrations: number;
   status: string;
+  location?: {
+    city?: string;
+    venue?: string;
+  };
+}
+
+interface EventsResponse {
+  success: boolean;
+  events?: Event[];
+  total?: number;
 }
 
 const getEventTypeLabel = (type: string) => {
   const labels: Record<string, string> = {
     beginner_online: 'Beginner Online',
-    beginner_physical: 'Beginner Physical',
+    beginner_physical: 'Beginner In-Person',
     advanced_online: 'Advanced Online',
-    advanced_physical: 'Advanced Physical',
+    advanced_physical: 'Advanced In-Person',
     conference: 'Conference',
+    retreat: 'Retreat',
+    workshop: 'Workshop',
   };
-  return labels[type] || type;
-};
-
-const getEventTypeIcon = (type: string) => {
-  const icons: Record<string, string> = {
-    beginner_online: '🌱',
-    beginner_physical: '🏛️',
-    advanced_online: '🚀',
-    advanced_physical: '⭐',
-    conference: '🎯',
-  };
-  return icons[type] || '🧘';
+  return labels[type] || type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 };
 
 const formatDate = (date: string) => {
@@ -58,7 +58,6 @@ export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [registrationOpen, setRegistrationOpen] = useState(false);
   const [filterType, setFilterType] = useState<string>('all');
@@ -66,13 +65,16 @@ export default function EventsPage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        setLoading(true);
         const response = await fetch('/api/events/public');
-        if (!response.ok) throw new Error('Failed to fetch events');
-        const data = await response.json();
-        setEvents(data);
-        setFilteredEvents(data);
+        const data: EventsResponse = await response.json();
+
+        if (data.success && data.events) {
+          setEvents(data.events);
+          setFilteredEvents(data.events);
+        }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Error fetching events:', err);
       } finally {
         setLoading(false);
       }
@@ -94,82 +96,99 @@ export default function EventsPage() {
     setRegistrationOpen(true);
   };
 
+  // Get unique event types
+  const eventTypes = Array.from(new Set(events.map((e) => e.type)));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-slate-950">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <Loader2 className="h-12 w-12 animate-spin text-blue-400" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-950">
       <Header />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-slate-950">
-          {/* Animated Background */}
+        {/* Hero Section - Golden Ratio: 1:1.618 */}
+        <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-slate-950">
+          {/* Background */}
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl" />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
+            <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md text-blue-400 text-sm font-medium border border-white/10 mb-6">
-              <Calendar className="w-4 h-4 text-blue-400" />
-              <span>Upcoming Programs</span>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30 mb-6">
+              <Calendar className="w-4 h-4" />
+              <span>Transformative Programs</span>
             </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold text-white mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
               Events &{' '}
               <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">
                 Programs
               </span>
             </h1>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto border-l-4 border-blue-500/40 pl-6">
-              Discover our upcoming meditation programs and register for
-              transformative experiences that will change your life
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Discover our meditation programs designed for your transformation journey
             </p>
           </div>
         </section>
 
-        {/* Events Grid & Filters */}
-        <section className="py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl animate-pulse" />
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-12 gap-6">
-              <h2 className="text-3xl font-semibold text-white">
-                {filterType === 'all' ? 'All Events' : getEventTypeLabel(filterType)}
-              </h2>
-              <div className="flex items-center gap-3 flex-wrap bg-white/5 backdrop-blur-md p-2 rounded-xl border border-white/10">
-                <Filter className="h-4 w-4 text-blue-400" />
-                <div className="flex gap-2 flex-wrap">
-                  {['all', 'beginner_online', 'advanced_online', 'beginner_physical', 'conference'].map((type) => (
-                    <Button
-                      key={type}
-                      variant={filterType === type ? 'default' : 'ghost'}
-                      size="sm"
-                      onClick={() => setFilterType(type)}
-                      className={
-                        filterType === type
-                          ? 'bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg hover:shadow-xl hover:shadow-blue-500/25 transition-all'
-                          : 'hover:bg-white/10 text-slate-400 hover:text-white transition-all'
-                      }
-                    >
-                      {type === 'all' ? 'All' : getEventTypeLabel(type)}
-                    </Button>
-                  ))}
-                </div>
+        {/* Filters Section */}
+        <section className="py-8 bg-slate-900/50 border-y border-white/5">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-white">
+                <Filter className="h-5 w-5 text-blue-400" />
+                <span className="font-semibold">
+                  {filterType === 'all' ? 'All Programs' : getEventTypeLabel(filterType)}
+                </span>
+                <span className="text-slate-400">({filteredEvents.length})</span>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  onClick={() => setFilterType('all')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    filterType === 'all'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  All
+                </button>
+                {eventTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFilterType(type)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      filterType === type
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    {getEventTypeLabel(type)}
+                  </button>
+                ))}
               </div>
             </div>
+          </div>
+        </section>
 
-            {loading ? (
-              <div className="flex justify-center items-center py-20">
-                <Loader2 className="h-12 w-12 animate-spin text-blue-400" />
-              </div>
-            ) : error ? (
+        {/* Events Grid - Golden Ratio Layout */}
+        <section className="py-16 bg-slate-950">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            {filteredEvents.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-destructive">{error}</p>
-              </div>
-            ) : filteredEvents.length === 0 ? (
-              <div className="text-center py-20">
-                <p className="text-slate-400">No events found.</p>
+                <Calendar className="w-16 h-16 text-slate-700 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-white mb-2">No Events Found</h3>
+                <p className="text-slate-400">Check back soon for new programs!</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -178,116 +197,118 @@ export default function EventsPage() {
                     ? event.maxParticipants - event.currentRegistrations
                     : null;
                   const isFullyBooked = availableSlots === 0;
+                  const isCompleted = event.status === 'completed';
 
                   return (
                     <Card
                       key={event._id}
-                      className="group overflow-hidden hover:shadow-2xl hover:shadow-blue-500/15 transition-all duration-500 flex flex-col border border-white/10 hover:border-white/30 hover:-translate-y-1 bg-white/5 backdrop-blur-md rounded-3xl"
-                      style={{ animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both` }}
+                      className="group overflow-hidden border border-white/10 hover:border-blue-600/50 transition-all duration-300 bg-white/5 backdrop-blur-sm hover:-translate-y-1"
+                      id={event._id}
                     >
-                      <div className="relative aspect-video bg-gradient-to-br from-blue-500/15 via-violet-500/20 to-emerald-500/15 overflow-hidden">
-                        <div className="absolute inset-0 flex items-center justify-center text-7xl group-hover:scale-110 transition-transform duration-500">
-                          {getEventTypeIcon(event.type)}
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <Badge
-                          className="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-violet-600 text-white border-0 shadow-lg"
-                        >
-                          {getEventTypeLabel(event.type)}
-                        </Badge>
+                      {/* Image - Aspect ratio ~1.618 (Golden Ratio) */}
+                      <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
+                        <Image
+                          src={event.imageUrl || "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"}
+                          alt={event.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+
+                        {/* Status Badge */}
+                        {event.status === 'upcoming' && (
+                          <div className="absolute top-4 right-4">
+                            <span className="px-3 py-1 rounded-full bg-emerald-500/90 text-white text-xs font-medium backdrop-blur-sm">
+                              Upcoming
+                            </span>
+                          </div>
+                        )}
                         {event.status === 'ongoing' && (
-                          <Badge className="absolute top-4 left-4 bg-emerald-500 text-white border-0 shadow-lg animate-pulse">
-                            Ongoing
-                          </Badge>
+                          <div className="absolute top-4 right-4">
+                            <span className="px-3 py-1 rounded-full bg-blue-500/90 text-white text-xs font-medium backdrop-blur-sm animate-pulse">
+                              Ongoing
+                            </span>
+                          </div>
+                        )}
+                        {isCompleted && (
+                          <div className="absolute top-4 right-4">
+                            <span className="px-3 py-1 rounded-full bg-slate-500/90 text-white text-xs font-medium backdrop-blur-sm">
+                              Completed
+                            </span>
+                          </div>
                         )}
                       </div>
-                      <CardHeader className="flex-1 pb-4">
-                        <h3 className="font-semibold text-xl mb-3 group-hover:text-blue-400 transition-colors text-white">
+
+                      <CardContent className="p-6">
+                        {/* Title */}
+                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors line-clamp-2">
                           {event.title}
                         </h3>
-                        <div className="space-y-2 text-sm text-slate-400">
-                          <div className="flex items-center">
-                            <Calendar className="mr-2 h-4 w-4 text-blue-400" />
-                            {formatDate(event.startDate)} - {formatDate(event.endDate)}
-                          </div>
-                          <div>{event.timings}</div>
-                          <div className="flex items-center">
-                            <Users className="mr-2 h-4 w-4 text-emerald-400" />
-                            {event.maxParticipants ? (
-                              <span
-                                className={
-                                  isFullyBooked
-                                    ? 'text-destructive font-semibold'
-                                    : availableSlots !== null && availableSlots < 20
-                                    ? 'text-blue-400 font-semibold'
-                                    : 'text-emerald-400 font-semibold'
-                                }
-                              >
-                                {event.currentRegistrations} / {event.maxParticipants} registered
-                                {availableSlots !== null && (
-                                  <span className="ml-1 text-slate-400">
-                                    ({availableSlots} slots left)
-                                  </span>
-                                )}
-                              </span>
-                            ) : (
-                              <span className="text-emerald-400 font-semibold">{event.currentRegistrations} registered</span>
-                            )}
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="flex-1 pb-4">
-                        <p className="text-sm text-slate-400 line-clamp-3 leading-relaxed">
+
+                        {/* Description */}
+                        <p className="text-sm text-slate-400 mb-4 line-clamp-3 leading-relaxed">
                           {event.description}
                         </p>
-                      </CardContent>
-                      <CardFooter className="pt-4 border-t border-white/10">
-                        {event.status === 'completed' ? (
-                          <Button variant="outline" className="w-full border-white/10 text-slate-400" disabled>
-                            ✨ Completed
-                          </Button>
-                        ) : event.status === 'cancelled' ? (
-                          <Button variant="outline" className="w-full border-white/10 text-slate-400" disabled>
-                            Cancelled
+
+                        {/* Event Details */}
+                        <div className="space-y-3 mb-6">
+                          <div className="flex items-start gap-3 text-sm">
+                            <Calendar className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                            <span className="text-slate-300">
+                              {formatDate(event.startDate)} - {formatDate(event.endDate)}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-3 text-sm">
+                            <Clock className="w-4 h-4 text-violet-400 flex-shrink-0 mt-0.5" />
+                            <span className="text-slate-300">{event.timings}</span>
+                          </div>
+                          {event.location?.city && (
+                            <div className="flex items-start gap-3 text-sm">
+                              <MapPin className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                              <span className="text-slate-300">{event.location.city}</span>
+                            </div>
+                          )}
+                          {event.maxParticipants && (
+                            <div className="flex items-start gap-3 text-sm">
+                              <Users className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <div className="text-slate-300">
+                                  {event.currentRegistrations} / {event.maxParticipants}
+                                </div>
+                                {availableSlots !== null && (
+                                  <div className={`text-xs font-medium ${isFullyBooked ? 'text-red-400' : availableSlots < 10 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                    {isFullyBooked ? 'Fully Booked' : `${availableSlots} slots left`}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Action Button */}
+                        {isCompleted ? (
+                          <Button variant="outline" className="w-full" disabled>
+                            Completed
                           </Button>
                         ) : isFullyBooked ? (
-                          <Button variant="outline" className="w-full border-destructive/50 text-destructive" disabled>
-                            🔥 Fully Booked
+                          <Button variant="outline" className="w-full border-red-500/50 text-red-400" disabled>
+                            Fully Booked
                           </Button>
                         ) : (
                           <Button
-                            className="w-full bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-500/90 hover:to-violet-500/90 text-white shadow-lg hover:shadow-xl hover:shadow-blue-500/25 transition-all"
+                            className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white"
                             onClick={() => handleRegisterClick(event)}
                           >
-                            <Sparkles className="mr-2 h-4 w-4" />
                             Register Now
+                            <ArrowRight className="ml-2 h-4 w-4" />
                           </Button>
                         )}
-                      </CardFooter>
+                      </CardContent>
                     </Card>
                   );
                 })}
               </div>
             )}
-          </div>
-        </section>
-
-        {/* Nearby Events Map */}
-        <section className="py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f08_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f08_1px,transparent_1px)] bg-[size:64px_64px]" />
-          <div className="absolute inset-x-0 top-1/4 mx-auto w-80 sm:w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-3xl mx-auto text-center mb-10">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-3 tracking-tight">
-                Find Events Near You
-              </h2>
-              <p className="text-slate-400 text-sm sm:text-base">
-                Explore nearby meditation programs and in-person gatherings designed to support your journey.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 overflow-hidden">
-              <NearbyEventsMap />
-            </div>
           </div>
         </section>
       </main>

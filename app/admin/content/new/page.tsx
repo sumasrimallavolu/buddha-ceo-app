@@ -566,7 +566,7 @@ export default function NewContentPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-8 max-w-5xl px-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/admin/content">
@@ -609,7 +609,7 @@ export default function NewContentPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
             {/* Title */}
             <div className="space-y-2">
               <Label htmlFor="title">Title *</Label>

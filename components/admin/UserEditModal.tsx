@@ -15,14 +15,14 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CheckCircle2, Edit } from 'lucide-react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
 interface UserEditModalProps {
   userId: string;
@@ -144,29 +144,29 @@ export function UserEditModal({
 
   if (fetching) {
     return (
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-        <DialogContent>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+        <SheetContent side="right" className="w-full sm:max-w-md bg-slate-950 border-white/10">
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     );
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>Edit User</DialogTitle>
-          <DialogDescription>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+      <SheetContent side="right" className="w-full sm:max-w-md bg-slate-950 border-white/10">
+        <SheetHeader>
+          <SheetTitle className="text-white">Edit User</SheetTitle>
+          <SheetDescription className="text-slate-400">
             Update user details and permissions
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="space-y-6 py-8 px-6">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
@@ -174,7 +174,7 @@ export function UserEditModal({
           )}
 
           {success && (
-            <Alert className="border-green-500 bg-green-50 text-green-700">
+            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 User updated successfully!
@@ -246,7 +246,7 @@ export function UserEditModal({
           )}
         </div>
 
-        <DialogFooter>
+        <SheetFooter className="pt-6 px-6">
           <Button
             type="button"
             variant="outline"
@@ -273,8 +273,8 @@ export function UserEditModal({
               </>
             )}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }

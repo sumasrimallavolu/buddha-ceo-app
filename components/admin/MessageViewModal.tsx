@@ -121,13 +121,13 @@ export function MessageViewModal({
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'new':
-        return 'bg-emerald-100 text-emerald-800';
+        return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
       case 'read':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
       case 'responded':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-slate-500/20 text-slate-400 border border-slate-500/30';
     }
   };
 
@@ -148,9 +148,9 @@ export function MessageViewModal({
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-        <DialogContent>
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
+        <DialogContent className="sm:max-w-2xl bg-slate-950 border-white/10">
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
           </div>
         </DialogContent>
       </Dialog>
@@ -160,64 +160,65 @@ export function MessageViewModal({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-950 border-white/10">
         <DialogHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pb-4">
             <div>
-              <DialogTitle className="text-lg">Message Details</DialogTitle>
-              <DialogDescription>Full message from contact form</DialogDescription>
+              <DialogTitle className="text-white text-lg">Message Details</DialogTitle>
+              <DialogDescription className="text-slate-400">Full message from contact form</DialogDescription>
             </div>
             {message && (
-              <Badge className={getStatusBadgeColor(message.status)}>
+              <Badge className={`${getStatusBadgeColor(message.status)} border-0`}>
                 {getStatusIcon(message.status)}
-                <span className="ml-1">{message.status}</span>
+                <span className="ml-1 capitalize">{message.status}</span>
               </Badge>
             )}
           </div>
         </DialogHeader>
 
         {error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="border-red-500/50 bg-red-500/10 text-red-400">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
         {message && (
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-500">Name</label>
-                <p className="text-base font-medium">{message.name}</p>
+          <div className="space-y-6 py-6">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-400">Name</label>
+                <p className="text-base font-medium text-white">{message.name}</p>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Email</label>
-                <p className="text-base">{message.email}</p>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-500">Subject</label>
-              <p className="text-base font-medium">{message.subject}</p>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-500">Message</label>
-              <div className="mt-1 p-4 bg-gray-50 rounded-lg border">
-                <p className="text-base whitespace-pre-wrap">{message.message}</p>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-400">Email</label>
+                <p className="text-base text-slate-300">{message.email}</p>
               </div>
             </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-500">Received</label>
-              <p className="text-base">{new Date(message.createdAt).toLocaleString()}</p>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-400">Subject</label>
+              <p className="text-base font-medium text-white">{message.subject}</p>
             </div>
 
-            <div className="flex gap-2 pt-4 border-t">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-400">Message</label>
+              <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                <p className="text-base text-slate-300 whitespace-pre-wrap leading-relaxed">{message.message}</p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-400">Received</label>
+              <p className="text-base text-slate-300">{new Date(message.createdAt).toLocaleString()}</p>
+            </div>
+
+            <div className="flex gap-3 pt-6 border-t border-white/10">
               {message.status === 'new' && (
                 <Button
                   variant="outline"
                   onClick={handleMarkAsRead}
                   disabled={actionLoading}
+                  className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
                 >
                   <MailOpen className="mr-2 h-4 w-4" />
                   {actionLoading ? 'Marking...' : 'Mark as Read'}
@@ -225,7 +226,7 @@ export function MessageViewModal({
               )}
               {message.status !== 'responded' && (
                 <Button
-                  className="bg-green-600"
+                  className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white border-0 shadow-lg shadow-blue-500/25"
                   onClick={handleMarkAsResponded}
                   disabled={actionLoading}
                 >
@@ -236,6 +237,7 @@ export function MessageViewModal({
               <Button
                 variant="outline"
                 onClick={() => window.location.href = `mailto:${message.email}`}
+                className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
               >
                 Reply via Email
               </Button>

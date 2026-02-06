@@ -557,7 +557,7 @@ export default function EditContentPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
       </div>
     );
   }
@@ -574,7 +574,7 @@ export default function EditContentPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-8 max-w-5xl px-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/admin/content">
@@ -617,7 +617,7 @@ export default function EditContentPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
             {/* Title */}
             <div className="space-y-2">
               <Label htmlFor="title">Title *</Label>

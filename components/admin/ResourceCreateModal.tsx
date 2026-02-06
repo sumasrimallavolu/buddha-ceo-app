@@ -16,14 +16,14 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CheckCircle2, BookOpen, Save } from 'lucide-react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
 interface ResourceCreateModalProps {
   trigger?: React.ReactNode;
@@ -150,28 +150,28 @@ export function ResourceCreateModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(value) => {
+    <Sheet open={isOpen} onOpenChange={(value) => {
       setIsOpen(value);
       if (!value) resetForm();
     }}>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Create New Resource</DialogTitle>
-          <DialogDescription>
+      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+      <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10">
+        <SheetHeader>
+          <SheetTitle className="text-white">Create New Resource</SheetTitle>
+          <SheetDescription className="text-slate-400">
             Add a new book, video, magazine, or link
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="flex-1 overflow-y-auto py-8 px-6 space-y-8">
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="border-red-500/50 bg-red-500/10 text-red-400">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           {success && (
-            <Alert className="border-green-500 bg-green-50 text-green-700">
+            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 Resource created successfully!
@@ -179,120 +179,139 @@ export function ResourceCreateModal({
             </Alert>
           )}
 
-          <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="Resource title"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="type">Resource Type *</Label>
-            <Select
-              value={formData.type}
-              onValueChange={(value) => setFormData({ ...formData, type: value })}
-            >
-              <SelectTrigger id="type">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="book">Book</SelectItem>
-                <SelectItem value="video">Video</SelectItem>
-                <SelectItem value="magazine">Magazine</SelectItem>
-                <SelectItem value="link">Link</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="category">Category</Label>
-            <Input
-              id="category"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              placeholder="e.g., Teachings, Meditation Techniques, Talks"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Describe this resource..."
-              rows={3}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="thumbnailUrl">Thumbnail Image URL</Label>
-            <Input
-              id="thumbnailUrl"
-              value={formData.thumbnailUrl}
-              onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-
-          {formData.type === 'video' && (
-            <div className="space-y-2">
-              <Label htmlFor="videoUrl">Video URL</Label>
-              <Input
-                id="videoUrl"
-                value={formData.videoUrl}
-                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                placeholder="https://www.youtube.com/watch?v=..."
-              />
+          <div className="space-y-5">
+            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
+              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
+              <h3 className="text-sm font-semibold text-white">Basic Information</h3>
             </div>
-          )}
 
-          {(formData.type === 'book' || formData.type === 'magazine') && (
-            <div className="space-y-2">
-              <Label htmlFor="downloadUrl">Download/Purchase URL</Label>
-              <Input
-                id="downloadUrl"
-                value={formData.downloadUrl}
-                onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
-                placeholder="https://example.com/resource.pdf"
-              />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-slate-300">Title *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="Resource title"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="type" className="text-slate-300">Resource Type *</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => setFormData({ ...formData, type: value })}
+                >
+                  <SelectTrigger id="type">
+                    <SelectValue placeholder="Select resource type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="book">Book</SelectItem>
+                    <SelectItem value="video">Video</SelectItem>
+                    <SelectItem value="magazine">Magazine</SelectItem>
+                    <SelectItem value="link">Link</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-slate-300">Category</Label>
+                <Input
+                  id="category"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  placeholder="e.g., Teachings, Meditation Techniques, Talks"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-slate-300">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Describe this resource..."
+                  rows={3}
+                />
+              </div>
             </div>
-          )}
+          </div>
 
-          {formData.type === 'link' && (
-            <div className="space-y-2">
-              <Label htmlFor="linkUrl">Link URL</Label>
-              <Input
-                id="linkUrl"
-                value={formData.linkUrl}
-                onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })}
-                placeholder="https://example.com"
-              />
+          <div className="space-y-5">
+            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
+              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
+              <h3 className="text-sm font-semibold text-white">Media Details</h3>
             </div>
-          )}
 
-          <div className="space-y-2">
-            <Label htmlFor="order">Display Order</Label>
-            <Input
-              id="order"
-              type="number"
-              value={formData.order}
-              onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-              placeholder="0"
-            />
-            <p className="text-sm text-gray-500">Lower numbers appear first</p>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="thumbnailUrl" className="text-slate-300">Thumbnail Image URL</Label>
+                <Input
+                  id="thumbnailUrl"
+                  value={formData.thumbnailUrl}
+                  onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+
+              {formData.type === 'video' && (
+                <div className="space-y-2">
+                  <Label htmlFor="videoUrl" className="text-slate-300">Video URL</Label>
+                  <Input
+                    id="videoUrl"
+                    value={formData.videoUrl}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                  />
+                </div>
+              )}
+
+              {(formData.type === 'book' || formData.type === 'magazine') && (
+                <div className="space-y-2">
+                  <Label htmlFor="downloadUrl" className="text-slate-300">Download/Purchase URL</Label>
+                  <Input
+                    id="downloadUrl"
+                    value={formData.downloadUrl}
+                    onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
+                    placeholder="https://example.com/resource.pdf"
+                  />
+                </div>
+              )}
+
+              {formData.type === 'link' && (
+                <div className="space-y-2">
+                  <Label htmlFor="linkUrl" className="text-slate-300">Link URL</Label>
+                  <Input
+                    id="linkUrl"
+                    value={formData.linkUrl}
+                    onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })}
+                    placeholder="https://example.com"
+                  />
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="order" className="text-slate-300">Display Order</Label>
+                <Input
+                  id="order"
+                  type="number"
+                  value={formData.order}
+                  onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
+                  placeholder="0"
+                />
+                <p className="text-xs text-slate-500">Lower numbers appear first</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <DialogFooter className="gap-2">
+        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-white/10 pt-6 px-6 mt-auto">
           <Button
             type="button"
             variant="outline"
             onClick={() => setIsOpen(false)}
             disabled={loading || success}
+            className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
           >
             Cancel
           </Button>
@@ -301,10 +320,11 @@ export function ResourceCreateModal({
             variant="outline"
             onClick={() => handleSubmit(true, false)}
             disabled={loading || success}
+            className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-500" />
                 Saving...
               </>
             ) : (
@@ -316,7 +336,7 @@ export function ResourceCreateModal({
           </Button>
           <Button
             type="button"
-            className="bg-green-600"
+            className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white border-0 shadow-lg shadow-blue-500/25"
             onClick={() => handleSubmit(false, true)}
             disabled={loading || success}
           >
@@ -332,8 +352,8 @@ export function ResourceCreateModal({
               </>
             )}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }

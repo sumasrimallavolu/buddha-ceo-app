@@ -94,7 +94,7 @@ export default function NewUserPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-8 max-w-2xl px-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/admin/users">
@@ -133,7 +133,7 @@ export default function NewUserPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Name */}
             <div className="space-y-2">
               <Label htmlFor="name">Full Name *</Label>

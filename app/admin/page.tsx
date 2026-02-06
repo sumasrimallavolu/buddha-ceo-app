@@ -2,9 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, FileText, Calendar, BookOpen, MessageSquare, Mail, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import {
+  Users,
+  FileText,
+  Calendar,
+  BookOpen,
+  MessageSquare,
+  Mail,
+  TrendingUp,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  ArrowRight,
+  Eye,
+  BarChart3,
+  Activity,
+} from 'lucide-react';
+import { AnalyticsCharts } from '@/components/admin/AnalyticsCharts';
 
 interface DashboardStats {
   users: number;
@@ -15,6 +30,15 @@ interface DashboardStats {
   subscribers: number;
   pendingReviews: number;
   upcomingEvents: number;
+  analytics?: {
+    totalVisits: number;
+    uniqueVisitors: number;
+    todayVisits: number;
+    todayUniqueVisitors: number;
+    pageStats: Array<{ _id: string; count: number }>;
+    recentVisits: any[];
+    dailyStats: Array<{ date: string; visits: number; uniqueVisitors: number }>;
+  } | null;
 }
 
 export default function AdminDashboard() {
@@ -54,50 +78,65 @@ export default function AdminDashboard() {
       title: 'Total Users',
       value: stats.users,
       icon: Users,
-      color: 'from-emerald-500 to-emerald-600',
-      bgColor: 'bg-emerald-50',
+      gradient: 'from-blue-500 to-cyan-500',
+      bgColor: 'bg-blue-500/10',
+      iconColor: 'text-blue-400',
+      href: '/admin/users',
     },
     {
       title: 'Content Items',
       value: stats.content,
       icon: FileText,
-      color: 'from-amber-500 to-amber-600',
-      bgColor: 'bg-amber-50',
+      gradient: 'from-violet-500 to-purple-500',
+      bgColor: 'bg-violet-500/10',
+      iconColor: 'text-violet-400',
+      href: '/admin/content',
     },
     {
       title: 'Events',
       value: stats.events,
       icon: Calendar,
-      color: 'from-green-500 to-green-600',
-      bgColor: 'bg-green-50',
+      gradient: 'from-emerald-500 to-green-500',
+      bgColor: 'bg-emerald-500/10',
+      iconColor: 'text-emerald-400',
+      href: '/admin/events',
     },
     {
       title: 'Resources',
       value: stats.resources,
       icon: BookOpen,
-      color: 'from-orange-500 to-orange-600',
-      bgColor: 'bg-orange-50',
+      gradient: 'from-amber-500 to-orange-500',
+      bgColor: 'bg-amber-500/10',
+      iconColor: 'text-amber-400',
+      href: '/admin/resources',
     },
     {
       title: 'Messages',
       value: stats.messages,
       icon: MessageSquare,
-      color: 'from-orange-500 to-orange-600',
-      bgColor: 'bg-orange-50',
+      gradient: 'from-pink-500 to-rose-500',
+      bgColor: 'bg-pink-500/10',
+      iconColor: 'text-pink-400',
+      href: '/admin/contact-messages',
     },
     {
       title: 'Subscribers',
       value: stats.subscribers,
       icon: Mail,
-      color: 'from-amber-700 to-amber-800',
-      bgColor: 'bg-amber-100',
+      gradient: 'from-cyan-500 to-blue-500',
+      bgColor: 'bg-cyan-500/10',
+      iconColor: 'text-cyan-400',
+      href: '/admin/subscribers',
     },
   ];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-lg text-gray-600">Loading dashboard...</div>
+        <div className="text-center">
+          <div className="inline-block w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mb-4" />
+          <p className="text-slate-400">Loading dashboard...</p>
+        </div>
       </div>
     );
   }
@@ -105,96 +144,353 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       {/* Welcome Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">
-          Welcome back, {session?.user.name}!
-        </h1>
-        <p className="mt-2 text-gray-600">
-          Here's what's happening with your meditation institute today.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Welcome back, {session?.user.name}!
+          </h1>
+          <p className="text-slate-400">
+            Here's what's happening with your meditation institute today.
+          </p>
+        </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {statCards.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.title} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">
-                  {stat.title}
-                </CardTitle>
-                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                  <Icon className="h-5 w-5 text-amber-700" />
+      {/* Visitor Analytics - Admin Only - Prominent Position */}
+      {session?.user?.role === 'admin' && stats.analytics && (
+        <div className="space-y-6">
+          {/* Analytics Header */}
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20">
+              <BarChart3 className="h-5 w-5 text-blue-400" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Visitor Analytics</h2>
+              <p className="text-sm text-slate-400">Track your website performance</p>
+            </div>
+          </div>
+
+          {/* Main Analytics Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Total Visits */}
+            <div className="rounded-2xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-sm border border-blue-500/20 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-xl bg-blue-500/20">
+                  <Eye className="h-6 w-6 text-blue-400" />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{stat.value}</div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Total Visits</h3>
+                  <p className="text-sm text-slate-400">Last 30 days</p>
+                </div>
+              </div>
+              <div className="flex items-end gap-3">
+                <div className="text-5xl font-bold bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                  {stats.analytics.totalVisits.toLocaleString()}
+                </div>
+                <div className="text-slate-400 mb-2">page views</div>
+              </div>
+            </div>
+
+            {/* Unique Visitors */}
+            <div className="rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 backdrop-blur-sm border border-violet-500/20 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-xl bg-violet-500/20">
+                  <Users className="h-6 w-6 text-violet-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Unique Visitors</h3>
+                  <p className="text-sm text-slate-400">Last 30 days</p>
+                </div>
+              </div>
+              <div className="flex items-end gap-3">
+                <div className="text-5xl font-bold bg-gradient-to-br from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                  {stats.analytics.uniqueVisitors.toLocaleString()}
+                </div>
+                <div className="text-slate-400 mb-2">visitors</div>
+              </div>
+            </div>
+
+            {/* Today's Stats */}
+            <div className="rounded-2xl bg-gradient-to-br from-emerald-500/10 to-green-500/10 backdrop-blur-sm border border-emerald-500/20 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-xl bg-emerald-500/20">
+                  <Activity className="h-6 w-6 text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Today</h3>
+                  <p className="text-sm text-slate-400">Page views / Visitors</p>
+                </div>
+              </div>
+              <div className="flex items-end gap-3">
+                <div className="text-4xl font-bold bg-gradient-to-br from-emerald-400 to-green-400 bg-clip-text text-transparent">
+                  {stats.analytics.todayVisits}
+                </div>
+                <div className="text-slate-400 mb-2">/ {stats.analytics.todayUniqueVisitors}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Analytics Charts */}
+          <AnalyticsCharts
+            dailyStats={stats.analytics.dailyStats || []}
+            pageStats={stats.analytics.pageStats || []}
+          />
+
+          {/* Top Pages & Recent Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Top Pages */}
+            {stats.analytics.pageStats && stats.analytics.pageStats.length > 0 && (
+              <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 rounded-xl bg-amber-500/10">
+                    <TrendingUp className="h-6 w-6 text-amber-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">Top Pages</h3>
+                    <p className="text-sm text-slate-400">Most visited pages</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {stats.analytics.pageStats.slice(0, 5).map((pageStat, index) => (
+                    <div
+                      key={pageStat._id}
+                      className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
+                          index === 0 ? 'bg-amber-500/20 text-amber-400' :
+                          index === 1 ? 'bg-slate-400/20 text-slate-400' :
+                          index === 2 ? 'bg-orange-500/20 text-orange-400' :
+                          'bg-white/5 text-slate-500'
+                        }`}>
+                          {index + 1}
+                        </div>
+                        <div className="text-sm text-white truncate max-w-[200px]">
+                          {pageStat._id === '/' ? 'Home' :
+                           pageStat._id.startsWith('/admin') ? 'Admin' :
+                           pageStat._id === '/about' ? 'About' :
+                           pageStat._id === '/events' ? 'Events' :
+                           pageStat._id === '/resources' ? 'Resources' :
+                           pageStat._id === '/contact' ? 'Contact' :
+                           pageStat._id}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="text-lg font-bold text-white">{pageStat.count}</div>
+                        <Eye className="h-4 w-4 text-slate-500" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Recent Activity */}
+            {stats.analytics.recentVisits && stats.analytics.recentVisits.length > 0 && (
+              <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-3 rounded-xl bg-pink-500/10">
+                    <Clock className="h-6 w-6 text-pink-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">Recent Activity</h3>
+                    <p className="text-sm text-slate-400">Latest page visits</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                  {stats.analytics.recentVisits.slice(0, 10).map((visit, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 rounded-xl bg-white/5"
+                    >
+                      <div className="w-2 h-2 rounded-full bg-blue-400 mt-2 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm text-white truncate">
+                          {visit.page === '/' ? 'Home' :
+                           visit.page.startsWith('/admin') ? 'Admin' :
+                           visit.page === '/about' ? 'About' :
+                           visit.page === '/events' ? 'Events' :
+                           visit.page === '/resources' ? 'Resources' :
+                           visit.page === '/contact' ? 'Contact' :
+                           visit.page}
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          {new Date(visit.createdAt).toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Analytics Summary Card */}
+          <div className="rounded-2xl bg-gradient-to-br from-blue-500/10 to-violet-500/10 backdrop-blur-sm border border-blue-500/20 p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-blue-500/20">
+                  <BarChart3 className="h-6 w-6 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Analytics Overview</h3>
+                  <p className="text-sm text-slate-400">
+                    Tracking page visits and user behavior
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-slate-400">Total Tracked Pages</div>
+                <div className="text-2xl font-bold text-white">
+                  {stats.analytics.pageStats?.length || 0}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Content Management Section */}
+      <div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20">
+            <FileText className="h-5 w-5 text-violet-400" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-white">Content Overview</h2>
+            <p className="text-sm text-slate-400">Manage your website content</p>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {statCards.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <Link
+                key={stat.title}
+                href={stat.href}
+                className="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02]"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient}`} />
+                </div>
+
+                <div className="relative p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`p-3 rounded-xl ${stat.bgColor} ${stat.iconColor}`}>
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <ArrowRight className={`h-5 w-5 text-slate-600 group-hover:text-white transition-colors duration-300 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0`} />
+                  </div>
+
+                  <div className="space-y-1">
+                    <p className="text-3xl font-bold text-white">{stat.value}</p>
+                    <p className="text-sm text-slate-400">{stat.title}</p>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Pending Reviews & Upcoming Events */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <TrendingUp className="mr-2 h-5 w-5 text-amber-700" />
-              Pending Content Reviews
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+      {/* Actions & Notifications */}
+      <div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20">
+            <Clock className="h-5 w-5 text-amber-400" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-white">Actions & Notifications</h2>
+            <p className="text-sm text-slate-400">Review pending items and upcoming events</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Pending Reviews */}
+        <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-3 rounded-xl bg-amber-500/10">
+              <Clock className="h-6 w-6 text-amber-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">Pending Reviews</h3>
+              <p className="text-sm text-slate-400">Content awaiting approval</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
             {stats.pendingReviews > 0 ? (
               <>
-                <div className="text-4xl font-bold text-amber-700 mb-2">
-                  {stats.pendingReviews}
+                <div className="flex items-end gap-3">
+                  <div className="text-5xl font-bold bg-gradient-to-br from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                    {stats.pendingReviews}
+                  </div>
+                  <div className="text-slate-400 mb-2">items</div>
                 </div>
-                <p className="text-sm text-gray-600">
-                  items waiting for review
-                </p>
-                <a
+                <Link
                   href="/admin/content?status=pending_review"
-                  className="inline-block mt-4 text-sm text-amber-700 hover:text-amber-800 font-medium"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors group"
                 >
-                  Review Now →
-                </a>
+                  Review now
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </>
             ) : (
-              <p className="text-gray-600">No pending reviews</p>
+              <div className="flex items-center gap-3 py-4">
+                <CheckCircle className="h-8 w-8 text-emerald-400" />
+                <div>
+                  <p className="text-white font-medium">All caught up!</p>
+                  <p className="text-sm text-slate-400">No pending reviews</p>
+                </div>
+              </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Calendar className="mr-2 h-5 w-5 text-green-600" />
-              Upcoming Events
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+        {/* Upcoming Events */}
+        <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-3 rounded-xl bg-emerald-500/10">
+              <Calendar className="h-6 w-6 text-emerald-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">Upcoming Events</h3>
+              <p className="text-sm text-slate-400">Events scheduled soon</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
             {stats.upcomingEvents > 0 ? (
               <>
-                <div className="text-4xl font-bold text-green-600 mb-2">
-                  {stats.upcomingEvents}
+                <div className="flex items-end gap-3">
+                  <div className="text-5xl font-bold bg-gradient-to-br from-emerald-400 to-green-400 bg-clip-text text-transparent">
+                    {stats.upcomingEvents}
+                  </div>
+                  <div className="text-slate-400 mb-2">events</div>
                 </div>
-                <p className="text-sm text-gray-600">
-                  events scheduled
-                </p>
-                <a
+                <Link
                   href="/admin/events"
-                  className="inline-block mt-4 text-sm text-green-600 hover:text-green-700 font-medium"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors group"
                 >
-                  Manage Events →
-                </a>
+                  Manage events
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </>
             ) : (
-              <p className="text-gray-600">No upcoming events</p>
+              <div className="flex items-center gap-3 py-4">
+                <AlertCircle className="h-8 w-8 text-slate-500" />
+                <div>
+                  <p className="text-white font-medium">No upcoming events</p>
+                  <p className="text-sm text-slate-400">Schedule a new event</p>
+                </div>
+              </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
   );

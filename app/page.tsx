@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/home/HeroSection';
-import { VideoSection } from '@/components/home/VideoSection';
-import { RecentEvents } from '@/components/home/RecentEvents';
+import { PhotosGrid } from '@/components/home/PhotosGrid';
+import { TransformationStories } from '@/components/home/TransformationStories';
+import { ProgramsServices } from '@/components/home/ProgramsServices';
+import { TeacherEnrollment } from '@/components/home/TeacherEnrollment';
+import { VolunteerSection } from '@/components/home/VolunteerSection';
+import { ContactSection } from '@/components/home/ContactSection';
 
 export default function HomePage() {
   return (
@@ -14,8 +16,12 @@ export default function HomePage() {
       <Header />
       <main className="flex-1">
         <HeroSection />
-        <VideoSection />
-        <RecentEvents />
+        <PhotosGrid />
+        <TransformationStories />
+        <ProgramsServices />
+        <TeacherEnrollment />
+        <VolunteerSection />
+        <ContactSection />
       </main>
       <Footer />
     </div>

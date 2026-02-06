@@ -16,17 +16,9 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, CheckCircle2, Plus } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import ImageUpload from './ImageUpload';
 import RichTextEditor from './RichTextEditor';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetTrigger } from '@/components/ui/sheet';
 
 interface ContentCreateModalProps {
   trigger?: React.ReactNode;
@@ -388,25 +380,25 @@ export function ContentCreateModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Create New Content</DialogTitle>
-          <DialogDescription>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+      <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10">
+        <SheetHeader>
+          <SheetTitle className="text-white">Create New Content</SheetTitle>
+          <SheetDescription className="text-slate-400">
             Quick create content for the website
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="flex-1 overflow-y-auto py-8 px-6 space-y-8">
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="border-red-500/50 bg-red-500/10 text-red-400">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           {success && (
-            <Alert className="border-green-500 bg-green-50 text-green-700">
+            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 Content created successfully!
@@ -414,93 +406,115 @@ export function ContentCreateModal({
             </Alert>
           )}
 
-          <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="Enter content title"
-            />
+          {/* Basic Information Section */}
+          <div className="space-y-5">
+            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
+              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
+              <h3 className="text-sm font-semibold text-white">Basic Information</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-slate-300">Title *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="Enter content title"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="type" className="text-slate-300">Content Type *</Label>
+                <Select value={contentType} onValueChange={setContentType}>
+                  <SelectTrigger id="type">
+                    <SelectValue placeholder="Select content type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="photo_collage">Photo Collage</SelectItem>
+                    <SelectItem value="video_content">Video Content</SelectItem>
+                    <SelectItem value="book_publication">Book/Publication</SelectItem>
+                    <SelectItem value="mixed_media">Mixed Media Article</SelectItem>
+                    <SelectItem value="achievement">Achievement</SelectItem>
+                    <SelectItem value="team_member">Team Member</SelectItem>
+                    <SelectItem value="testimonial">Testimonial</SelectItem>
+                    <SelectItem value="service">Service (Vision/Mission)</SelectItem>
+                    <SelectItem value="poster">Poster</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="type">Content Type *</Label>
-            <Select value={contentType} onValueChange={setContentType}>
-              <SelectTrigger id="type">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="photo_collage">Photo Collage</SelectItem>
-                <SelectItem value="video_content">Video Content</SelectItem>
-                <SelectItem value="book_publication">Book/Publication</SelectItem>
-                <SelectItem value="mixed_media">Mixed Media Article</SelectItem>
-                <SelectItem value="achievement">Achievement</SelectItem>
-                <SelectItem value="team_member">Team Member</SelectItem>
-                <SelectItem value="testimonial">Testimonial</SelectItem>
-                <SelectItem value="service">Service (Vision/Mission)</SelectItem>
-                <SelectItem value="poster">Poster</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="border-t pt-4">
-            <h3 className="text-sm font-semibold mb-4">
-              {contentType === 'photo_collage' && 'Photo Collage Details'}
-              {contentType === 'video_content' && 'Video Content Details'}
-              {contentType === 'book_publication' && 'Publication Details'}
-              {contentType === 'mixed_media' && 'Article Content'}
-              {contentType === 'achievement' && 'Achievement Details'}
-              {contentType === 'team_member' && 'Team Member Information'}
-              {contentType === 'testimonial' && 'Testimonial Details'}
-              {contentType === 'service' && 'Service Description'}
-              {contentType === 'poster' && 'Poster Information'}
-            </h3>
-
+          {/* Content Details Section */}
+          <div className="space-y-5">
+            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
+              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
+              <h3 className="text-sm font-semibold text-white">
+                {contentType === 'photo_collage' && 'Photo Collage Details'}
+                {contentType === 'video_content' && 'Video Content Details'}
+                {contentType === 'book_publication' && 'Publication Details'}
+                {contentType === 'mixed_media' && 'Article Content'}
+                {contentType === 'achievement' && 'Achievement Details'}
+                {contentType === 'team_member' && 'Team Member Information'}
+                {contentType === 'testimonial' && 'Testimonial Details'}
+                {contentType === 'service' && 'Service Description'}
+                {contentType === 'poster' && 'Poster Information'}
+              </h3>
+            </div>
             {renderTypeForm()}
           </div>
 
-          {['photo_collage', 'video_content', 'book_publication'].includes(contentType) && (
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="featured"
-                checked={formData.isFeatured}
-                onCheckedChange={(checked) => setFormData({ ...formData, isFeatured: checked as boolean })}
-              />
-              <Label htmlFor="featured">Feature on homepage</Label>
+          {/* Publishing Options Section */}
+          <div className="space-y-5">
+            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
+              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
+              <h3 className="text-sm font-semibold text-white">Publishing Options</h3>
             </div>
-          )}
 
-          {canAutoPublish && (
-            <div className="flex items-center space-x-2 border-t pt-4">
-              <Checkbox
-                id="autoPublish"
-                checked={autoPublish}
-                onCheckedChange={(checked) => setAutoPublish(checked as boolean)}
-              />
-              <div className="flex-1">
-                <Label htmlFor="autoPublish" className="cursor-pointer">
-                  Publish directly (skip review)
-                </Label>
-                <p className="text-xs text-gray-500">
-                  As a {session?.user?.role === 'admin' ? 'n admin' : 'content manager'}, you can publish content without review
-                </p>
+            {['photo_collage', 'video_content', 'book_publication'].includes(contentType) && (
+              <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                <Checkbox
+                  id="featured"
+                  checked={formData.isFeatured}
+                  onCheckedChange={(checked) => setFormData({ ...formData, isFeatured: checked as boolean })}
+                />
+                <div className="flex-1">
+                  <Label htmlFor="featured" className="cursor-pointer text-slate-200">Feature on homepage</Label>
+                  <p className="text-xs text-slate-500 mt-1">This content will be highlighted on the homepage</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {canAutoPublish && (
+              <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                <Checkbox
+                  id="autoPublish"
+                  checked={autoPublish}
+                  onCheckedChange={(checked) => setAutoPublish(checked as boolean)}
+                />
+                <div className="flex-1">
+                  <Label htmlFor="autoPublish" className="cursor-pointer text-slate-200">Publish directly</Label>
+                  <p className="text-xs text-slate-500 mt-1">
+                    As a {session?.user?.role === 'content_manager' ? 'content manager' : 'content manager'}, you can publish content without review
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        <DialogFooter className="flex-col gap-2 sm:flex-row">
+        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-white/10 pt-6 px-6 mt-auto">
           <Button
             type="button"
             variant="outline"
             onClick={() => handleSubmit(true, false)}
             disabled={loading || success}
-            className="flex-1 sm:flex-none"
+            className="flex-1 sm:flex-none bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-500" />
                 Saving...
               </>
             ) : (
@@ -513,11 +527,11 @@ export function ContentCreateModal({
             variant="outline"
             onClick={() => handleSubmit(false, false)}
             disabled={loading || success}
-            className="flex-1 sm:flex-none"
+            className="flex-1 sm:flex-none bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-500" />
                 Submitting...
               </>
             ) : (
@@ -528,7 +542,7 @@ export function ContentCreateModal({
           {canAutoPublish && (
             <Button
               type="button"
-              className="bg-amber-600 flex-1 sm:flex-none"
+              className="flex-1 sm:flex-none bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white border-0 shadow-lg shadow-blue-500/25"
               onClick={() => handleSubmit(false, true)}
               disabled={loading || success}
             >
@@ -545,8 +559,8 @@ export function ContentCreateModal({
               )}
             </Button>
           )}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }
