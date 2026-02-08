@@ -1,16 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-export type ContentType =
-  | 'poster'
-  | 'testimonial'
-  | 'team_member'
-  | 'achievement'
-  | 'service'
-  | 'photo_collage'      // Multiple photos in grid layouts
-  | 'video_content'      // YouTube/embedded videos
-  | 'book_publication'   // Books/publications
-  | 'mixed_media';       // Text + images + videos
-
+export type ContentType = 'photos' | 'mentors' | 'founders' | 'steering_committee';
 export type ContentStatus = 'draft' | 'pending_review' | 'published' | 'archived';
 export type ContentLayout = 'grid' | 'masonry' | 'slider';
 
@@ -25,10 +15,11 @@ export interface IContent {
   createdAt: Date;
   updatedAt: Date;
   publishedAt?: Date;
-  thumbnailUrl?: string;        // For gallery previews
-  layout?: ContentLayout;       // For photo collages
-  mediaOrder?: string[];        // Order of media items
-  isFeatured?: boolean;         // Highlight on homepage
+  thumbnailUrl?: string;
+  order?: number;
+  layout?: ContentLayout;
+  mediaOrder?: string[];
+  isFeatured?: boolean;
 }
 
 export interface IContentDocument extends IContent, Document {}
@@ -42,7 +33,7 @@ const ContentSchema = new Schema<IContentDocument>(
     },
     type: {
       type: String,
-      enum: ['poster', 'testimonial', 'team_member', 'achievement', 'service', 'photo_collage', 'video_content', 'book_publication', 'mixed_media'],
+      enum: ['photos', 'mentors', 'founders', 'steering_committee'],
       required: [true, 'Content type is required'],
     },
     status: {
@@ -77,6 +68,10 @@ const ContentSchema = new Schema<IContentDocument>(
       type: String,
       default: null,
     },
+    order: {
+      type: Number,
+      default: 0,
+    },
     layout: {
       type: String,
       enum: ['grid', 'masonry', 'slider'],
@@ -97,10 +92,11 @@ const ContentSchema = new Schema<IContentDocument>(
 );
 
 // Indexes for faster queries
-ContentSchema.index({ type: 1, status: 1 });
+ContentSchema.index({ type: 1, status: 1, order: 1 });
 ContentSchema.index({ createdBy: 1 });
-ContentSchema.index({ status: 1 });
+ContentSchema.index({ status: 1, isFeatured: 1 });
 ContentSchema.index({ createdAt: -1 });
+ContentSchema.index({ 'content.category': 1 });
 
 const Content: Model<IContentDocument> = mongoose.models.Content || mongoose.model<IContentDocument>('Content', ContentSchema);
 

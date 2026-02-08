@@ -2,6 +2,7 @@
 export { default as User } from './User';
 export { default as Content } from './Content';
 export { default as Event } from './Event';
+export { default as EventFeedback } from './EventFeedback';
 export { default as Registration } from './Registration';
 export { default as Resource } from './Resource';
 export { default as ContactMessage } from './ContactMessage';
@@ -18,6 +19,7 @@ export { default as VisitorLog, logVisitor } from './VisitorLog';
 export type { IUser, IUserDocument } from './User';
 export type { IContent, IContentDocument, ContentType, ContentStatus } from './Content';
 export type { IEvent, IEventDocument, EventType, EventStatus } from './Event';
+export type { IEventFeedback, IEventFeedbackDocument, FeedbackType, FeedbackStatus } from './EventFeedback';
 export type { IRegistration, IRegistrationDocument, RegistrationStatus, PaymentStatus } from './Registration';
 export type { IResource, IResourceDocument, ResourceType } from './Resource';
 export type { IContactMessage, IContactMessageDocument, MessageStatus } from './ContactMessage';

@@ -7,7 +7,7 @@ echo ""
 # Color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+blue='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
@@ -26,7 +26,7 @@ check_issue() {
     echo "   File: $file${line:+:$line}"
     ISSUES_FOUND=$((ISSUES_FOUND + 1))
   elif [ "$severity" = "WARNING" ]; then
-    echo -e "${YELLOW}⚠️  WARNING${NC}: $description"
+    echo -e "${blue}⚠️  WARNING${NC}: $description"
     echo "   File: $file${line:+:$line}"
     WARNINGS_FOUND=$((WARNINGS_FOUND + 1))
   fi
@@ -115,7 +115,7 @@ for route in $API_ROUTES; do
 done
 
 if [ -n "$UNPROTECTED_ROUTES" ]; then
-  echo -e "${YELLOW}⚠️  WARNING${NC}: API routes may be missing authentication:"
+  echo -e "${blue}⚠️  WARNING${NC}: API routes may be missing authentication:"
   echo -e "$UNPROTECTED_ROUTES" | head -5
   WARNINGS_FOUND=$((WARNINGS_FOUND + 1))
 fi
@@ -146,7 +146,7 @@ fi
 echo -e "${BLUE}[6/10]${NC} Checking CORS configuration..."
 
 if ! grep -q "cors" app/api/**/*.ts 2>/dev/null; then
-  echo -e "${YELLOW}⚠️  WARNING${NC}: No CORS configuration found in API routes"
+  echo -e "${blue}⚠️  WARNING${NC}: No CORS configuration found in API routes"
   WARNINGS_FOUND=$((WARNINGS_FOUND + 1))
 fi
 
@@ -187,13 +187,13 @@ echo -e "${BLUE}[9/10]${NC} Checking session security..."
 
 # Check for session expiration
 if ! grep -E "maxAge|expires|expiresIn" lib/auth.ts 2>/dev/null; then
-  echo -e "${YELLOW}⚠️  WARNING${NC}: Session expiration may not be configured"
+  echo -e "${blue}⚠️  WARNING${NC}: Session expiration may not be configured"
   WARNINGS_FOUND=$((WARNINGS_FOUND + 1))
 fi
 
 # Check for secure cookies
 if ! grep -E "secure.*true|httpOnly.*true" lib/auth.ts 2>/dev/null; then
-  echo -e "${YELLOW}⚠️  WARNING${NC}: Session cookies may not be secure/httpOnly"
+  echo -e "${blue}⚠️  WARNING${NC}: Session cookies may not be secure/httpOnly"
   WARNINGS_FOUND=$((WARNINGS_FOUND + 1))
 fi
 
@@ -206,7 +206,7 @@ if command -v npm &> /dev/null; then
   VULNERABILITIES=$(npm audit --json 2>/dev/null | grep -o '"vulnerabilities"' | wc -l)
 
   if [ "$VULNERABILITIES" -gt 0 ]; then
-    echo -e "${YELLOW}⚠️  WARNING${NC}: Found $VULNERABILITIES vulnerable dependencies"
+    echo -e "${blue}⚠️  WARNING${NC}: Found $VULNERABILITIES vulnerable dependencies"
     echo "   Run: npm audit fix"
     WARNINGS_FOUND=$((WARNINGS_FOUND + 1))
   else
@@ -224,7 +224,7 @@ if [ $ISSUES_FOUND -gt 0 ]; then
 fi
 
 if [ $WARNINGS_FOUND -gt 0 ]; then
-  echo -e "${YELLOW}⚠️  Warnings: $WARNINGS_FOUND${NC}"
+  echo -e "${blue}⚠️  Warnings: $WARNINGS_FOUND${NC}"
 fi
 
 if [ $ISSUES_FOUND -eq 0 ] && [ $WARNINGS_FOUND -eq 0 ]; then

@@ -83,7 +83,7 @@ export function EventRegistrationsModal({
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+        return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       case 'confirmed':
         return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
       case 'cancelled':
@@ -98,7 +98,7 @@ export function EventRegistrationsModal({
       case 'completed':
         return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
       case 'pending':
-        return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+        return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       case 'free':
         return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       default:
@@ -181,7 +181,7 @@ export function EventRegistrationsModal({
               </Card>
               <Card className="flex-1 bg-white/5 border-white/10">
                 <CardContent className="pt-6">
-                  <div className="text-2xl font-bold text-amber-400">
+                  <div className="text-2xl font-bold text-blue-400">
                     {registrations.filter(r => r.status === 'pending').length}
                   </div>
                   <div className="text-sm text-slate-400">Pending</div>

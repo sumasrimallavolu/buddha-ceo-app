@@ -60,7 +60,7 @@ export function EnhancedHeroSection() {
           poster="https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=1920"
         >
           <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4"
+            src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-blue-flowers-1173-large.mp4"
             type="video/mp4"
           />
         </video>
@@ -565,7 +565,7 @@ export function EnhancedEventCard({ event, onRegister, index }: EventCardProps) 
                   ${isFullyBooked
                     ? 'text-red-600'
                     : availableSlots !== null && availableSlots < 20
-                    ? 'text-orange-600'
+                    ? 'text-blue-600'
                     : 'text-green-600'
                   }
                 `}

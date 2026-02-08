@@ -33,7 +33,21 @@
       "Bash(git push:*)",
       "Bash(npx shadcn@latest add:*)",
       "Bash(git checkout:*)",
-      "Bash(tee:*)"
+      "Bash(tee:*)",
+      "Bash(npx tsc:*)",
+      "Bash(findstr:*)",
+      "Bash(test:*)",
+      "Bash(openssl:*)",
+      "Bash(tasklist:*)",
+      "Bash(powershell:*)",
+      "Bash(grep:*)",
+      "Bash(node:*)",
+      "Bash(tail:*)",
+      "Bash(npm run dev)",
+      "Bash(if exist .next rmdir /s /q .next)",
+      "Bash(pkill:*)",
+      "Bash(dir *.md /b)",
+      "Bash(git log:*)"
     ]
   }
 }

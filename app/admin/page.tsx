@@ -4,12 +4,9 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import {
-  Users,
   FileText,
   Calendar,
   BookOpen,
-  MessageSquare,
-  Mail,
   TrendingUp,
   Clock,
   CheckCircle,
@@ -18,16 +15,16 @@ import {
   Eye,
   BarChart3,
   Activity,
+  Image,
+  Users,
 } from 'lucide-react';
 import { AnalyticsCharts } from '@/components/admin/AnalyticsCharts';
 
 interface DashboardStats {
-  users: number;
   content: number;
   events: number;
   resources: number;
-  messages: number;
-  subscribers: number;
+  photos: number;
   pendingReviews: number;
   upcomingEvents: number;
   analytics?: {
@@ -44,12 +41,10 @@ interface DashboardStats {
 export default function AdminDashboard() {
   const { data: session } = useSession();
   const [stats, setStats] = useState<DashboardStats>({
-    users: 0,
     content: 0,
     events: 0,
     resources: 0,
-    messages: 0,
-    subscribers: 0,
+    photos: 0,
     pendingReviews: 0,
     upcomingEvents: 0,
   });
@@ -75,15 +70,6 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
-      title: 'Total Users',
-      value: stats.users,
-      icon: Users,
-      gradient: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-500/10',
-      iconColor: 'text-blue-400',
-      href: '/admin/users',
-    },
-    {
       title: 'Content Items',
       value: stats.content,
       icon: FileText,
@@ -105,28 +91,19 @@ export default function AdminDashboard() {
       title: 'Resources',
       value: stats.resources,
       icon: BookOpen,
-      gradient: 'from-amber-500 to-orange-500',
-      bgColor: 'bg-amber-500/10',
-      iconColor: 'text-amber-400',
+      gradient: 'from-blue-500 to-blue-500',
+      bgColor: 'bg-blue-500/10',
+      iconColor: 'text-blue-400',
       href: '/admin/resources',
     },
     {
-      title: 'Messages',
-      value: stats.messages,
-      icon: MessageSquare,
-      gradient: 'from-pink-500 to-rose-500',
-      bgColor: 'bg-pink-500/10',
-      iconColor: 'text-pink-400',
-      href: '/admin/contact-messages',
-    },
-    {
-      title: 'Subscribers',
-      value: stats.subscribers,
-      icon: Mail,
+      title: 'Photos',
+      value: stats.photos,
+      icon: Image,
       gradient: 'from-cyan-500 to-blue-500',
       bgColor: 'bg-cyan-500/10',
       iconColor: 'text-cyan-400',
-      href: '/admin/subscribers',
+      href: '/admin/content?type=photos',
     },
   ];
 
@@ -241,8 +218,8 @@ export default function AdminDashboard() {
             {stats.analytics.pageStats && stats.analytics.pageStats.length > 0 && (
               <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-3 rounded-xl bg-amber-500/10">
-                    <TrendingUp className="h-6 w-6 text-amber-400" />
+                  <div className="p-3 rounded-xl bg-blue-500/10">
+                    <TrendingUp className="h-6 w-6 text-blue-400" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-white">Top Pages</h3>
@@ -258,9 +235,9 @@ export default function AdminDashboard() {
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
-                          index === 0 ? 'bg-amber-500/20 text-amber-400' :
+                          index === 0 ? 'bg-blue-500/20 text-blue-400' :
                           index === 1 ? 'bg-slate-400/20 text-slate-400' :
-                          index === 2 ? 'bg-orange-500/20 text-orange-400' :
+                          index === 2 ? 'bg-blue-500/20 text-blue-400' :
                           'bg-white/5 text-slate-500'
                         }`}>
                           {index + 1}
@@ -399,8 +376,8 @@ export default function AdminDashboard() {
       {/* Actions & Notifications */}
       <div>
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20">
-            <Clock className="h-5 w-5 text-amber-400" />
+          <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/20">
+            <Clock className="h-5 w-5 text-blue-400" />
           </div>
           <div>
             <h2 className="text-xl font-semibold text-white">Actions & Notifications</h2>
@@ -412,8 +389,8 @@ export default function AdminDashboard() {
         {/* Pending Reviews */}
         <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-3 rounded-xl bg-amber-500/10">
-              <Clock className="h-6 w-6 text-amber-400" />
+            <div className="p-3 rounded-xl bg-blue-500/10">
+              <Clock className="h-6 w-6 text-blue-400" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white">Pending Reviews</h3>
@@ -425,14 +402,14 @@ export default function AdminDashboard() {
             {stats.pendingReviews > 0 ? (
               <>
                 <div className="flex items-end gap-3">
-                  <div className="text-5xl font-bold bg-gradient-to-br from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                  <div className="text-5xl font-bold bg-gradient-to-br from-blue-400 to-blue-400 bg-clip-text text-transparent">
                     {stats.pendingReviews}
                   </div>
                   <div className="text-slate-400 mb-2">items</div>
                 </div>
                 <Link
                   href="/admin/content?status=pending_review"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors group"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors group"
                 >
                   Review now
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />

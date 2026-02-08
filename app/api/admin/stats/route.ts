@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
       resourcesCount,
       messagesCount,
       subscribersCount,
+      photosCount,
       pendingReviewsCount,
       upcomingEventsCount,
       totalVisits,
@@ -75,6 +76,7 @@ export async function GET(request: NextRequest) {
       Resource.countDocuments(),
       ContactMessage.countDocuments(),
       Subscriber.countDocuments({ status: 'active' }),
+      Content.countDocuments({ type: 'photos', status: 'published' }),
       Content.countDocuments({ status: 'pending_review' }),
       Event.countDocuments({
         status: 'published',
@@ -122,6 +124,7 @@ export async function GET(request: NextRequest) {
       resources: resourcesCount,
       messages: messagesCount,
       subscribers: subscribersCount,
+      photos: photosCount,
       pendingReviews: pendingReviewsCount,
       upcomingEvents: upcomingEventsCount,
       // Visitor analytics

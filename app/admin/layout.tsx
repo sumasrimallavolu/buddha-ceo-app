@@ -8,12 +8,9 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import {
   LayoutDashboard,
-  Users,
   FileText,
   Calendar,
   BookOpen,
-  MessageSquare,
-  Mail,
   LogOut,
   Menu,
   X,
@@ -31,12 +28,9 @@ import { useState } from 'react';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, roles: ['admin', 'content_manager', 'content_reviewer'] },
-  { name: 'Users', href: '/admin/users', icon: Users, roles: ['admin'] },
   { name: 'Content', href: '/admin/content', icon: FileText, roles: ['admin', 'content_manager', 'content_reviewer'] },
   { name: 'Events', href: '/admin/events', icon: Calendar, roles: ['admin', 'content_manager', 'content_reviewer'] },
   { name: 'Resources', href: '/admin/resources', icon: BookOpen, roles: ['admin', 'content_manager', 'content_reviewer'] },
-  { name: 'Messages', href: '/admin/contact-messages', icon: MessageSquare, roles: ['admin', 'content_manager', 'content_reviewer'] },
-  { name: 'People', href: '/admin/people', icon: Users, roles: ['admin', 'content_manager', 'content_reviewer'] },
 ];
 
 export default function AdminLayout({

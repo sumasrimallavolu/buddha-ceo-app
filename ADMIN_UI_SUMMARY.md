@@ -141,7 +141,7 @@ Changes:
    - Only visible to creator
    - Can be edited
 
-2. **Pending Review** (Yellow)
+2. **Pending Review** (blue)
    - Waiting for reviewer approval
    - Cannot be edited
    - Reviewer can approve/reject

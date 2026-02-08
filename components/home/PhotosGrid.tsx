@@ -59,7 +59,7 @@ export function PhotosGrid() {
     try {
       setLoading(true);
 
-      const limit = 8;
+      const limit = 6;
       const response = await fetch(`/api/photos?limit=${limit}&skip=0`);
       const data: PhotosResponse = await response.json();
 
@@ -170,7 +170,7 @@ export function PhotosGrid() {
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                   <h3 className="text-white font-bold text-xl mb-3">{photo.title}</h3>
-                  <div className="flex items-center gap-4 text-slate-300 text-sm">
+                  {/* <div className="flex items-center gap-4 text-slate-300 text-sm">
                     <div className="flex items-center gap-1.5">
                       <Heart className="w-4 h-4 text-red-400" />
                       <span>{photo.likes || 0}</span>
@@ -179,7 +179,7 @@ export function PhotosGrid() {
                       <Eye className="w-4 h-4 text-blue-400" />
                       <span>{photo.views || 0}</span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </motion.div>

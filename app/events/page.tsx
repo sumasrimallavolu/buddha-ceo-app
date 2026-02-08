@@ -5,9 +5,9 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RegistrationForm } from '@/components/events/RegistrationForm';
 import { Calendar, Users, Filter, Loader2, MapPin, Clock, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Event {
   _id: string;
@@ -58,8 +58,6 @@ export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [registrationOpen, setRegistrationOpen] = useState(false);
   const [filterType, setFilterType] = useState<string>('all');
 
   useEffect(() => {
@@ -91,10 +89,6 @@ export default function EventsPage() {
     }
   }, [filterType, events]);
 
-  const handleRegisterClick = (event: Event) => {
-    setSelectedEvent(event);
-    setRegistrationOpen(true);
-  };
 
   // Get unique event types
   const eventTypes = Array.from(new Set(events.map((e) => e.type)));
@@ -124,7 +118,7 @@ export default function EventsPage() {
             <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-10">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-medium border border-blue-500/30 mb-6">
               <Calendar className="w-4 h-4" />
               <span>Transformative Programs</span>
@@ -202,6 +196,12 @@ export default function EventsPage() {
                   const isFullyBooked = availableSlots === 0;
                   const isCompleted = event.status === 'completed';
 
+                  // Check if registration is closed (30 minutes before end time)
+                  const now = new Date();
+                  const eventEndTime = new Date(event.endDate);
+                  const registrationCloseTime = new Date(eventEndTime.getTime() - 30 * 60 * 1000); // 30 minutes before end
+                  const isRegistrationClosed = now >= registrationCloseTime;
+
                   return (
                     <Card
                       key={event._id}
@@ -243,10 +243,12 @@ export default function EventsPage() {
                       </div>
 
                       <CardContent className="p-6">
-                        {/* Title */}
-                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors line-clamp-2">
-                          {event.title}
-                        </h3>
+                        {/* Title - Clickable */}
+                        <Link href={`/events/${event._id}`}>
+                          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors line-clamp-2 cursor-pointer">
+                            {event.title}
+                          </h3>
+                        </Link>
 
                         {/* Description */}
                         <p className="text-sm text-slate-400 mb-4 line-clamp-3 leading-relaxed">
@@ -279,7 +281,7 @@ export default function EventsPage() {
                                   {event.currentRegistrations} / {event.maxParticipants}
                                 </div>
                                 {availableSlots !== null && (
-                                  <div className={`text-xs font-medium ${isFullyBooked ? 'text-red-400' : availableSlots < 10 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                  <div className={`text-xs font-medium ${isFullyBooked ? 'text-red-400' : availableSlots < 10 ? 'text-blue-400' : 'text-emerald-400'}`}>
                                     {isFullyBooked ? 'Fully Booked' : `${availableSlots} slots left`}
                                   </div>
                                 )}
@@ -288,24 +290,38 @@ export default function EventsPage() {
                           )}
                         </div>
 
-                        {/* Action Button */}
-                        {isCompleted ? (
-                          <Button variant="outline" className="w-full" disabled>
-                            Completed
-                          </Button>
-                        ) : isFullyBooked ? (
-                          <Button variant="outline" className="w-full border-red-500/50 text-red-400" disabled>
-                            Fully Booked
-                          </Button>
-                        ) : (
-                          <Button
-                            className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white"
-                            onClick={() => handleRegisterClick(event)}
-                          >
-                            Register Now
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                          </Button>
-                        )}
+                        {/* Action Buttons */}
+                        <div className="space-y-3">
+                          {/* View Details - Always visible */}
+                          <Link href={`/events/${event._id}`} className="block">
+                            <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">
+                              View Details
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                          </Link>
+
+                          {/* Register/Status Button */}
+                          {isCompleted ? (
+                            <Button variant="outline" className="w-full" disabled>
+                              Event Completed
+                            </Button>
+                          ) : isRegistrationClosed ? (
+                            <Button variant="outline" className="w-full border-blue-500/50 text-blue-400" disabled>
+                              Registration Closed
+                            </Button>
+                          ) : isFullyBooked ? (
+                            <Button variant="outline" className="w-full border-red-500/50 text-red-400" disabled>
+                              Fully Booked
+                            </Button>
+                          ) : (
+                            <Link href={`/events/${event._id}/register`}>
+                              <Button className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white">
+                                Register Now
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                              </Button>
+                            </Link>
+                          )}
+                        </div>
                       </CardContent>
                     </Card>
                   );
@@ -317,14 +333,6 @@ export default function EventsPage() {
       </main>
 
       <Footer />
-
-      {selectedEvent && (
-        <RegistrationForm
-          event={selectedEvent}
-          open={registrationOpen}
-          onOpenChange={setRegistrationOpen}
-        />
-      )}
     </div>
   );
 }

@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getSessionFromRequest } from '@/lib/session';
 import connectDB from '@/lib/mongodb';
 import { Content } from '@/lib/models';
 
 // GET all content with filters
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSessionFromRequest(request);
 
     if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      console.error('GET /api/admin/content - No session found');
+      return NextResponse.json({ error: 'Unauthorized - No session' }, { status: 401 });
     }
 
     await connectDB();
@@ -43,10 +43,15 @@ export async function GET(request: NextRequest) {
       .sort({ createdAt: -1 });
 
     return NextResponse.json(content);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching content:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
     return NextResponse.json(
-      { error: 'Failed to fetch content' },
+      { error: error.message || 'Failed to fetch content' },
       { status: 500 }
     );
   }
@@ -55,10 +60,16 @@ export async function GET(request: NextRequest) {
 // POST create new content
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSessionFromRequest(request);
 
-    if (!session || (session.user.role !== 'admin' && session.user.role !== 'content_manager')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!session) {
+      console.error('POST /api/admin/content - No session found');
+      return NextResponse.json({ error: 'Unauthorized - No session' }, { status: 401 });
+    }
+
+    if (session.user.role !== 'admin' && session.user.role !== 'content_manager') {
+      console.error('POST /api/admin/content - Forbidden - Role:', session.user.role);
+      return NextResponse.json({ error: 'Forbidden - Insufficient permissions' }, { status: 403 });
     }
 
     await connectDB();
@@ -77,7 +88,8 @@ export async function POST(request: NextRequest) {
     let contentStatus = status || 'draft';
 
     // Auto-publish for content_manager and admin roles
-    if (autoPublish && (session.user.role === 'content_manager' || session.user.role === 'admin')) {
+    // Content managers and admins can publish directly without review
+    if (contentStatus === 'pending_review' && (session.user.role === 'content_manager' || session.user.role === 'admin')) {
       contentStatus = 'published';
     }
 
@@ -102,10 +114,15 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating content:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
     return NextResponse.json(
-      { error: 'Failed to create content' },
+      { error: error.message || 'Failed to create content' },
       { status: 500 }
     );
   }

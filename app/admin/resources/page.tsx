@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -17,8 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { BookOpen, MoreVertical, Edit, Trash, Download, Book, Video, FileText, Link } from 'lucide-react';
-import { ResourceCreateModal, ResourceEditModal } from '@/components/admin';
+import { BookOpen, MoreVertical, Trash, Download, Book, Video, FileText, Link as LinkIcon, MessageSquare, Plus, Pencil } from 'lucide-react';
 
 interface Resource {
   _id: string;
@@ -31,6 +31,7 @@ interface Resource {
 
 export default function ResourcesPage() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -97,14 +98,20 @@ export default function ResourcesPage() {
       case 'magazine':
         return {
           label: 'Magazine',
-          className: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+          className: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
           icon: FileText,
         };
       case 'link':
         return {
           label: 'Link',
-          className: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-          icon: Link,
+          className: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+          icon: LinkIcon,
+        };
+      case 'testimonial':
+        return {
+          label: 'Testimonial',
+          className: 'bg-pink-500/20 text-pink-400 border-pink-500/30',
+          icon: MessageSquare,
         };
       default:
         return {
@@ -124,19 +131,17 @@ export default function ResourcesPage() {
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Resource Management</h1>
           <p className="text-slate-400">
-            Manage books, videos, magazines, and links
+            Manage books, videos, magazines, links, and testimonials
           </p>
         </div>
         {canEdit && (
-          <ResourceCreateModal
-            trigger={
-              <Button className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-xl shadow-lg shadow-blue-500/25 transition-all hover:scale-105">
-                <BookOpen className="mr-2 h-4 w-4" />
-                Add Resource
-              </Button>
-            }
-            onSuccess={fetchResources}
-          />
+          <Button
+            onClick={() => router.push('/admin/resources/new')}
+            className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-xl shadow-lg shadow-blue-500/25 transition-all hover:scale-105"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Resource
+          </Button>
         )}
       </div>
 
@@ -205,19 +210,16 @@ export default function ResourcesPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
                             {canEdit && (
-                              <ResourceEditModal
-                                resourceId={resource._id}
-                                trigger={
-                                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10">
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    Edit
-                                  </DropdownMenuItem>
-                                }
-                                onSuccess={fetchResources}
-                              />
+                              <DropdownMenuItem
+                                onClick={() => router.push(`/admin/resources/edit/${resource._id}`)}
+                                className="text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10"
+                              >
+                                <Pencil className="mr-2 h-4 w-4" />
+                                Edit
+                              </DropdownMenuItem>
                             )}
 
-                            {(resource.type === 'book' || resource.type === 'magazine') && (
+                            {resource.type === 'book' && (
                               <DropdownMenuItem className="text-slate-300 hover:text-white hover:bg-white/10 focus:bg-white/10">
                                 <Download className="mr-2 h-4 w-4" />
                                 Download

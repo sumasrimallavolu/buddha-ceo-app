@@ -21,8 +21,16 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, CheckCircle2, Calendar, Clock, Users } from 'lucide-react';
+import {
+  Loader2,
+  CheckCircle2,
+  Calendar,
+  Clock,
+  Users,
+  ArrowLeft,
+} from 'lucide-react';
 
 const registrationSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -44,6 +52,7 @@ interface Event {
   timings: string;
   maxParticipants?: number;
   currentRegistrations: number;
+  imageUrl?: string;
 }
 
 interface RegistrationFormProps {
@@ -130,121 +139,103 @@ export function RegistrationForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[95vh] overflow-y-auto bg-white dark:bg-gray-900">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Register for Event</DialogTitle>
-          <DialogDescription className="text-base">
+          <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+            Register for Event
+          </DialogTitle>
+          <DialogDescription className="text-base text-gray-600 dark:text-gray-400">
             {event.title}
           </DialogDescription>
         </DialogHeader>
 
         {/* Event Details */}
-        <div className="bg-amber-50 p-4 rounded-lg space-y-2">
-          <div className="flex items-center text-sm">
-            <Calendar className="mr-2 h-4 w-4 text-amber-700" />
-            <span className="font-medium">
-              {formatDate(event.startDate)} - {formatDate(event.endDate)}
-            </span>
-          </div>
-          <div className="flex items-center text-sm">
-            <Clock className="mr-2 h-4 w-4 text-amber-700" />
-            <span>{event.timings}</span>
-          </div>
-          {availableSlots !== null && (
-            <div className="flex items-center text-sm">
-              <Users className="mr-2 h-4 w-4 text-amber-700" />
-              <span>
-                {availableSlots > 0 ? (
-                  <span className="text-green-600 font-medium">
-                    {availableSlots} slots available
-                  </span>
-                ) : (
-                  <span className="text-red-600 font-medium">Event fully booked</span>
-                )}
-              </span>
+        <Card className="p-4 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex items-start gap-3">
+              <Calendar className="h-5 w-5 text-gray-600 dark:text-gray-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-500 font-medium">Dates</p>
+                <p className="text-sm text-gray-900 dark:text-gray-100">
+                  {formatDate(event.startDate)}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  to {formatDate(event.endDate)}
+                </p>
+              </div>
             </div>
-          )}
-        </div>
 
+            <div className="flex items-start gap-3">
+              <Clock className="h-5 w-5 text-gray-600 dark:text-gray-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-500 font-medium">Timings</p>
+                <p className="text-sm text-gray-900 dark:text-gray-100">{event.timings}</p>
+              </div>
+            </div>
+
+            {availableSlots !== null && (
+              <div className="flex items-start gap-3 sm:col-span-2">
+                <Users className="h-5 w-5 text-gray-600 dark:text-gray-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-500 font-medium">Availability</p>
+                  <p className="text-sm">
+                    {availableSlots > 0 ? (
+                      <span className="text-green-600 dark:text-green-400 font-medium">
+                        {availableSlots} slots remaining
+                      </span>
+                    ) : (
+                      <span className="text-red-600 dark:text-red-400 font-medium">
+                        Fully booked
+                      </span>
+                    )}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    {event.currentRegistrations} / {event.maxParticipants} registered
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </Card>
+
+        {/* Success/Error Message */}
         {submitStatus.type && (
           <Alert
             variant={submitStatus.type === 'error' ? 'destructive' : 'default'}
-            className={submitStatus.type === 'success' ? 'border-green-500 text-green-700' : ''}
+            className={`${
+              submitStatus.type === 'success'
+                ? 'border-green-500 bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400'
+                : ''
+            }`}
           >
             {submitStatus.type === 'success' ? (
               <CheckCircle2 className="h-4 w-4" />
             ) : null}
-            <AlertDescription>{submitStatus.message}</AlertDescription>
+            <AlertDescription className="text-sm">
+              {submitStatus.message}
+            </AlertDescription>
           </Alert>
         )}
 
+        {/* Registration Form */}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your full name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email Address *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="your.email@example.com" type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="+91 98765 43210" type="tel" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Name Field */}
+            <div className="space-y-2">
               <FormField
                 control={form.control}
-                name="city"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                      Full Name <span className="text-red-600">*</span>
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="Your city" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="profession"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Profession</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your profession" {...field} />
+                      <Input
+                        placeholder="Enter your full name"
+                        className="border-gray-300 dark:border-gray-700"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -252,11 +243,107 @@ export function RegistrationForm({
               />
             </div>
 
-            <div className="flex gap-3 pt-4">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                      Email Address <span className="text-red-600">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="your.email@example.com"
+                        type="email"
+                        className="border-gray-300 dark:border-gray-700"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Phone Field */}
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                      Phone Number <span className="text-red-600">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="+91 98765 43210"
+                        type="tel"
+                        className="border-gray-300 dark:border-gray-700"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* City & Profession - Two Columns */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                        City
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Your city"
+                          className="border-gray-300 dark:border-gray-700"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="profession"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                        Profession
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Your profession"
+                          className="border-gray-300 dark:border-gray-700"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <Button
                 type="button"
                 variant="outline"
-                className="flex-1"
+                className="flex-1 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300"
                 onClick={() => onOpenChange(false)}
                 disabled={isSubmitting}
               >
@@ -264,7 +351,7 @@ export function RegistrationForm({
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-amber-600"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                 disabled={isSubmitting || availableSlots === 0}
               >
                 {isSubmitting ? (

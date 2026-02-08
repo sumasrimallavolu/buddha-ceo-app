@@ -14,29 +14,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, CheckCircle2, BookOpen, Save } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+import { Card, CardContent } from '@/components/ui/card';
+import { Loader2, CheckCircle2, BookOpen, Video, FileText, Link as LinkIcon, Quote, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface ResourceCreateModalProps {
   trigger?: React.ReactNode;
   onSuccess?: () => void;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
 }
 
 export function ResourceCreateModal({
   trigger,
   onSuccess,
-  open: controlledOpen,
-  onOpenChange,
 }: ResourceCreateModalProps) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
@@ -44,9 +33,9 @@ export function ResourceCreateModal({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const [resourceType, setResourceType] = useState<string>('video');
   const [formData, setFormData] = useState({
     title: '',
-    type: 'video',
     description: '',
     thumbnailUrl: '',
     downloadUrl: '',
@@ -54,22 +43,15 @@ export function ResourceCreateModal({
     linkUrl: '',
     category: '',
     order: 0,
+    // Testimonial-specific fields
+    subtitle: '',
+    quote: '',
   });
 
-  const isControlled = controlledOpen !== undefined;
-  const isOpen = isControlled ? controlledOpen : open;
-  const setIsOpen = (value: boolean) => {
-    if (isControlled && onOpenChange) {
-      onOpenChange(value);
-    } else {
-      setOpen(value);
-    }
-  };
-
   const resetForm = () => {
+    setResourceType('video');
     setFormData({
       title: '',
-      type: 'video',
       description: '',
       thumbnailUrl: '',
       downloadUrl: '',
@@ -77,17 +59,37 @@ export function ResourceCreateModal({
       linkUrl: '',
       category: '',
       order: 0,
+      subtitle: '',
+      quote: '',
     });
     setError('');
     setSuccess(false);
   };
 
-  const handleSubmit = async (saveAsDraft = false, autoPublish = false) => {
+  const handleSubmit = async (saveAsDraft = false) => {
     setError('');
     setSuccess(false);
 
-    if (!formData.title) {
+    if (!formData.title.trim()) {
       setError('Title is required');
+      return;
+    }
+
+    // For testimonials, quote is required instead of description
+    if (resourceType === 'testimonial' && !formData.quote.trim()) {
+      setError('Quote is required for testimonials');
+      return;
+    }
+
+    // For non-testimonials, description is required
+    if (resourceType !== 'testimonial' && !formData.description.trim()) {
+      setError('Description is required');
+      return;
+    }
+
+    // For videos and testimonials, videoUrl is required
+    if ((resourceType === 'video' || resourceType === 'testimonial') && !formData.videoUrl.trim()) {
+      setError('Video URL is required');
       return;
     }
 
@@ -95,31 +97,49 @@ export function ResourceCreateModal({
 
     try {
       const resourceData: Record<string, any> = {
-        title: formData.title,
-        type: formData.type,
-        description: formData.description,
-        category: formData.category,
+        title: formData.title.trim(),
+        type: resourceType,
+        category: formData.category || 'General',
         order: formData.order,
         status: saveAsDraft ? 'draft' : 'published',
-        autoPublish,
       };
+
+      if (formData.description.trim()) {
+        resourceData.description = formData.description.trim();
+      }
 
       if (formData.thumbnailUrl) {
         resourceData.thumbnailUrl = formData.thumbnailUrl;
       }
 
-      if (formData.type === 'book' || formData.type === 'magazine') {
+      if (resourceType === 'book' || resourceType === 'magazine') {
         if (formData.downloadUrl) {
           resourceData.downloadUrl = formData.downloadUrl;
         }
       }
 
-      if (formData.type === 'video' && formData.videoUrl) {
-        resourceData.videoUrl = formData.videoUrl;
+      if (resourceType === 'video') {
+        if (formData.videoUrl) {
+          resourceData.videoUrl = formData.videoUrl;
+        }
       }
 
-      if (formData.type === 'link' && formData.linkUrl) {
-        resourceData.linkUrl = formData.linkUrl;
+      if (resourceType === 'link') {
+        if (formData.linkUrl) {
+          resourceData.linkUrl = formData.linkUrl;
+        }
+      }
+
+      if (resourceType === 'testimonial') {
+        if (formData.videoUrl) {
+          resourceData.videoUrl = formData.videoUrl;
+        }
+        if (formData.subtitle) {
+          resourceData.subtitle = formData.subtitle;
+        }
+        if (formData.quote) {
+          resourceData.quote = formData.quote;
+        }
       }
 
       const response = await fetch('/api/admin/resources', {
@@ -138,7 +158,7 @@ export function ResourceCreateModal({
 
       setSuccess(true);
       setTimeout(() => {
-        setIsOpen(false);
+        setOpen(false);
         resetForm();
         if (onSuccess) onSuccess();
       }, 1000);
@@ -149,211 +169,301 @@ export function ResourceCreateModal({
     }
   };
 
+  if (!trigger) return null;
+
   return (
-    <Sheet open={isOpen} onOpenChange={(value) => {
-      setIsOpen(value);
-      if (!value) resetForm();
-    }}>
-      {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10">
-        <SheetHeader>
-          <SheetTitle className="text-white">Create New Resource</SheetTitle>
-          <SheetDescription className="text-slate-400">
-            Add a new book, video, magazine, or link
-          </SheetDescription>
-        </SheetHeader>
+    <>
+      <div onClick={() => setOpen(true)}>{trigger}</div>
 
-        <div className="flex-1 overflow-y-auto py-8 px-6 space-y-8">
-          {error && (
-            <Alert variant="destructive" className="border-red-500/50 bg-red-500/10 text-red-400">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          {success && (
-            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
-              <CheckCircle2 className="h-4 w-4" />
-              <AlertDescription>
-                Resource created successfully!
-              </AlertDescription>
-            </Alert>
-          )}
-
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">Basic Information</h3>
+      {open && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-4xl bg-slate-900 rounded-2xl border border-white/10 shadow-2xl my-8">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <div className="flex-1">
+                <h1 className="text-2xl font-bold text-white">Create New Resource</h1>
+                <p className="text-slate-400 text-sm">Add books, videos, magazines, links, or testimonials</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setOpen(false);
+                  resetForm();
+                }}
+                className="text-slate-400 hover:text-white"
+              >
+                <X className="h-5 w-5" />
+              </Button>
             </div>
 
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title" className="text-slate-300">Title *</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="Resource title"
-                />
+            <div className="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+              {error && (
+                <Alert variant="destructive" className="bg-red-500/10 border-red-500/30 text-red-400">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              {success && (
+                <Alert className="bg-green-500/10 border-green-500/30 text-green-400">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <AlertDescription>Resource created successfully!</AlertDescription>
+                </Alert>
+              )}
+
+              {/* Resource Type Selector */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {[
+                  { value: 'video', label: 'Video', icon: Video, desc: 'YouTube videos' },
+                  { value: 'book', label: 'Book', icon: BookOpen, desc: 'PDF downloads' },
+                  { value: 'magazine', label: 'Magazine', icon: FileText, desc: 'Publications' },
+                  { value: 'link', label: 'Link', icon: LinkIcon, desc: 'External links' },
+                  { value: 'testimonial', label: 'Testimonial', icon: Quote, desc: 'Video testimonials' },
+                ].map((type) => {
+                  const Icon = type.icon;
+                  const isSelected = resourceType === type.value;
+                  return (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => setResourceType(type.value)}
+                      className={`relative p-4 rounded-xl border-2 text-left transition-all ${
+                        isSelected
+                          ? 'border-blue-500 bg-blue-500/10'
+                          : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
+                      }`}
+                    >
+                      <Icon className={`h-6 w-6 mb-2 ${isSelected ? 'text-blue-400' : 'text-slate-400'}`} />
+                      <div className={`font-semibold mb-1 text-sm ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                        {type.label}
+                      </div>
+                      <div className="text-xs text-slate-400">{type.desc}</div>
+                      {isSelected && (
+                        <div className="absolute top-2 right-2">
+                          <Badge className="bg-blue-500 text-white text-xs">Selected</Badge>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="type" className="text-slate-300">Resource Type *</Label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(value) => setFormData({ ...formData, type: value })}
-                >
-                  <SelectTrigger id="type">
-                    <SelectValue placeholder="Select resource type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="book">Book</SelectItem>
-                    <SelectItem value="video">Video</SelectItem>
-                    <SelectItem value="magazine">Magazine</SelectItem>
-                    <SelectItem value="link">Link</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Main Form Card */}
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+                <CardContent className="pt-6 space-y-6">
+                  {/* Title */}
+                  <div className="space-y-2">
+                    <Label htmlFor="title" className="text-white text-sm font-medium">
+                      Title <span className="text-red-400">*</span>
+                    </Label>
+                    <Input
+                      id="title"
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder="Resource title"
+                      disabled={loading}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                    />
+                  </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="category" className="text-slate-300">Category</Label>
-                <Input
-                  id="category"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  placeholder="e.g., Teachings, Meditation Techniques, Talks"
-                />
-              </div>
+                  {/* Description (not for testimonials) */}
+                  {resourceType !== 'testimonial' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="description" className="text-slate-300 text-sm">
+                        Description <span className="text-red-400">*</span>
+                      </Label>
+                      <Textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        placeholder="Describe this resource..."
+                        rows={3}
+                        disabled={loading}
+                        className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                      />
+                    </div>
+                  )}
 
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-slate-300">Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe this resource..."
-                  rows={3}
-                />
-              </div>
+                  {/* Video/Book/Link/Testimonial specific fields */}
+                  {(resourceType === 'video' || resourceType === 'testimonial') && (
+                    <div className="space-y-4 pt-4 border-t border-white/10">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Video className="h-5 w-5 text-blue-400" />
+                        <h3 className="text-white font-semibold">Video Details</h3>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="videoUrl" className="text-slate-300 text-sm">
+                          Video URL <span className="text-red-400">*</span>
+                        </Label>
+                        <Input
+                          id="videoUrl"
+                          value={formData.videoUrl}
+                          onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                          placeholder="https://youtube.com/watch?v=..."
+                          disabled={loading}
+                          className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                        />
+                      </div>
+
+                      {resourceType === 'testimonial' && (
+                        <>
+                          <div className="space-y-2">
+                            <Label htmlFor="subtitle" className="text-slate-300 text-sm">
+                              Subtitle/Role <span className="text-red-400">*</span>
+                            </Label>
+                            <Input
+                              id="subtitle"
+                              value={formData.subtitle}
+                              onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                              placeholder="e.g., Former Director-CBI, NHRC"
+                              disabled={loading}
+                              className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="quote" className="text-slate-300 text-sm">
+                              Quote/Message <span className="text-red-400">*</span>
+                            </Label>
+                            <Textarea
+                              id="quote"
+                              value={formData.quote}
+                              onChange={(e) => setFormData({ ...formData, quote: e.target.value })}
+                              placeholder="Their testimonial or inspiring message..."
+                              rows={3}
+                              disabled={loading}
+                              className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {(resourceType === 'book' || resourceType === 'magazine') && (
+                    <div className="space-y-4 pt-4 border-t border-white/10">
+                      <div className="flex items-center gap-2 mb-4">
+                        <BookOpen className="h-5 w-5 text-blue-400" />
+                        <h3 className="text-white font-semibold">
+                          {resourceType === 'book' ? 'Book Details' : 'Magazine Details'}
+                        </h3>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="downloadUrl" className="text-slate-300 text-sm">
+                          Download/Purchase URL <span className="text-red-400">*</span>
+                        </Label>
+                        <Input
+                          id="downloadUrl"
+                          value={formData.downloadUrl}
+                          onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
+                          placeholder="https://example.com/resource.pdf"
+                          disabled={loading}
+                          className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {resourceType === 'link' && (
+                    <div className="space-y-4 pt-4 border-t border-white/10">
+                      <div className="flex items-center gap-2 mb-4">
+                        <LinkIcon className="h-5 w-5 text-blue-400" />
+                        <h3 className="text-white font-semibold">Link Details</h3>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="linkUrl" className="text-slate-300 text-sm">
+                          URL <span className="text-red-400">*</span>
+                        </Label>
+                        <Input
+                          id="linkUrl"
+                          value={formData.linkUrl}
+                          onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })}
+                          placeholder="https://example.com"
+                          disabled={loading}
+                          className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Common fields */}
+                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                    <div className="space-y-2">
+                      <Label htmlFor="category" className="text-slate-300 text-sm">Category</Label>
+                      <Input
+                        id="category"
+                        value={formData.category}
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        placeholder="e.g., Meditation, Talks"
+                        disabled={loading}
+                        className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="order" className="text-slate-300 text-sm">Display Order</Label>
+                      <Input
+                        id="order"
+                        type="number"
+                        value={formData.order}
+                        onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
+                        placeholder="0"
+                        disabled={loading}
+                        className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="thumbnailUrl" className="text-slate-300 text-sm">Thumbnail URL (optional)</Label>
+                    <Input
+                      id="thumbnailUrl"
+                      value={formData.thumbnailUrl}
+                      onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
+                      placeholder="https://example.com/thumbnail.jpg"
+                      disabled={loading}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          </div>
 
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">Media Details</h3>
-            </div>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="thumbnailUrl" className="text-slate-300">Thumbnail Image URL</Label>
-                <Input
-                  id="thumbnailUrl"
-                  value={formData.thumbnailUrl}
-                  onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                />
-              </div>
-
-              {formData.type === 'video' && (
-                <div className="space-y-2">
-                  <Label htmlFor="videoUrl" className="text-slate-300">Video URL</Label>
-                  <Input
-                    id="videoUrl"
-                    value={formData.videoUrl}
-                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                    placeholder="https://www.youtube.com/watch?v=..."
-                  />
-                </div>
-              )}
-
-              {(formData.type === 'book' || formData.type === 'magazine') && (
-                <div className="space-y-2">
-                  <Label htmlFor="downloadUrl" className="text-slate-300">Download/Purchase URL</Label>
-                  <Input
-                    id="downloadUrl"
-                    value={formData.downloadUrl}
-                    onChange={(e) => setFormData({ ...formData, downloadUrl: e.target.value })}
-                    placeholder="https://example.com/resource.pdf"
-                  />
-                </div>
-              )}
-
-              {formData.type === 'link' && (
-                <div className="space-y-2">
-                  <Label htmlFor="linkUrl" className="text-slate-300">Link URL</Label>
-                  <Input
-                    id="linkUrl"
-                    value={formData.linkUrl}
-                    onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })}
-                    placeholder="https://example.com"
-                  />
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="order" className="text-slate-300">Display Order</Label>
-                <Input
-                  id="order"
-                  type="number"
-                  value={formData.order}
-                  onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-                  placeholder="0"
-                />
-                <p className="text-xs text-slate-500">Lower numbers appear first</p>
-              </div>
+            {/* Actions */}
+            <div className="flex gap-3 justify-end p-6 border-t border-white/10">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setOpen(false);
+                  resetForm();
+                }}
+                disabled={loading}
+                className="border-white/10 text-slate-300 hover:bg-white/5"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSubmit(true)}
+                disabled={loading}
+                className="border-white/10 text-slate-300 hover:bg-white/5"
+              >
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Save Draft'}
+              </Button>
+              <Button
+                onClick={() => handleSubmit(false)}
+                disabled={loading}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Publish'}
+              </Button>
             </div>
           </div>
         </div>
-
-        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-white/10 pt-6 px-6 mt-auto">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setIsOpen(false)}
-            disabled={loading || success}
-            className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleSubmit(true, false)}
-            disabled={loading || success}
-            className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-500" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save as Draft
-              </>
-            )}
-          </Button>
-          <Button
-            type="button"
-            className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white border-0 shadow-lg shadow-blue-500/25"
-            onClick={() => handleSubmit(false, true)}
-            disabled={loading || success}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Publishing...
-              </>
-            ) : (
-              <>
-                <BookOpen className="mr-2 h-4 w-4" />
-                Publish Now
-              </>
-            )}
-          </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+      )}
+    </>
   );
 }

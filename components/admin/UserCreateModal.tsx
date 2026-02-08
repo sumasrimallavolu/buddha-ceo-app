@@ -126,23 +126,23 @@ export function UserCreateModal({
       if (!value) resetForm();
     }}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent side="right" className="w-full sm:max-w-md bg-slate-950 border-white/10">
+      <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-gray-900">
         <SheetHeader>
-          <SheetTitle className="text-white">Create New User</SheetTitle>
-          <SheetDescription className="text-slate-400">
+          <SheetTitle className="text-gray-900 dark:text-white">Create New User</SheetTitle>
+          <SheetDescription className="text-gray-600 dark:text-gray-400">
             Add a new admin user to the system
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto py-8 px-6 space-y-8">
+        <div className="flex-1 overflow-y-auto py-6 space-y-6">
           {error && (
-            <Alert variant="destructive" className="border-red-500/50 bg-red-500/10 text-red-400">
+            <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           {success && (
-            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+            <Alert className="border-green-500 bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 User created successfully!
@@ -150,15 +150,15 @@ export function UserCreateModal({
             </Alert>
           )}
 
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">User Information</h3>
-            </div>
+          {/* User Information */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              User Information
+            </h3>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-slate-300">Full Name *</Label>
+                <Label htmlFor="name">Full Name <span className="text-red-600">*</span></Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -168,7 +168,7 @@ export function UserCreateModal({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-300">Email Address *</Label>
+                <Label htmlFor="email">Email Address <span className="text-red-600">*</span></Label>
                 <Input
                   id="email"
                   type="email"
@@ -179,7 +179,7 @@ export function UserCreateModal({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-300">Password *</Label>
+                <Label htmlFor="password">Password <span className="text-red-600">*</span></Label>
                 <Input
                   id="password"
                   type="password"
@@ -187,20 +187,22 @@ export function UserCreateModal({
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="Minimum 6 characters"
                 />
-                <p className="text-xs text-slate-500">Password must be at least 6 characters</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Password must be at least 6 characters
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">Role & Permissions</h3>
-            </div>
+          {/* Role & Permissions */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Role & Permissions
+            </h3>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="role" className="text-slate-300">Role *</Label>
+                <Label htmlFor="role">Role <span className="text-red-600">*</span></Label>
                 <Select
                   value={formData.role}
                   onValueChange={(value) => setFormData({ ...formData, role: value })}
@@ -209,38 +211,60 @@ export function UserCreateModal({
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="content_manager">Content Manager</SelectItem>
-                    <SelectItem value="content_reviewer">Content Reviewer</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="content_manager">
+                      <div className="flex flex-col">
+                        <span className="font-medium">Content Manager</span>
+                        <span className="text-xs text-gray-500">
+                          Can create and edit content
+                        </span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="content_reviewer">
+                      <div className="flex flex-col">
+                        <span className="font-medium">Content Reviewer</span>
+                        <span className="text-xs text-gray-500">
+                          Can review and approve content
+                        </span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="admin">
+                      <div className="flex flex-col">
+                        <span className="font-medium">Admin</span>
+                        <span className="text-xs text-gray-500">
+                          Full system access
+                        </span>
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="p-4 rounded-lg bg-white/5 border border-white/10 space-y-2">
-                <p className="text-xs text-slate-400 font-semibold mb-2">Role Permissions:</p>
-                <div className="space-y-1">
-                  <p className="text-xs text-slate-500">• <strong className="text-slate-300">Content Manager:</strong> Can create and edit content (auto-publish enabled)</p>
-                  <p className="text-xs text-slate-500">• <strong className="text-slate-300">Content Reviewer:</strong> Can review and approve/reject content</p>
-                  <p className="text-xs text-slate-500">• <strong className="text-slate-300">Admin:</strong> View-only access to all features</p>
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 space-y-2">
+                <p className="text-xs font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  Role Permissions:
+                </p>
+                <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                  <p>• <strong className="text-gray-900 dark:text-gray-200">Content Manager:</strong> Can create and edit content</p>
+                  <p>• <strong className="text-gray-900 dark:text-gray-200">Content Reviewer:</strong> Can review and approve/reject content</p>
+                  <p>• <strong className="text-gray-900 dark:text-gray-200">Admin:</strong> Full system access</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-white/10 pt-6 px-6 mt-auto">
+        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-gray-200 dark:border-gray-700 pt-6">
           <Button
             type="button"
             variant="outline"
             onClick={() => setIsOpen(false)}
             disabled={loading || success}
-            className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
           >
             Cancel
           </Button>
           <Button
             type="button"
-            className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white border-0 shadow-lg shadow-blue-500/25"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
             onClick={handleSubmit}
             disabled={loading || success}
           >

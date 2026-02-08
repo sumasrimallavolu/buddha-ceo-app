@@ -5,17 +5,18 @@ export type EventStatus = 'draft' | 'upcoming' | 'ongoing' | 'completed' | 'canc
 
 export interface IEvent {
   title: string;
-  description: string;
+  description?: string;
   type: EventType;
   startDate: Date;
   endDate: Date;
-  timings: string;
-  imageUrl: string;
+  timings?: string;
+  imageUrl?: string;
   registrationLink?: string;
   maxParticipants?: number;
   currentRegistrations: number;
   status: EventStatus;
   location?: {
+    online?: boolean;
     address?: string;
     city?: string;
     state?: string;
@@ -24,6 +25,23 @@ export interface IEvent {
     latitude?: number;
     longitude?: number;
   };
+  // Enhanced fields
+  benefits?: string[]; // List of benefits
+  teacherId?: string; // Reference to teacher/organizer
+  teacherName?: string; // Display name for teacher
+  galleryImages?: string[]; // Multiple event photos
+  requirements?: string[]; // Prerequisites or requirements
+  whatToBring?: string[]; // Items participants should bring
+  targetAudience?: string; // Who should attend
+  curriculum?: string; // Course outline/curriculum
+  price?: number; // Event price (0 for free)
+  currency?: string; // Currency code (default: INR)
+  dateSlots?: {
+    date: string;
+    startTime: string;
+    endTime: string;
+    title?: string;
+  }[]; // Multiple date/time slots for sessions
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,7 +57,8 @@ const EventSchema = new Schema<IEventDocument>(
     },
     description: {
       type: String,
-      required: [true, 'Description is required'],
+      default: '',
+      trim: true,
     },
     type: {
       type: String,
@@ -56,11 +75,13 @@ const EventSchema = new Schema<IEventDocument>(
     },
     timings: {
       type: String,
-      required: [true, 'Timings are required'],
+      default: '',
+      trim: true,
     },
     imageUrl: {
       type: String,
-      required: [true, 'Image is required'],
+      default: '',
+      trim: true,
     },
     registrationLink: {
       type: String,
@@ -81,6 +102,7 @@ const EventSchema = new Schema<IEventDocument>(
       required: true,
     },
     location: {
+      online: { type: Boolean, default: true },
       address: { type: String, default: null },
       city: { type: String, default: null },
       state: { type: String, default: null },
@@ -89,6 +111,65 @@ const EventSchema = new Schema<IEventDocument>(
       latitude: { type: Number, default: null },
       longitude: { type: Number, default: null },
     },
+    // Enhanced event fields
+    benefits: {
+      type: [String],
+      default: [],
+    },
+    teacherId: {
+      type: String,
+      default: null,
+    },
+    teacherName: {
+      type: String,
+      default: null,
+    },
+    galleryImages: {
+      type: [String],
+      default: [],
+    },
+    requirements: {
+      type: [String],
+      default: [],
+    },
+    whatToBring: {
+      type: [String],
+      default: [],
+    },
+    targetAudience: {
+      type: String,
+      default: null,
+    },
+    curriculum: {
+      type: String,
+      default: null,
+    },
+    price: {
+      type: Number,
+      default: 0,
+    },
+    currency: {
+      type: String,
+      default: 'INR',
+    },
+    dateSlots: [{
+      date: {
+        type: String,
+        default: '',
+      },
+      startTime: {
+        type: String,
+        default: '',
+      },
+      endTime: {
+        type: String,
+        default: '',
+      },
+      title: {
+        type: String,
+        default: '',
+      },
+    }],
   },
   {
     timestamps: true,

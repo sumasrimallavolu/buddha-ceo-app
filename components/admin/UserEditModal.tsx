@@ -257,7 +257,7 @@ export function UserEditModal({
           </Button>
           <Button
             type="button"
-            className="bg-amber-600"
+            className="bg-blue-600"
             onClick={handleSubmit}
             disabled={loading || success}
           >

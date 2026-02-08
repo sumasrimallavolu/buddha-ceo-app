@@ -8,6 +8,7 @@ import { VisionMission } from '@/components/about/VisionMission';
 import { Inspiration } from '@/components/about/Inspiration';
 import { Founders } from '@/components/about/Founders';
 import { Mentors } from '@/components/about/Mentors';
+import { SteeringCommittee } from '@/components/about/SteeringCommittee';
 import { Services } from '@/components/about/Services';
 import { Partners } from '@/components/about/Partners';
 import { Loader2 } from 'lucide-react';
@@ -107,6 +108,7 @@ export default function AboutPage() {
             <Inspiration data={data.inspiration} />
             <Founders data={data.teamMembers} />
             <Mentors data={data.teamMembers} />
+            <SteeringCommittee data={data.teamMembers} />
             <Services data={data.services} />
             <Partners data={data.partners} />
           </>

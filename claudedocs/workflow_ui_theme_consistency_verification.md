@@ -59,7 +59,7 @@ This workflow systematically verifies that all pages, components, and UI element
 **Focus:** Find hardcoded colors that should use CSS variables
 
 **Tasks:**
-1. Search for hardcoded Tailwind colors (rose-500, amber-500, etc.)
+1. Search for hardcoded Tailwind colors (rose-500, blue-500, etc.)
 2. Search for hardcoded hex/rgb values in component files
 3. Verify gradient usage follows theme system
 4. Check dark mode implementation completeness
@@ -165,7 +165,7 @@ This workflow systematically verifies that all pages, components, and UI element
 **Checklist:**
 - [ ] All variants defined (default, destructive, outline, secondary, ghost, link)
 - [ ] All sizes defined (xs, sm, default, lg, icon, icon-xs, icon-sm, icon-lg)
-- [ ] Uses CSS variables for colors (no hardcoded rose-500, amber-500)
+- [ ] Uses CSS variables for colors (no hardcoded rose-500, blue-500)
 - [ ] Gradient backgrounds follow theme system
 - [ ] Hover effects: `hover:scale-105`
 - [ ] Active state: `active:scale-95`
@@ -227,7 +227,7 @@ className="text-muted-foreground hover:text-foreground"
 ```tsx
 // Hardcoded Tailwind colors
 className="bg-rose-500 text-white"
-className="border-amber-600"
+className="border-blue-600"
 className="hover:bg-blue-500"
 
 // Hardcoded hex values
@@ -321,7 +321,7 @@ className="hover:shadow-xl"  // Missing transition-all
 1. **Hardcoded Colors → CSS Variables**
    ```bash
    # Find all hardcoded colors
-   grep -r "rose-500\|amber-500\|blue-500\|green-500" components/ app/
+   grep -r "rose-500\|blue-500\|blue-500\|green-500" components/ app/
    # Replace with theme tokens
    ```
 
@@ -387,7 +387,7 @@ echo "🎨 Running UI theme consistency checks..."
 
 # Check for hardcoded colors
 echo "  → Checking for hardcoded colors..."
-if grep -r "rose-500\|amber-500\|bg-\[#" --include="*.tsx" --include="*.ts" components/ app/ | grep -v "node_modules"; then
+if grep -r "rose-500\|blue-500\|bg-\[#" --include="*.tsx" --include="*.ts" components/ app/ | grep -v "node_modules"; then
   echo "❌ Found hardcoded colors! Please use CSS variables instead."
   exit 1
 fi
@@ -549,7 +549,7 @@ Verified with UI theme consistency workflow"
 
 ### button.tsx
 - Line 45: `bg-rose-500` → Should use `bg-primary`
-- Line 46: `to-amber-500` → Should use gradient token
+- Line 46: `to-blue-500` → Should use gradient token
 
 ### [Component/File]
 - Line [X]: [Violation] → [Recommendation]
@@ -627,7 +627,7 @@ Verified with UI theme consistency workflow"
 
 ### Known Issues
 From agent analysis:
-1. Button component uses hardcoded gradients (rose-500 → amber-500)
+1. Button component uses hardcoded gradients (rose-500 → blue-500)
 2. Card component doesn't use CVA pattern
 3. Inconsistent spacing patterns across components
 4. Mix of CVA and inline styling approaches

@@ -13,7 +13,7 @@ echo ""
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+blue='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Track issues
@@ -26,7 +26,7 @@ echo ""
 
 # Check 1: Hardcoded colors (CRITICAL)
 echo "1️⃣  Checking for hardcoded colors..."
-HARDCODED_COLORS=$(grep -r "rose-500\|amber-500\|blue-500\|emerald-500\|teal-500\|indigo-500" \
+HARDCODED_COLORS=$(grep -r "rose-500\|blue-500\|blue-500\|emerald-500\|teal-500\|indigo-500" \
   --include="*.tsx" --include="*.ts" \
   components/ app/ 2>/dev/null || echo "")
 
@@ -46,7 +46,7 @@ ARBITRARY_SPACING=$(grep -r "p-\-\[\|px-\-\[\|py-\-\[\|m-\-\[\|mx-\-\[\|my-\-\["
   components/ app/ 2>/dev/null || echo "")
 
 if [ -n "$ARBITRARY_SPACING" ]; then
-  echo -e "${YELLOW}⚠️  Found arbitrary spacing values${NC}"
+  echo -e "${blue}⚠️  Found arbitrary spacing values${NC}"
   echo "$ARBITRARY_SPACING" | head -10
   MEDIUM_ISSUES=$(echo "$ARBITRARY_SPACING" | wc -l)
 else
@@ -61,7 +61,7 @@ BORDER_COLORS=$(grep -r "border-gray-200\|border-gray-300\|border-gray-400" \
   components/ app/ 2>/dev/null || echo "")
 
 if [ -n "$BORDER_COLORS" ]; then
-  echo -e "${YELLOW}⚠️  Found hardcoded border colors${NC}"
+  echo -e "${blue}⚠️  Found hardcoded border colors${NC}"
   echo "$BORDER_COLORS" | head -10
   MEDIUM_ISSUES=$((MEDIUM_ISSUES + $(echo "$BORDER_COLORS" | wc -l)))
 else
@@ -76,7 +76,7 @@ TEXT_COLORS=$(grep -r "text-gray-500\|text-gray-600\|text-gray-700\|text-blue-60
   components/ app/ 2>/dev/null || echo "")
 
 if [ -n "$TEXT_COLORS" ]; then
-  echo -e "${YELLOW}⚠️  Found hardcoded text colors${NC}"
+  echo -e "${blue}⚠️  Found hardcoded text colors${NC}"
   echo "$TEXT_COLORS" | head -10
   MEDIUM_ISSUES=$((MEDIUM_ISSUES + $(echo "$TEXT_COLORS" | wc -l)))
 else
@@ -91,7 +91,7 @@ BG_COLORS=$(grep -r "bg-gray-50\|bg-gray-100\|bg-gray-200" \
   components/ app/ 2>/dev/null || echo "")
 
 if [ -n "$BG_COLORS" ]; then
-  echo -e "${YELLOW}⚠️  Found hardcoded background colors${NC}"
+  echo -e "${blue}⚠️  Found hardcoded background colors${NC}"
   echo "$BG_COLORS" | head -10
   MEDIUM_ISSUES=$((MEDIUM_ISSUES + $(echo "$BG_COLORS" | wc -l)))
 else
@@ -108,7 +108,7 @@ HOVER_NO_TRANSITION=$(grep -r "hover:scale\|hover:shadow" \
   head -20 || echo "")
 
 if [ -n "$HOVER_NO_TRANSITION" ]; then
-  echo -e "${YELLOW}⚠️  Found hover states without transitions${NC}"
+  echo -e "${blue}⚠️  Found hover states without transitions${NC}"
   echo "$HOVER_NO_TRANSITION" | head -5
   LOW_ISSUES=$(echo "$HOVER_NO_TRANSITION" | wc -l)
 else
@@ -123,7 +123,7 @@ WRONG_FONT_HEADINGS=$(grep -r "className.*font-geist-sans.*text-[2-9]xl\|classNa
   components/ app/ 2>/dev/null || echo "")
 
 if [ -n "$WRONG_FONT_HEADINGS" ]; then
-  echo -e "${YELLOW}⚠️  Found headings using body font${NC}"
+  echo -e "${blue}⚠️  Found headings using body font${NC}"
   echo "$WRONG_FONT_HEADINGS" | head -5
   LOW_ISSUES=$((LOW_ISSUES + $(echo "$WRONG_FONT_HEADINGS" | wc -l)))
 else
@@ -142,7 +142,7 @@ if [ $CRITICAL_ISSUES -gt 0 ]; then
 fi
 
 if [ $MEDIUM_ISSUES -gt 0 ]; then
-  echo -e "${YELLOW}🟡 Medium Issues: $MEDIUM_ISSUES${NC}"
+  echo -e "${blue}🟡 Medium Issues: $MEDIUM_ISSUES${NC}"
 fi
 
 if [ $LOW_ISSUES -gt 0 ]; then
@@ -168,12 +168,12 @@ if [ $CRITICAL_ISSUES -gt 0 ]; then
   echo "See: claudedocs/theme-consistency-checks/color-violation-report.md"
   exit 1
 elif [ $MEDIUM_ISSUES -gt 10 ]; then
-  echo -e "${YELLOW}⚠️  WARNING: $MEDIUM_ISSUES medium issue(s) found${NC}"
+  echo -e "${blue}⚠️  WARNING: $MEDIUM_ISSUES medium issue(s) found${NC}"
   echo "   Consider fixing these before commit for better consistency"
   echo ""
   exit 0
 else
-  echo -e "${YELLOW}⚠️  Found $TOTAL_ISSUES minor issue(s)${NC}"
+  echo -e "${blue}⚠️  Found $TOTAL_ISSUES minor issue(s)${NC}"
   echo "   Proceed with caution"
   echo ""
   exit 0

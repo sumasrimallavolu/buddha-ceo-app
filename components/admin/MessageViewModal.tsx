@@ -123,7 +123,7 @@ export function MessageViewModal({
       case 'new':
         return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
       case 'read':
-        return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+        return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       case 'responded':
         return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       default:

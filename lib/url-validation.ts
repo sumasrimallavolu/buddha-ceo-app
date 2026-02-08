@@ -18,9 +18,19 @@ export interface UrlValidationResult {
  * Common image file extensions and patterns
  */
 const IMAGE_PATTERNS = [
-  /\.(jpg|jpeg|png|gif|webp|svg|bmp)(\?.*)?$/i,
+  /\.(jpg|jpeg|png|gif|webp|svg|bmp|avif)(\?.*)?$/i,
   /image\//i,
+  // CDN patterns - URLs containing these keywords are likely images
+  /[/?&](format|quality|width|height|w|h)=/i,
+  // Common CDN hosts
+  /(img\.freepik\.com|i\.ytimg\.com|images\.unsplash\.com|cdn\.|static\.|assets\.|media\.)/i,
 ];
+
+/**
+ * Google Images URL patterns - these are search/redirect URLs that need special handling
+ */
+const GOOGLE_IMAGES_REDIRECT_PATTERN = /(?:https?:\/\/)?(?:www\.)?google\.com\/url\?.*url=([^&]+)/i;
+const GOOGLE_IMAGES_SEARCH_PATTERN = /(?:https?:\/\/)?(?:www\.)?google\.com\/imgres.*[?&]imgurl=([^&]+)/i;
 
 /**
  * Common video URL patterns
@@ -52,6 +62,40 @@ export function isValidUrl(string: string): boolean {
   } catch (_) {
     return false;
   }
+}
+
+/**
+ * Extract actual URL from Google Images redirect or search URLs
+ */
+export function extractUrlFromGoogleImages(url: string): string | null {
+  // Try redirect URL pattern first
+  let match = url.match(GOOGLE_IMAGES_REDIRECT_PATTERN);
+  if (match && match[1]) {
+    try {
+      return decodeURIComponent(match[1]);
+    } catch {
+      return null;
+    }
+  }
+
+  // Try search URL pattern
+  match = url.match(GOOGLE_IMAGES_SEARCH_PATTERN);
+  if (match && match[1]) {
+    try {
+      return decodeURIComponent(match[1]);
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Check if URL is a Google Images redirect or search URL
+ */
+export function isGoogleImagesUrl(url: string): boolean {
+  return GOOGLE_IMAGES_REDIRECT_PATTERN.test(url) || GOOGLE_IMAGES_SEARCH_PATTERN.test(url);
 }
 
 /**
@@ -131,6 +175,19 @@ export function getVimeoThumbnail(videoId: string): string {
  * Validate media URL and extract metadata
  */
 export async function validateMediaUrl(url: string, expectedType?: 'image' | 'video'): Promise<UrlValidationResult> {
+  // Handle Google Images redirect URLs
+  if (isGoogleImagesUrl(url)) {
+    const actualUrl = extractUrlFromGoogleImages(url);
+    if (actualUrl) {
+      // Recursively validate the extracted URL
+      return validateMediaUrl(actualUrl, expectedType);
+    }
+    return {
+      isValid: false,
+      error: 'Could not extract image URL from Google Images link. Please use "Copy image address" instead.',
+    };
+  }
+
   // Basic URL validation
   if (!isValidUrl(url)) {
     return {
@@ -143,15 +200,39 @@ export async function validateMediaUrl(url: string, expectedType?: 'image' | 'vi
   const detectedType = detectMediaType(url);
 
   // Check if type matches expectation
-  if (expectedType && detectedType !== expectedType) {
+  if (expectedType && detectedType !== expectedType && detectedType !== 'unknown') {
     return {
       isValid: false,
       error: `Expected ${expectedType} URL, but got ${detectedType}`,
     };
   }
 
-  // Unknown type
+  // For unknown type but valid URL, accept it anyway if it looks like an image URL
+  // This allows CDN URLs without clear extensions
   if (detectedType === 'unknown') {
+    // Check if it's from a known image CDN or has query parameters typical of image services
+    const isLikelyImage = /[/?&](format|quality|width|height|w|h|fit|crop)=/i.test(url) ||
+                         /(img\.freepik\.com|i\.ytimg\.com|images\.unsplash\.com|cdn\.|static\.|assets\.|media\.|image\.)/i.test(url) ||
+                         url.includes('image');
+
+    if (expectedType === 'image' && isLikelyImage) {
+      // Accept it as a valid image URL
+      return {
+        isValid: true,
+        type: 'image',
+        metadata: { url },
+      };
+    }
+
+    // If no expected type specified but unknown, still accept the URL
+    if (!expectedType) {
+      return {
+        isValid: true,
+        type: 'unknown',
+        metadata: { url },
+      };
+    }
+
     return {
       isValid: false,
       error: 'Could not detect media type. Please use a direct link to an image or video file.',

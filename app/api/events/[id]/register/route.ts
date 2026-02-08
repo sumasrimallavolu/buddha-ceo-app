@@ -100,7 +100,6 @@ export async function POST(
         eventTitle: event.title,
         startDate: event.startDate,
         endDate: event.endDate,
-        timings: event.timings,
       },
       { status: 201 }
     );

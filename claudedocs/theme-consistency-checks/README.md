@@ -11,7 +11,7 @@ Run these quick checks before committing:
 ```bash
 # 1. Check for hardcoded colors
 echo "Checking for hardcoded colors..."
-grep -r "rose-500\|amber-500\|blue-500\|green-500\|purple-500" --include="*.tsx" --include="*.ts" components/ app/ | grep -v "node_modules" | grep -v ".next"
+grep -r "rose-500\|blue-500\|blue-500\|green-500\|purple-500" --include="*.tsx" --include="*.ts" components/ app/ | grep -v "node_modules" | grep -v ".next"
 
 # 2. Check for arbitrary spacing
 echo "Checking for arbitrary spacing..."
@@ -31,7 +31,7 @@ npm run build
 ### Must Verify Before Commit
 
 1. **No Hardcoded Colors**
-   - Search for: `rose-500`, `amber-500`, `blue-500`, hex codes like `#8B4513`
+   - Search for: `rose-500`, `blue-500`, `blue-500`, hex codes like `#8B4513`
    - Replace with: `bg-primary`, `text-primary`, CSS variables
 
 2. **Consistent Button Usage**
@@ -64,7 +64,7 @@ text-muted-foreground   // Muted text
 
 // ❌ Don't use these
 bg-rose-500
-bg-amber-500
+bg-blue-500
 text-blue-600
 border-gray-300
 ```
@@ -137,7 +137,7 @@ hover:scale-150             // Too much
 
 ```bash
 # In button.tsx
-- className="bg-gradient-to-r from-rose-500 to-amber-500"
+- className="bg-gradient-to-r from-rose-500 to-blue-500"
 + className="bg-gradient-to-r from-primary to-secondary"
 
 # In any component

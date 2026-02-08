@@ -88,7 +88,7 @@ export function HeroSection() {
           poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920"
         >
           <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4"
+            src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-blue-flowers-1173-large.mp4"
             type="video/mp4"
           />
         </video>
@@ -101,7 +101,7 @@ export function HeroSection() {
           <div className={`space-y-6 sm:space-y-8 text-center mx-auto`} style={{ opacity: 1 - scrollY / 500 }}>
             {/* Badge */}
             <div className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 backdrop-blur-sm text-blue-400 text-sm font-medium border border-white/10 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all ${!showEventCard ? 'mx-auto' : ''}`}>
-              <Sparkles className="w-4 h-4 text-amber-400" />
+              <Sparkles className="w-4 h-4 text-blue-400" />
               <span>Transform Your Life Through Meditation</span>
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
             </div>

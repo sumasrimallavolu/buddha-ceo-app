@@ -629,7 +629,7 @@
           ${isFullyBooked
             ? 'text-red-600'
             : availableSlots < 20
-            ? 'text-orange-600'
+            ? 'text-blue-600'
             : 'text-green-600'
           }
         `}>
@@ -775,7 +775,7 @@
           key={i}
           className="
             w-4 h-4
-            fill-yellow-400 text-yellow-400
+            fill-blue-400 text-blue-400
             drop-shadow-md
           "
         />

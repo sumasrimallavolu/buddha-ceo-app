@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, CheckCircle2, CalendarPlus, Save } from 'lucide-react';
+import { Loader2, CheckCircle2, CalendarPlus, Save, Plus, X, Upload, User, GraduationCap } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -25,6 +25,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { Card } from '@/components/ui/card';
 import ImageUpload from './ImageUpload';
 
 interface EventCreateModalProps {
@@ -32,6 +33,13 @@ interface EventCreateModalProps {
   onSuccess?: () => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+}
+
+interface Teacher {
+  _id: string;
+  name: string;
+  specialization?: string;
+  bio?: string;
 }
 
 export function EventCreateModal({
@@ -46,6 +54,13 @@ export function EventCreateModal({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<any[]>([]);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+
+  // Dynamic list fields
+  const [benefits, setBenefits] = useState<string[]>(['']);
+  const [requirements, setRequirements] = useState<string[]>(['']);
+  const [whatToBring, setWhatToBring] = useState<string[]>(['']);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -53,7 +68,6 @@ export function EventCreateModal({
     description: '',
     startDate: '',
     endDate: '',
-    timings: '',
     imageUrl: '',
     registrationLink: '',
     maxParticipants: '',
@@ -62,6 +76,13 @@ export function EventCreateModal({
     locationCity: '',
     locationState: '',
     locationCountry: '',
+    // New fields
+    teacherId: '',
+    teacherName: '',
+    targetAudience: '',
+    curriculum: '',
+    price: '',
+    currency: 'INR',
   });
 
   const isControlled = controlledOpen !== undefined;
@@ -74,6 +95,25 @@ export function EventCreateModal({
     }
   };
 
+  // Fetch teachers when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      fetchTeachers();
+    }
+  }, [isOpen]);
+
+  const fetchTeachers = async () => {
+    try {
+      const response = await fetch('/api/admin/teachers');
+      if (response.ok) {
+        const data = await response.json();
+        setTeachers(data.teachers || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch teachers:', err);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: '',
@@ -81,8 +121,7 @@ export function EventCreateModal({
       description: '',
       startDate: '',
       endDate: '',
-      timings: '',
-      imageUrl: '',
+        imageUrl: '',
       registrationLink: '',
       maxParticipants: '',
       locationOnline: true,
@@ -90,10 +129,45 @@ export function EventCreateModal({
       locationCity: '',
       locationState: '',
       locationCountry: '',
+      teacherId: '',
+      teacherName: '',
+      targetAudience: '',
+      curriculum: '',
+      price: '',
+      currency: 'INR',
     });
     setUploadedImages([]);
+    setGalleryImages([]);
+    setBenefits(['']);
+    setRequirements(['']);
+    setWhatToBring(['']);
     setError('');
     setSuccess(false);
+  };
+
+  // Dynamic list handlers
+  const addBenefit = () => setBenefits([...benefits, '']);
+  const removeBenefit = (index: number) => setBenefits(benefits.filter((_, i) => i !== index));
+  const updateBenefit = (index: number, value: string) => {
+    const newBenefits = [...benefits];
+    newBenefits[index] = value;
+    setBenefits(newBenefits);
+  };
+
+  const addRequirement = () => setRequirements([...requirements, '']);
+  const removeRequirement = (index: number) => setRequirements(requirements.filter((_, i) => i !== index));
+  const updateRequirement = (index: number, value: string) => {
+    const newRequirements = [...requirements];
+    newRequirements[index] = value;
+    setRequirements(newRequirements);
+  };
+
+  const addWhatToBring = () => setWhatToBring([...whatToBring, '']);
+  const removeWhatToBring = (index: number) => setWhatToBring(whatToBring.filter((_, i) => i !== index));
+  const updateWhatToBring = (index: number, value: string) => {
+    const newItems = [...whatToBring];
+    newItems[index] = value;
+    setWhatToBring(newItems);
   };
 
   const handleSubmit = async (saveAsDraft = false, autoPublish = false) => {
@@ -114,7 +188,6 @@ export function EventCreateModal({
         description: formData.description,
         startDate: new Date(formData.startDate),
         endDate: new Date(formData.endDate),
-        timings: formData.timings,
         status: saveAsDraft ? 'draft' : 'upcoming',
         autoPublish,
         location: {
@@ -124,6 +197,11 @@ export function EventCreateModal({
           state: formData.locationState,
           country: formData.locationCountry,
         },
+        // Enhanced fields
+        benefits: benefits.filter(b => b.trim()),
+        requirements: requirements.filter(r => r.trim()),
+        whatToBring: whatToBring.filter(w => w.trim()),
+        galleryImages: galleryImages.map(img => img.url),
       };
 
       if (formData.imageUrl) {
@@ -139,6 +217,29 @@ export function EventCreateModal({
       if (formData.maxParticipants) {
         eventData.maxParticipants = parseInt(formData.maxParticipants);
         eventData.currentRegistrations = 0;
+      }
+
+      // Add enhanced fields
+      if (formData.teacherId) {
+        eventData.teacherId = formData.teacherId;
+        const teacher = teachers.find(t => t._id === formData.teacherId);
+        eventData.teacherName = teacher?.name || formData.teacherName;
+      }
+
+      if (formData.targetAudience) {
+        eventData.targetAudience = formData.targetAudience;
+      }
+
+      if (formData.curriculum) {
+        eventData.curriculum = formData.curriculum;
+      }
+
+      if (formData.price) {
+        eventData.price = parseFloat(formData.price);
+      }
+
+      if (formData.currency) {
+        eventData.currency = formData.currency;
       }
 
       const response = await fetch('/api/admin/events', {
@@ -174,23 +275,23 @@ export function EventCreateModal({
       if (!value) resetForm();
     }}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10">
+      <SheetContent side="right" className="w-full sm:max-w-3xl bg-white dark:bg-gray-900 overflow-y-auto">
         <SheetHeader>
-          <SheetTitle className="text-white">Create New Event</SheetTitle>
-          <SheetDescription className="text-slate-400">
-            Add a new meditation program or event
+          <SheetTitle className="text-gray-900 dark:text-white">Create New Event</SheetTitle>
+          <SheetDescription className="text-gray-600 dark:text-gray-400">
+            Add a new meditation program or event with detailed information
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto py-8 px-6 space-y-8">
+        <div className="py-6 space-y-6">
           {error && (
-            <Alert variant="destructive" className="border-red-500/50 bg-red-500/10 text-red-400">
+            <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           {success && (
-            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+            <Alert className="border-green-500 bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 Event created successfully!
@@ -198,15 +299,15 @@ export function EventCreateModal({
             </Alert>
           )}
 
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">Basic Information</h3>
-            </div>
+          {/* Basic Information */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Basic Information
+            </h3>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-slate-300">Event Title *</Label>
+                <Label htmlFor="title">Event Title <span className="text-red-600">*</span></Label>
                 <Input
                   id="title"
                   value={formData.title}
@@ -216,7 +317,7 @@ export function EventCreateModal({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="type" className="text-slate-300">Event Type *</Label>
+                <Label htmlFor="type">Event Type <span className="text-red-600">*</span></Label>
                 <Select
                   value={formData.type}
                   onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -236,7 +337,7 @@ export function EventCreateModal({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="startDate" className="text-slate-300">Start Date *</Label>
+                  <Label htmlFor="startDate">Start Date <span className="text-red-600">*</span></Label>
                   <Input
                     id="startDate"
                     type="datetime-local"
@@ -246,7 +347,7 @@ export function EventCreateModal({
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="endDate" className="text-slate-300">End Date *</Label>
+                  <Label htmlFor="endDate">End Date <span className="text-red-600">*</span></Label>
                   <Input
                     id="endDate"
                     type="datetime-local"
@@ -256,27 +357,84 @@ export function EventCreateModal({
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="timings" className="text-slate-300">Timings</Label>
-                <Input
-                  id="timings"
-                  value={formData.timings}
-                  onChange={(e) => setFormData({ ...formData, timings: e.target.value })}
-                  placeholder="e.g., 7:00 to 8:00 AM IST | 8:30 to 9:30 PM US ET"
-                />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="price">Price</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    placeholder="0 for free"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="currency">Currency</Label>
+                  <Select
+                    value={formData.currency}
+                    onValueChange={(value) => setFormData({ ...formData, currency: value })}
+                  >
+                    <SelectTrigger id="currency">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="INR">INR (₹)</SelectItem>
+                      <SelectItem value="USD">USD ($)</SelectItem>
+                      <SelectItem value="EUR">EUR (€)</SelectItem>
+                      <SelectItem value="GBP">GBP (£)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">Event Details</h3>
+          {/* Teacher Selection */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              <User className="inline h-4 w-4 mr-2" />
+              Event Teacher
+            </h3>
+
+            <div className="space-y-2">
+              <Label htmlFor="teacher">Select Teacher</Label>
+              <Select
+                value={formData.teacherId}
+                onValueChange={(value) => {
+                  const teacher = teachers.find(t => t._id === value);
+                  setFormData({
+                    ...formData,
+                    teacherId: value,
+                    teacherName: teacher?.name || ''
+                  });
+                }}
+              >
+                <SelectTrigger id="teacher">
+                  <SelectValue placeholder="Select a teacher (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  {teachers.map((teacher) => (
+                    <SelectItem key={teacher._id} value={teacher._id}>
+                      {teacher.name} {teacher.specialization && `(${teacher.specialization})`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+          </div>
+
+          {/* Event Details */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Event Details
+            </h3>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-slate-300">Description</Label>
+                <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
@@ -287,7 +445,30 @@ export function EventCreateModal({
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Event Image</Label>
+                <Label htmlFor="targetAudience">Target Audience</Label>
+                <Textarea
+                  id="targetAudience"
+                  value={formData.targetAudience}
+                  onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
+                  placeholder="e.g., This program is suitable for beginners with no prior meditation experience..."
+                  rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="curriculum">Course Curriculum/Outline</Label>
+                <Textarea
+                  id="curriculum"
+                  value={formData.curriculum}
+                  onChange={(e) => setFormData({ ...formData, curriculum: e.target.value })}
+                  placeholder="Week 1: Introduction to Meditation&#10;Week 2: Breathing Techniques&#10;Week 3: Mindfulness Practices..."
+                  rows={4}
+                  className="whitespace-pre-wrap"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Event Image</Label>
                 <ImageUpload
                   images={uploadedImages}
                   onImagesChange={(images) => {
@@ -302,15 +483,162 @@ export function EventCreateModal({
             </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">Registration</h3>
+          {/* Benefits Section - Dynamic List */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+                Benefits
+              </h3>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addBenefit}
+                className="h-8"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Add Benefit
+              </Button>
             </div>
+
+            <div className="space-y-2">
+              {benefits.map((benefit, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={benefit}
+                    onChange={(e) => updateBenefit(index, e.target.value)}
+                    placeholder={`Benefit ${index + 1}`}
+                    className="flex-1"
+                  />
+                  {benefits.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeBenefit(index)}
+                      className="h-10 w-10 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Requirements Section - Dynamic List */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+                <GraduationCap className="inline h-4 w-4 mr-2" />
+                Requirements / Prerequisites
+              </h3>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addRequirement}
+                className="h-8"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Add Requirement
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              {requirements.map((req, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={req}
+                    onChange={(e) => updateRequirement(index, e.target.value)}
+                    placeholder={`Requirement ${index + 1}`}
+                    className="flex-1"
+                  />
+                  {requirements.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeRequirement(index)}
+                      className="h-10 w-10 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* What to Bring Section - Dynamic List */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+                What to Bring
+              </h3>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addWhatToBring}
+                className="h-8"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Add Item
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              {whatToBring.map((item, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={item}
+                    onChange={(e) => updateWhatToBring(index, e.target.value)}
+                    placeholder={`Item ${index + 1}`}
+                    className="flex-1"
+                  />
+                  {whatToBring.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeWhatToBring(index)}
+                      className="h-10 w-10 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Photo Gallery */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+                <Upload className="inline h-4 w-4 mr-2" />
+                Photo Gallery
+              </h3>
+              <span className="text-xs text-gray-500">Multiple images allowed</span>
+            </div>
+
+            <ImageUpload
+              images={galleryImages}
+              onImagesChange={setGalleryImages}
+              maxImages={10}
+            />
+          </div>
+
+          {/* Registration */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Registration
+            </h3>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="registrationLink" className="text-slate-300">Registration Link</Label>
+                <Label htmlFor="registrationLink">Registration Link</Label>
                 <Input
                   id="registrationLink"
                   value={formData.registrationLink}
@@ -320,7 +648,7 @@ export function EventCreateModal({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="maxParticipants" className="text-slate-300">Maximum Participants</Label>
+                <Label htmlFor="maxParticipants">Maximum Participants</Label>
                 <Input
                   id="maxParticipants"
                   type="number"
@@ -332,29 +660,29 @@ export function EventCreateModal({
             </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <div className="h-1 w-6 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full" />
-              <h3 className="text-sm font-semibold text-white">Location Details</h3>
-            </div>
+          {/* Location Details */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Location Details
+            </h3>
 
             <div className="space-y-4">
-              <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/5 border border-white/10">
+              <div className="flex items-center space-x-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                 <Checkbox
                   id="online"
                   checked={formData.locationOnline}
                   onCheckedChange={(checked) => setFormData({ ...formData, locationOnline: checked as boolean })}
                 />
                 <div className="flex-1">
-                  <Label htmlFor="online" className="cursor-pointer text-slate-200">Online Event</Label>
-                  <p className="text-xs text-slate-500 mt-1">Check if this event will be held online</p>
+                  <Label htmlFor="online" className="cursor-pointer text-gray-900 dark:text-gray-100">Online Event</Label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Check if this event will be held online</p>
                 </div>
               </div>
 
               {!formData.locationOnline && (
-                <div className="space-y-3 p-4 rounded-lg bg-white/5 border border-white/10">
+                <div className="space-y-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                   <div className="space-y-2">
-                    <Label htmlFor="venue" className="text-slate-300">Venue</Label>
+                    <Label htmlFor="venue">Venue</Label>
                     <Input
                       id="venue"
                       value={formData.locationVenue}
@@ -365,7 +693,7 @@ export function EventCreateModal({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="city" className="text-slate-300">City</Label>
+                      <Label htmlFor="city">City</Label>
                       <Input
                         id="city"
                         value={formData.locationCity}
@@ -375,7 +703,7 @@ export function EventCreateModal({
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="state" className="text-slate-300">State</Label>
+                      <Label htmlFor="state">State</Label>
                       <Input
                         id="state"
                         value={formData.locationState}
@@ -386,7 +714,7 @@ export function EventCreateModal({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="country" className="text-slate-300">Country</Label>
+                    <Label htmlFor="country">Country</Label>
                     <Input
                       id="country"
                       value={formData.locationCountry}
@@ -399,7 +727,7 @@ export function EventCreateModal({
 
               {formData.locationOnline && (
                 <div className="space-y-2">
-                  <Label htmlFor="onlineLocation" className="text-slate-300">Online Platform/Link</Label>
+                  <Label htmlFor="onlineLocation">Online Platform/Link</Label>
                   <Input
                     id="onlineLocation"
                     value={formData.locationVenue}
@@ -412,13 +740,12 @@ export function EventCreateModal({
           </div>
         </div>
 
-        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-white/10 pt-6 px-6 mt-auto">
+        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-gray-200 dark:border-gray-700 pt-6">
           <Button
             type="button"
             variant="outline"
             onClick={() => setIsOpen(false)}
             disabled={loading || success}
-            className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
           >
             Cancel
           </Button>
@@ -427,11 +754,10 @@ export function EventCreateModal({
             variant="outline"
             onClick={() => handleSubmit(true, false)}
             disabled={loading || success}
-            className="bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white"
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-500" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Saving...
               </>
             ) : (
@@ -443,7 +769,7 @@ export function EventCreateModal({
           </Button>
           <Button
             type="button"
-            className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white border-0 shadow-lg shadow-blue-500/25"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
             onClick={() => handleSubmit(false, true)}
             disabled={loading || success}
           >

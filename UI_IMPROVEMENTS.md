@@ -136,7 +136,7 @@ The seed script (`lib/seed.ts`) has been updated with real data from https://www
 
 **Icon Gradients:**
 - Each achievement has unique gradient
-- Purple-Blue, Blue-Cyan, Green-Teal, Orange-Red, Pink-Rose, Indigo-Purple
+- Purple-Blue, Blue-Cyan, Green-Teal, blue-Red, Pink-Rose, Indigo-Purple
 
 ---
 

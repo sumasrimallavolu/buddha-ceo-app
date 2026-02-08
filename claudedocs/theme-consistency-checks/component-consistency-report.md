@@ -33,7 +33,7 @@
 
 **Issues Found:**
 1. **Hardcoded gradient colors** (Priority: HIGH)
-   - Line ~45: `from-rose-500 to-amber-500`
+   - Line ~45: `from-rose-500 to-blue-500`
    - Should use: `from-primary to-secondary` or gradient token
 
 2. **Hardcoded hover colors** (Priority: MEDIUM)
@@ -41,7 +41,7 @@
    - Should use: `hover:bg-primary hover:text-primary-foreground`
 
 **Recommendations:**
-1. Replace hardcoded rose-500/amber-500 with theme tokens
+1. Replace hardcoded rose-500/blue-500 with theme tokens
 2. Create gradient utility classes in globals.css
 3. Document variant usage in component JSDoc
 
@@ -191,7 +191,7 @@
 ### Phase 1: Critical (Must Fix Before Commit)
 
 1. **Replace hardcoded colors in Button** (15 min)
-   - Replace `from-rose-500 to-amber-500` with gradient token
+   - Replace `from-rose-500 to-blue-500` with gradient token
    - Replace `hover:bg-rose-500` with `hover:bg-primary`
 
 2. **Document Button component** (10 min)

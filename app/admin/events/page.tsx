@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { CalendarPlus, MoreVertical, Edit, Trash, Users, Clock, CheckCircle, XCircle, Calendar } from 'lucide-react';
 import Link from 'next/link';
-import { EventCreateModal, EventEditModal } from '@/components/admin';
+import { EventEditModal } from '@/components/admin';
 
 interface Event {
   _id: string;
@@ -138,15 +138,12 @@ export default function EventsPage() {
           </p>
         </div>
         {canEdit && (
-          <EventCreateModal
-            trigger={
-              <Button className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-xl shadow-lg shadow-blue-500/25 transition-all hover:scale-105">
-                <CalendarPlus className="mr-2 h-4 w-4" />
-                Add Event
-              </Button>
-            }
-            onSuccess={fetchEvents}
-          />
+          <Link href="/admin/events/new">
+            <Button className="bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white rounded-xl shadow-lg shadow-blue-500/25 transition-all hover:scale-105">
+              <CalendarPlus className="mr-2 h-4 w-4" />
+              Add Event
+            </Button>
+          </Link>
         )}
       </div>
 

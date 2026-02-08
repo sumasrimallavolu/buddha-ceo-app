@@ -117,7 +117,7 @@ export default function ContactMessagesPage() {
       case 'read':
         return {
           label: 'Read',
-          className: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+          className: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
           icon: MailOpen,
         };
       case 'responded':

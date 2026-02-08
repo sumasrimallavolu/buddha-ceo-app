@@ -194,7 +194,7 @@ Cards:       white/5 with backdrop-blur
 Borders:     white/10
 Primary:     blue-500 → violet-500 gradient
 Success:     emerald-500
-Warning:     amber-500
+Warning:     blue-500
 Error:       red-500
 Info:        blue-500
 Text:        white (primary), slate-400 (secondary)

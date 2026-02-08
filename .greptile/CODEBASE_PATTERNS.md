@@ -46,7 +46,7 @@ const getStatusBadgeColor = (status: string) => {
     case 'published':
       return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
     case 'pending_review':
-      return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+      return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
     case 'draft':
       return 'bg-slate-500/20 text-slate-400 border border-slate-500/30';
     case 'rejected':

@@ -115,7 +115,6 @@ export function EventEditModal({
         description: event.description,
         startDate: new Date(event.startDate),
         endDate: new Date(event.endDate),
-        timings: event.timings,
         status: saveAsDraft ? 'draft' : (autoPublish ? 'upcoming' : event.status),
         autoPublish,
         location: event.location || {},
@@ -163,7 +162,7 @@ export function EventEditModal({
     return (
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-        <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10">
+        <SheetContent side="right" className="w-full sm:max-w-2xl bg-white dark:bg-gray-900">
           <div className="flex items-center justify-center py-8">
             <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
           </div>
@@ -175,15 +174,15 @@ export function EventEditModal({
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-950 border-white/10 overflow-y-auto">
+      <SheetContent side="right" className="w-full sm:max-w-2xl bg-white dark:bg-gray-900 overflow-y-auto">
         <SheetHeader>
-          <SheetTitle className="text-white">Edit Event</SheetTitle>
-          <SheetDescription className="text-slate-400">
+          <SheetTitle className="text-gray-900 dark:text-white">Edit Event</SheetTitle>
+          <SheetDescription className="text-gray-600 dark:text-gray-400">
             Update event details
           </SheetDescription>
         </SheetHeader>
 
-        <div className="space-y-6 py-8 px-6">
+        <div className="flex-1 overflow-y-auto py-6 space-y-6">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
@@ -191,7 +190,7 @@ export function EventEditModal({
           )}
 
           {success && (
-            <Alert className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+            <Alert className="border-green-500 bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 Event updated successfully!
@@ -201,8 +200,15 @@ export function EventEditModal({
 
           {event && (
             <>
-              <div className="space-y-2">
-                <Label htmlFor="title">Event Title *</Label>
+              {/* Basic Information */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+                  Basic Information
+                </h3>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Event Title <span className="text-red-600">*</span></Label>
                 <Input
                   id="title"
                   value={event.title}
@@ -211,7 +217,7 @@ export function EventEditModal({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="type">Event Type *</Label>
+                <Label htmlFor="type">Event Type <span className="text-red-600">*</span></Label>
                 <Select
                   value={event.type}
                   onValueChange={(value) => handleUpdateField('type', value)}
@@ -249,7 +255,7 @@ export function EventEditModal({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="startDate">Start Date *</Label>
+                  <Label htmlFor="startDate">Start Date <span className="text-red-600">*</span></Label>
                   <Input
                     id="startDate"
                     type="datetime-local"
@@ -259,7 +265,7 @@ export function EventEditModal({
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="endDate">End Date *</Label>
+                  <Label htmlFor="endDate">End Date <span className="text-red-600">*</span></Label>
                   <Input
                     id="endDate"
                     type="datetime-local"
@@ -269,21 +275,23 @@ export function EventEditModal({
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="timings">Timings</Label>
-                <Input
-                  id="timings"
-                  value={event.timings || ''}
-                  onChange={(e) => handleUpdateField('timings', e.target.value)}
-                />
-              </div>
+            </div>
+          </div>
 
+          {/* Event Details */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Event Details
+            </h3>
+
+            <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   value={event.description || ''}
                   onChange={(e) => handleUpdateField('description', e.target.value)}
+                  placeholder="Describe this event..."
                   rows={3}
                 />
               </div>
@@ -304,13 +312,23 @@ export function EventEditModal({
                   <img src={event.imageUrl} alt="Current" className="w-32 rounded" />
                 )}
               </div>
+            </div>
+          </div>
 
+          {/* Registration */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Registration
+            </h3>
+
+            <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="registrationLink">Registration Link</Label>
                 <Input
                   id="registrationLink"
                   value={event.registrationLink || ''}
                   onChange={(e) => handleUpdateField('registrationLink', e.target.value)}
+                  placeholder="https://example.com/register"
                 />
               </div>
 
@@ -321,25 +339,35 @@ export function EventEditModal({
                   type="number"
                   value={event.maxParticipants || ''}
                   onChange={(e) => handleUpdateField('maxParticipants', parseInt(e.target.value) || '')}
+                  placeholder="Leave empty for unlimited"
                 />
               </div>
+            </div>
+          </div>
 
-              <div className="border-t pt-4">
-                <h3 className="text-sm font-semibold mb-4">Location Details</h3>
+          {/* Location Details */}
+          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              Location Details
+            </h3>
 
-                <div className="flex items-center space-x-2 mb-4">
-                  <Checkbox
-                    id="online"
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                <Checkbox
+                  id="online"
                     checked={event.location?.online || false}
                     onCheckedChange={(checked) =>
                       handleUpdateField('location', { ...event.location, online: checked })
                     }
                   />
-                  <Label htmlFor="online">This is an online event</Label>
+                  <div className="flex-1">
+                    <Label htmlFor="online" className="cursor-pointer text-gray-900 dark:text-gray-100">Online Event</Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Check if this event will be held online</p>
+                  </div>
                 </div>
 
                 {event.location && !event.location.online && (
-                  <div className="space-y-4">
+                  <div className="space-y-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                     <div className="space-y-2">
                       <Label htmlFor="venue">Venue</Label>
                       <Input
@@ -348,6 +376,7 @@ export function EventEditModal({
                         onChange={(e) =>
                           handleUpdateField('location', { ...event.location, venue: e.target.value })
                         }
+                        placeholder="Venue name"
                       />
                     </div>
 
@@ -360,6 +389,7 @@ export function EventEditModal({
                           onChange={(e) =>
                             handleUpdateField('location', { ...event.location, city: e.target.value })
                           }
+                          placeholder="City"
                         />
                       </div>
 
@@ -371,6 +401,7 @@ export function EventEditModal({
                           onChange={(e) =>
                             handleUpdateField('location', { ...event.location, state: e.target.value })
                           }
+                          placeholder="State"
                         />
                       </div>
                     </div>
@@ -383,16 +414,32 @@ export function EventEditModal({
                         onChange={(e) =>
                           handleUpdateField('location', { ...event.location, country: e.target.value })
                         }
+                        placeholder="Country"
                       />
                     </div>
                   </div>
                 )}
-              </div>
-            </>
+
+                {event.location && event.location.online && (
+                  <div className="space-y-2">
+                    <Label htmlFor="onlineLocation">Online Platform/Link</Label>
+                    <Input
+                      id="onlineLocation"
+                      value={event.location.venue || ''}
+                      onChange={(e) =>
+                        handleUpdateField('location', { ...event.location, venue: e.target.value })
+                      }
+                      placeholder="e.g., Zoom, Google Meet, etc."
+                    />
+                  </div>
+                )}
+            </div>
+          </div>
+        </>
           )}
         </div>
 
-        <SheetFooter className="gap-3 pt-6 px-6">
+        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-gray-200 dark:border-gray-700 pt-6">
           <Button
             type="button"
             variant="outline"
@@ -421,7 +468,7 @@ export function EventEditModal({
           </Button>
           <Button
             type="button"
-            className="bg-green-600"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
             onClick={() => handleSubmit(false, true)}
             disabled={loading || success}
           >

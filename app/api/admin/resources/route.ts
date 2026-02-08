@@ -40,6 +40,8 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
+    console.log('Creating resource with data:', JSON.stringify(body, null, 2));
+
     const {
       title,
       type,
@@ -52,13 +54,25 @@ export async function POST(request: NextRequest) {
       order,
       status,
       autoPublish,
+      subtitle,
+      quote,
     } = body;
 
-    if (!title || !type || !description || !category) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+    // For testimonials and blogs, description is optional
+    if (type === 'testimonial' || type === 'blog') {
+      if (!title || !type || !category) {
+        return NextResponse.json(
+          { error: 'Missing required fields' },
+          { status: 400 }
+        );
+      }
+    } else {
+      if (!title || !type || !description || !category) {
+        return NextResponse.json(
+          { error: 'Missing required fields' },
+          { status: 400 }
+        );
+      }
     }
 
     // Determine status based on request and user role
@@ -78,16 +92,26 @@ export async function POST(request: NextRequest) {
       thumbnailUrl,
       order: order || 0,
       status: resourceStatus,
+      subtitle,
+      quote,
     });
 
     return NextResponse.json(
       { message: 'Resource created successfully', resource },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating resource:', error);
+    console.error('Error details:', {
+      message: error?.message,
+      name: error?.name,
+      errors: error?.errors,
+    });
     return NextResponse.json(
-      { error: 'Failed to create resource' },
+      {
+        error: 'Failed to create resource',
+        details: error?.message || 'Unknown error',
+      },
       { status: 500 }
     );
   }

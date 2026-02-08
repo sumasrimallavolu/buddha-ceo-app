@@ -190,7 +190,7 @@ export default function RegisterPage() {
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md text-blue-400 text-sm font-medium border border-white/10 mb-6">
-              <User className="w-4 h-4 text-amber-300" />
+              <User className="w-4 h-4 text-blue-300" />
               <span>Join Us</span>
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">

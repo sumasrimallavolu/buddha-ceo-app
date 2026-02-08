@@ -79,7 +79,7 @@ const eventTypes = Array.from(new Set(events.map((e) => e.type)));
 ### Slots Display
 ```typescript
 - 0 slots: "Fully Booked" (red)
-- 1-9 slots: "X slots left" (amber)
+- 1-9 slots: "X slots left" (blue)
 - 10+ slots: "X slots left" (emerald)
 ```
 

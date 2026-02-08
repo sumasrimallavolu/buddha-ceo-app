@@ -73,7 +73,7 @@ export function Header() {
           <div className="hidden lg:flex items-center space-x-3">
             {session ? (
               <>
-                <Link href="/admin">
+                <Link href={session.user?.role === 'user' ? '/dashboard' : '/admin'}>
                   <Button
                     variant="outline"
                     size="sm"
@@ -94,15 +94,26 @@ export function Header() {
                 </Button>
               </>
             ) : (
-              <Link href="/login">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full border-2 border-white/20 text-white hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
-                >
-                  Login
-                </Button>
-              </Link>
+              <>
+                <Link href="/signup">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="rounded-full hover:bg-white/10 text-slate-300 hover:text-white hover:scale-105 transition-all duration-300"
+                  >
+                    Sign Up
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full border-2 border-white/20 text-white hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+                  >
+                    Login
+                  </Button>
+                </Link>
+              </>
             )}
           </div>
 
@@ -140,7 +151,7 @@ export function Header() {
                 <div className="pt-4 border-t border-white/10">
                   {session ? (
                     <>
-                      <Link href="/admin" className="block mb-4">
+                      <Link href={session.user?.role === 'user' ? '/dashboard' : '/admin'} className="block mb-4">
                         <Button
                           variant="outline"
                           className="w-full rounded-full border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300"
@@ -159,14 +170,24 @@ export function Header() {
                       </Button>
                     </>
                   ) : (
-                    <Link href="/login">
-                      <Button
-                        variant="outline"
-                        className="w-full rounded-full border-2 border-white/20 text-white hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white transition-all duration-300"
-                      >
-                        Login
-                      </Button>
-                    </Link>
+                    <>
+                      <Link href="/signup" className="block mb-3">
+                        <Button
+                          variant="ghost"
+                          className="w-full rounded-xl hover:bg-white/10 text-slate-300 hover:text-white transition-all duration-300"
+                        >
+                          Sign Up
+                        </Button>
+                      </Link>
+                      <Link href="/login">
+                        <Button
+                          variant="outline"
+                          className="w-full rounded-full border-2 border-white/20 text-white hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white transition-all duration-300"
+                        >
+                          Login
+                        </Button>
+                      </Link>
+                    </>
                   )}
                 </div>
               </div>

@@ -93,7 +93,6 @@ export async function POST(request: NextRequest) {
           eventTitle: event.title,
           startDate: event.startDate,
           endDate: event.endDate,
-          timings: event.timings,
         },
         { status: 201 }
       );

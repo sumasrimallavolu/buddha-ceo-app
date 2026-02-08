@@ -7,7 +7,7 @@ const achievements = [
     number: '50,000+',
     label: 'Lives Transformed',
     description: 'Through our meditation programs worldwide, bringing positive change to individuals and communities',
-    gradient: 'from-amber-600 to-emerald-600',
+    gradient: 'from-blue-600 to-emerald-600',
   },
   {
     icon: Users,
@@ -28,21 +28,21 @@ const achievements = [
     number: '500+',
     label: 'Free Resources',
     description: 'Books, videos, guided meditations, and articles freely available to all seekers',
-    gradient: 'from-orange-600 to-red-600',
+    gradient: 'from-blue-600 to-red-600',
   },
   {
     icon: Heart,
     number: '40-Day',
     label: 'Transformation Programs',
     description: 'Scientifically designed meditation programs proven to create lasting positive change',
-    gradient: 'from-orange-600 to-orange-700',
+    gradient: 'from-blue-600 to-blue-700',
   },
   {
     icon: Award,
     number: '25+',
     label: 'Years of Service',
     description: 'Dedicated to bringing meditation wisdom to leaders, professionals, and seekers globally',
-    gradient: 'from-amber-700 to-amber-800',
+    gradient: 'from-blue-700 to-blue-800',
   },
 ];
 

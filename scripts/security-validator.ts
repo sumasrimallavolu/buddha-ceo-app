@@ -32,7 +32,7 @@ interface SecurityReport {
 const COLORS = {
   RED: '\x1b[31m',
   GREEN: '\x1b[32m',
-  YELLOW: '\x1b[33m',
+  blue: '\x1b[33m',
   BLUE: '\x1b[34m',
   RESET: '\x1b[0m',
 };
@@ -533,7 +533,7 @@ class SecurityValidator {
     }
 
     if (warnings.length > 0) {
-      console.log(`${COLORS.YELLOW}⚠️  Warnings: ${warnings.length}${COLORS.RESET}`);
+      console.log(`${COLORS.blue}⚠️  Warnings: ${warnings.length}${COLORS.RESET}`);
     }
 
     if (this.issues.length === 0) {
@@ -565,7 +565,7 @@ class SecurityValidator {
     console.log('═'.repeat(50));
 
     this.issues.forEach((issue, index) => {
-      const color = issue.type === 'CRITICAL' ? COLORS.RED : COLORS.YELLOW;
+      const color = issue.type === 'CRITICAL' ? COLORS.RED : COLORS.blue;
       const icon = issue.type === 'CRITICAL' ? '❌' : '⚠️';
 
       console.log(`${color}${icon} [${index + 1}] ${issue.type}: ${issue.message}${COLORS.RESET}`);

@@ -33,7 +33,7 @@ interface Registration {
 export default function EventRegistrationsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { data: session } = useSession();
   const router = useRouter();
@@ -41,15 +41,21 @@ export default function EventRegistrationsPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [eventTitle, setEventTitle] = useState('');
+  const [eventId, setEventId] = useState<string>('');
 
   useEffect(() => {
-    fetchEventDetails();
-    fetchRegistrations();
-  }, [params.id]);
+    const initParams = async () => {
+      const { id } = await params;
+      setEventId(id);
+      fetchEventDetails(id);
+      fetchRegistrations(id);
+    };
+    initParams();
+  }, [params]);
 
-  const fetchEventDetails = async () => {
+  const fetchEventDetails = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/events/${params.id}`);
+      const response = await fetch(`/api/admin/events/${id}`);
       if (response.ok) {
         const data = await response.json();
         setEventTitle(data.title);
@@ -59,10 +65,10 @@ export default function EventRegistrationsPage({
     }
   };
 
-  const fetchRegistrations = async () => {
+  const fetchRegistrations = async (id: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/admin/events/${params.id}/registrations`);
+      const response = await fetch(`/api/admin/events/${id}/registrations`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -80,7 +86,7 @@ export default function EventRegistrationsPage({
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+        return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       case 'confirmed':
         return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
       case 'cancelled':
@@ -95,7 +101,7 @@ export default function EventRegistrationsPage({
       case 'completed':
         return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
       case 'pending':
-        return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+        return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       case 'free':
         return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
       default:
@@ -191,11 +197,11 @@ export default function EventRegistrationsPage({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-400 mb-1">Pending</p>
-                <p className="text-3xl font-bold text-amber-400">
+                <p className="text-3xl font-bold text-blue-400">
                   {registrations.filter(r => r.status === 'pending').length}
                 </p>
               </div>
-              <Clock className="h-8 w-8 text-amber-400" />
+              <Clock className="h-8 w-8 text-blue-400" />
             </div>
           </CardContent>
         </Card>

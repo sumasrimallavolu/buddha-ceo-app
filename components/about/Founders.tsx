@@ -19,7 +19,7 @@ interface FoundersProps {
 
 export function Founders({ data: teamMembers }: FoundersProps) {
   const founders = teamMembers
-    .filter((member) => member.role === 'founder' || member.role === 'co_founder')
+    .filter((member) => member.role === 'founder' || member.role === 'co_founder' || member.role === 'trustee')
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   if (founders.length === 0) {
@@ -30,10 +30,10 @@ export function Founders({ data: teamMembers }: FoundersProps) {
             <div className="flex items-center justify-center gap-3 mb-4">
               <Users className="w-8 h-8 text-violet-400" />
               <h2 className="text-3xl sm:text-4xl font-bold text-white">
-                Leadership
+                Founders & Trustees
               </h2>
             </div>
-            <p className="text-slate-500">No leadership information available</p>
+            <p className="text-slate-500">No founders & trustees information available</p>
           </div>
         </div>
       </section>
@@ -48,11 +48,11 @@ export function Founders({ data: teamMembers }: FoundersProps) {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Users className="w-8 h-8 text-violet-400" />
             <h2 className="text-3xl sm:text-4xl font-bold text-white">
-              Leadership
+              Founders & Trustees
             </h2>
           </div>
           <p className="text-slate-400">
-            Led by successful entrepreneurs and corporate leaders
+            Led by visionary founders and trusted leaders
           </p>
         </div>
 

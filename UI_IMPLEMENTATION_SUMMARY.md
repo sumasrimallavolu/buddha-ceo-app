@@ -29,7 +29,7 @@ Features:
   - Title, description, dates, timings
   - Registration count and available slots
   - Register Now button (disabled if fully booked or completed)
-- Color-coded slot availability (green/orange/red)
+- Color-coded slot availability (green/blue/red)
 - Registration modal form
 - CTA section
 

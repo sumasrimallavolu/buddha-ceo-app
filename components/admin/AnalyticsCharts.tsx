@@ -118,8 +118,8 @@ export function AnalyticsCharts({ dailyStats, pageStats }: AnalyticsChartsProps)
       {/* Page Visits Distribution - Bar Chart */}
       <div className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 rounded-xl bg-amber-500/10">
-            <svg className="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="p-3 rounded-xl bg-blue-500/10">
+            <svg className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>

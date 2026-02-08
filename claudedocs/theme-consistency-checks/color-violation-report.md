@@ -29,7 +29,7 @@ Hardcoded colors that break theme system, directly visible to users, affect visu
 **Line ~45:** Default variant gradient
 ```tsx
 // ❌ Current (CRITICAL)
-className="bg-gradient-to-r from-rose-500 to-amber-500"
+className="bg-gradient-to-r from-rose-500 to-blue-500"
 
 // ✅ Should be
 className="bg-gradient-to-r from-primary to-secondary"
@@ -114,7 +114,7 @@ className="hover:shadow-primary/50"
 **Line ~67:** Form submit button
 ```tsx
 // ❌ Current (CRITICAL)
-className="bg-gradient-to-r from-rose-500 to-amber-500"
+className="bg-gradient-to-r from-rose-500 to-blue-500"
 
 // ✅ Should be
 className="bg-gradient-to-r from-primary to-secondary"
@@ -369,7 +369,7 @@ const buttonVariants = cva(
 ```bash
 # Gradient replacements
 from-rose-500 → from-primary
-to-amber-500 → to-secondary
+to-blue-500 → to-secondary
 hover:bg-rose-500 → hover:bg-primary
 hover:bg-rose-600 → hover:bg-primary/90
 
@@ -429,7 +429,7 @@ bg-gray-100 → bg-muted/50
 
 ```bash
 # Check for remaining hardcoded colors
-grep -r "rose-500\|amber-500\|blue-500\|emerald-500\|teal-500\|indigo-500" \
+grep -r "rose-500\|blue-500\|blue-500\|emerald-500\|teal-500\|indigo-500" \
   --include="*.tsx" --include="*.ts" \
   components/ app/ \
   | grep -v "node_modules" | grep -v ".next"
@@ -465,7 +465,7 @@ Add to `.husky/pre-commit`:
 
 ```bash
 # Prevent hardcoded colors
-if grep -r "rose-500\|amber-500\|blue-500" --include="*.tsx" components/ app/ | grep -v "node_modules"; then
+if grep -r "rose-500\|blue-500\|blue-500" --include="*.tsx" components/ app/ | grep -v "node_modules"; then
   echo "❌ Found hardcoded colors! Use theme tokens instead."
   exit 1
 fi
@@ -480,7 +480,7 @@ Add to `.eslintrc.json`:
     "no-restricted-syntax": [
       "error",
       {
-        "selector": "JSXAttribute[value.value=/rose-500|amber-500|blue-500|gray-200|gray-300/]",
+        "selector": "JSXAttribute[value.value=/rose-500|blue-500|blue-500|gray-200|gray-300/]",
         "message": "Use theme tokens instead of hardcoded colors"
       }
     ]

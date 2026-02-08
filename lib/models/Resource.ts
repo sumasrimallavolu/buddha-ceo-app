@@ -1,16 +1,23 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-export type ResourceType = 'book' | 'video' | 'magazine' | 'link';
+export type ResourceType = 'book' | 'video' | 'magazine' | 'link' | 'blog' | 'testimonial';
 export type ResourceStatus = 'draft' | 'published';
 
 export interface IResource {
   title: string;
   type: ResourceType;
-  description: string;
+  description?: string;
   thumbnailUrl?: string;
-  downloadUrl?: string; // for books, magazines
-  videoUrl?: string; // for YouTube videos
+  downloadUrl?: string; // for books
+  purchaseUrl?: string; // for books
+  author?: string; // for books
+  isbn?: string; // for books
+  pages?: string; // for books
+  videoUrl?: string; // for YouTube videos and testimonials
   linkUrl?: string; // for external links
+  content?: string; // for articles (HTML content)
+  quote?: string; // for testimonials
+  subtitle?: string; // for testimonials
   category: string;
   order: number;
   status?: ResourceStatus;
@@ -29,12 +36,12 @@ const ResourceSchema = new Schema<IResourceDocument>(
     },
     type: {
       type: String,
-      enum: ['book', 'video', 'magazine', 'link'],
+      enum: ['book', 'video', 'magazine', 'link', 'blog', 'testimonial'],
       required: [true, 'Resource type is required'],
     },
     description: {
       type: String,
-      required: [true, 'Description is required'],
+      default: null,
     },
     thumbnailUrl: {
       type: String,
@@ -44,11 +51,39 @@ const ResourceSchema = new Schema<IResourceDocument>(
       type: String,
       default: null,
     },
+    purchaseUrl: {
+      type: String,
+      default: null,
+    },
+    author: {
+      type: String,
+      default: null,
+    },
+    isbn: {
+      type: String,
+      default: null,
+    },
+    pages: {
+      type: String,
+      default: null,
+    },
     videoUrl: {
       type: String,
       default: null,
     },
     linkUrl: {
+      type: String,
+      default: null,
+    },
+    content: {
+      type: String,
+      default: null,
+    },
+    quote: {
+      type: String,
+      default: null,
+    },
+    subtitle: {
       type: String,
       default: null,
     },

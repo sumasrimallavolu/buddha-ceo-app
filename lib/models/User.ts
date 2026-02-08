@@ -4,7 +4,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'content_manager' | 'content_reviewer';
+  role: 'admin' | 'content_manager' | 'content_reviewer' | 'user';
   avatar?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -33,8 +33,8 @@ const UserSchema = new Schema<IUserDocument>(
     },
     role: {
       type: String,
-      enum: ['admin', 'content_manager', 'content_reviewer'],
-      default: 'content_manager',
+      enum: ['admin', 'content_manager', 'content_reviewer', 'user'],
+      default: 'user',
       required: true,
     },
     avatar: {

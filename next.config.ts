@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Fix turbopack root directory warning
+  turbopack: {
+    root: __dirname,
+  },
   // Fix NEXTAUTH_URL for Vercel deployment
   env: {
     NEXTAUTH_URL:
@@ -46,6 +50,24 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: '**.vercel-storage.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.freepik.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.google.com',
+        port: '',
+        pathname: '/imgres',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.gstatic.com',
         port: '',
         pathname: '/**',
       },
