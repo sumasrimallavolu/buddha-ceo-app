@@ -58,6 +58,9 @@ export default function ContentPage() {
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  // Only content_manager can add content
+  const canAddContent = session?.user?.role === 'content_manager';
+
   useEffect(() => {
     if (status === 'unauthenticated') {
       window.location.href = '/login';
@@ -136,12 +139,14 @@ export default function ContentPage() {
           <h1 className="text-3xl font-bold text-white mb-2">Content Management</h1>
           <p className="text-slate-400">Manage photos, mentors, founders & trustees, and steering committee</p>
         </div>
-        <Link href="/admin/content/new">
-          <Button className="bg-blue-600 text-white rounded-xl">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Content
-          </Button>
-        </Link>
+        {canAddContent && (
+          <Link href="/admin/content/new">
+            <Button className="bg-blue-600 text-white rounded-xl">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Content
+            </Button>
+          </Link>
+        )}
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
