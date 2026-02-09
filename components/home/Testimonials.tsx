@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Play, Star, Quote, Loader2 } from 'lucide-react';
+import { Play, Star, Quote } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Testimonial {
   _id: string;
@@ -57,10 +58,28 @@ export function Testimonials() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-gradient-to-br from-blue-50/80 via-stone-50/70 to-blue-50/80">
+      <section className="py-24 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950" id="testimonials">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
+          <div className="text-center mb-16">
+            <Skeleton className="w-16 h-16 rounded-full mx-auto mb-4" />
+            <Skeleton className="h-10 w-64 mx-auto mb-4" />
+            <Skeleton className="h-6 w-96 mx-auto" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <Skeleton className="w-full aspect-video rounded-xl mb-6" />
+                <Skeleton className="h-4 w-full mb-4" />
+                <Skeleton className="h-4 w-3/4 mb-6" />
+                <div className="flex items-center">
+                  <Skeleton className="w-12 h-12 rounded-full mr-4" />
+                  <div className="flex-1">
+                    <Skeleton className="h-4 w-32 mb-2" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -72,22 +91,22 @@ export function Testimonials() {
   }
 
   return (
-    <section className="py-24 bg-gradient-to-br from-blue-50/80 via-stone-50/70 to-blue-50/80">
+    <section className="py-24 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950" id="testimonials">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-100 to-blue-100 mb-4 shadow-md">
-            <Quote className="w-8 h-8 text-blue-700" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-600/20 to-violet-600/20 mb-4 shadow-lg">
+            <Quote className="w-8 h-8 text-blue-400" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-stone-800">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
             Transformations Through Meditation
           </h2>
-          <p className="text-lg text-stone-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             Hear from leaders, professionals, and students who have
             transformed their lives through meditation
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => {
             const youtubeId = getYouTubeId(testimonial.videoUrl);
             const thumbnail = testimonial.thumbnailUrl || getYouTubeThumbnail(testimonial.videoUrl);
@@ -96,11 +115,11 @@ export function Testimonials() {
             return (
               <Card
                 key={testimonial._id}
-                className="group bg-white/40 backdrop-blur-md border-blue-200/30 hover:bg-white/60 hover:shadow-2xl transition-all duration-500 overflow-hidden"
+                className="group bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden"
               >
                 <CardContent className="p-6">
                   {/* Video Thumbnail */}
-                  <div className="relative aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-blue-100/50 to-emerald-100/50">
+                  <div className="relative aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-blue-600/10 to-violet-600/10">
                     {thumbnail && (
                       <img
                         src={thumbnail}
@@ -118,7 +137,7 @@ export function Testimonials() {
 
                   {/* Quote */}
                   {testimonial.quote && (
-                    <p className="text-stone-700 mb-6 leading-relaxed border-l-4 border-blue-300/60 pl-4 italic">
+                    <p className="text-slate-300 mb-6 leading-relaxed border-l-4 border-blue-500/30 pl-4 italic">
                       "{testimonial.quote}"
                     </p>
                   )}
@@ -129,19 +148,19 @@ export function Testimonials() {
                       <img
                         src={avatar}
                         alt={testimonial.title}
-                        className="w-12 h-12 rounded-full border-2 border-blue-200/50 mr-4"
+                        className="w-12 h-12 rounded-full border-2 border-blue-500/30 mr-4"
                       />
                     )}
                     <div>
-                      <h4 className="font-semibold text-stone-800">{testimonial.title}</h4>
-                      <p className="text-sm text-stone-600">{testimonial.subtitle}</p>
+                      <h4 className="font-semibold text-white">{testimonial.title}</h4>
+                      <p className="text-sm text-slate-400">{testimonial.subtitle}</p>
                     </div>
                   </div>
 
                   {/* Rating */}
                   <div className="flex items-center mt-4 gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-blue-500 text-blue-500" />
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
                 </CardContent>

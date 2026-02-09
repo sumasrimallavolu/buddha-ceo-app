@@ -38,7 +38,7 @@ export function FeedbackModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide hover:scrollbar-hide">
         <FeedbackForm
           eventId={eventId}
           eventTitle={eventTitle}

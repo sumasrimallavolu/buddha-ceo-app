@@ -109,6 +109,12 @@ export default function EditResourcePage({
       return;
     }
 
+    // For blogs, content is required
+    if (resource.type === 'blog' && !resource.content?.trim()) {
+      setError('Blog content is required');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setSuccess(false);
@@ -340,13 +346,11 @@ export default function EditResourcePage({
                 </div>
               )}
 
-              {(resource.type === 'link' || resource.type === 'blog') && (
+              {resource.type === 'link' && (
                 <div className="space-y-4 pt-4 border-t border-white/10">
                   <div className="flex items-center gap-2 mb-4">
                     <LinkIcon className="h-5 w-5 text-blue-400" />
-                    <h3 className="text-white font-semibold">
-                      {resource.type === 'blog' ? 'Blog Details' : 'Link Details'}
-                    </h3>
+                    <h3 className="text-white font-semibold">Link Details</h3>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="linkUrl" className="text-slate-300 text-sm">
@@ -356,14 +360,38 @@ export default function EditResourcePage({
                       id="linkUrl"
                       value={resource.linkUrl || ''}
                       onChange={(e) => handleUpdateField('linkUrl', e.target.value)}
-                      placeholder={resource.type === 'blog' ? 'https://your-blog.com/post' : 'https://example.com'}
+                      placeholder="https://example.com"
                       disabled={loading}
                       className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
                     />
                     <p className="text-xs text-slate-500">
-                      {resource.type === 'blog'
-                        ? 'Enter the URL where users can read this blog post'
-                        : 'Enter the URL for this external link'}
+                      Enter the URL for this external link
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {resource.type === 'blog' && (
+                <div className="space-y-4 pt-4 border-t border-white/10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <FileText className="h-5 w-5 text-blue-400" />
+                    <h3 className="text-white font-semibold">Blog Content</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="content" className="text-slate-300 text-sm">
+                      Content <span className="text-red-400">*</span>
+                    </Label>
+                    <Textarea
+                      id="content"
+                      value={resource.content || ''}
+                      onChange={(e) => handleUpdateField('content', e.target.value)}
+                      placeholder="Write your blog post content here... You can use HTML tags for formatting."
+                      rows={15}
+                      disabled={loading}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-slate-500 font-mono text-sm"
+                    />
+                    <p className="text-xs text-slate-500">
+                      Write the full blog content. HTML tags like &lt;p&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;li&gt; are supported.
                     </p>
                   </div>
                 </div>

@@ -107,6 +107,8 @@ function LoginForm() {
         // Redirect based on role
         if (session?.user?.role === 'user') {
           router.push('/dashboard');
+        } else if (session?.user?.role === 'content_reviewer') {
+          router.push('/admin/content');
         } else {
           router.push('/admin');
         }
@@ -134,16 +136,12 @@ function LoginForm() {
       <div className="relative z-10 w-full max-w-md px-4">
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
           {/* Logo */}
-          <div className="flex justify-center mb-2">
-            <Link href="/" className="inline-block">
-              <Image
-                src="https://static.wixstatic.com/media/ea3b9d_245553e655454481beb6d6201be19c80~mv2.png/v1/fill/w_357,h_94,al_c,lg_1,q_85,enc_avif,quality_auto/255x69%20%20Pixel%20Header%20Logo.png"
-                alt="Meditation Institute"
-                width={200}
-                height={53}
-                className="hover:scale-105 transition-transform duration-300 brightness-0 invert"
-              />
-            </Link>
+          <div className="flex justify-center mb-2 w-full mt-0">
+          <div className="flex justify-center bg-white p-3  rounded-xl">
+                            <Link href="/" className="flex items-center group mx-2">
+                                <img src="https://static.wixstatic.com/media/ea3b9d_245553e655454481beb6d6201be19c80~mv2.png/v1/fill/w_357,h_94,al_c,lg_1,q_85,enc_avif,quality_auto/255x69%20%20Pixel%20Header%20Logo.png" alt="Meditation Institute" className="h-14 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-sm"/>
+                            </Link>
+                        </div>
           </div>
 
           {/* Title */}

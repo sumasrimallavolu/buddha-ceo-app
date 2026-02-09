@@ -27,7 +27,7 @@ import {
 import { FeedbackViewModal } from '@/components/admin/FeedbackViewModal';
 import {
   MoreVertical,
-  Star,
+  Video,
   MessageSquare,
   Image as ImageIcon,
   Check,
@@ -49,9 +49,10 @@ interface Feedback {
   userId?: string;
   userName: string;
   userEmail: string;
-  type: 'rating' | 'comment' | 'photo';
+  type: 'video' | 'comment' | 'photo';
   status: 'pending' | 'approved' | 'rejected';
-  rating?: number;
+  videoUrl?: string;
+  videoCaption?: string;
   comment?: string;
   photoUrl?: string;
   photoCaption?: string;
@@ -196,16 +197,16 @@ export default function EventFeedbackPage() {
 
   const getTypeBadge = (type: string) => {
     switch (type) {
-      case 'rating':
+      case 'video':
         return {
-          label: 'Rating',
-          className: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-          icon: Star,
+          label: 'Video',
+          className: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+          icon: Video,
         };
       case 'comment':
         return {
           label: 'Comment',
-          className: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+          className: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
           icon: MessageSquare,
         };
       case 'photo':
@@ -253,34 +254,57 @@ export default function EventFeedbackPage() {
   };
 
   const getFeedbackPreview = (feedback: Feedback) => {
-    if (feedback.type === 'rating') {
+    if (feedback.type === 'video') {
       return (
-        <div className="flex items-center gap-1">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              className={`h-4 w-4 ${
-                star <= (feedback.rating || 0)
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'text-slate-600'
-              }`}
-            />
-          ))}
+        <div className="flex items-center gap-3">
+          <div className="relative h-12 w-20 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-500/30 flex-shrink-0">
+            <Video className="h-4 w-4 text-blue-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white text-sm font-medium line-clamp-1">
+              {feedback.videoCaption || 'Video submission'}
+            </p>
+            <p className="text-xs text-slate-500">
+              Video File
+            </p>
+          </div>
         </div>
       );
     } else if (feedback.type === 'comment') {
       return (
-        <p className="text-slate-300 line-clamp-2 max-w-md">
-          {feedback.comment}
-        </p>
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex-shrink-0">
+            <MessageSquare className="h-5 w-5 text-emerald-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-slate-300 text-sm line-clamp-2 leading-relaxed">
+              {feedback.comment}
+            </p>
+          </div>
+        </div>
       );
     } else if (feedback.type === 'photo') {
       return (
-        <div className="flex items-center gap-2">
-          <ImageIcon className="h-4 w-4 text-violet-400" />
-          <span className="text-slate-300 text-sm">
-            {feedback.photoCaption || 'Photo submission'}
-          </span>
+        <div className="flex items-center gap-3">
+          <div className="relative h-12 w-20 rounded-lg overflow-hidden bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 flex-shrink-0">
+            {feedback.photoUrl ? (
+              <img
+                src={feedback.photoUrl}
+                alt="Photo thumbnail"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <ImageIcon className="h-5 w-5 text-violet-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white text-sm font-medium line-clamp-1">
+              {feedback.photoCaption || 'Photo submission'}
+            </p>
+            <p className="text-xs text-slate-500">
+              Photo File
+            </p>
+          </div>
         </div>
       );
     }
@@ -337,7 +361,7 @@ export default function EventFeedbackPage() {
             </SelectTrigger>
             <SelectContent className="bg-slate-900 border-white/10">
               <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="rating">Ratings</SelectItem>
+              <SelectItem value="video">Videos</SelectItem>
               <SelectItem value="comment">Comments</SelectItem>
               <SelectItem value="photo">Photos</SelectItem>
             </SelectContent>
@@ -361,7 +385,7 @@ export default function EventFeedbackPage() {
                 <TableHead className="text-slate-400 font-medium">Type</TableHead>
                 <TableHead className="text-slate-400 font-medium">User</TableHead>
                 <TableHead className="text-slate-400 font-medium">Event</TableHead>
-                <TableHead className="text-slate-400 font-medium">Content</TableHead>
+                <TableHead className="text-slate-400 font-medium min-w-[300px]">Content</TableHead>
                 <TableHead className="text-slate-400 font-medium">Submitted</TableHead>
                 <TableHead className="text-slate-400 font-medium text-right">Actions</TableHead>
               </TableRow>
@@ -416,7 +440,11 @@ export default function EventFeedbackPage() {
                         {getFeedbackPreview(feedback)}
                       </TableCell>
                       <TableCell className="text-slate-400">
-                        {new Date(feedback.createdAt).toLocaleDateString()}
+                        {new Date(feedback.createdAt).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>

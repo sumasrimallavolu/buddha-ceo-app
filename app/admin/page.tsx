@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   FileText,
@@ -40,6 +41,7 @@ interface DashboardStats {
 
 export default function AdminDashboard() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats>({
     content: 0,
     events: 0,
@@ -51,8 +53,13 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Redirect content_reviewers to content page
+    if (session?.user?.role === 'content_reviewer') {
+      router.replace('/admin/content');
+      return;
+    }
     fetchStats();
-  }, []);
+  }, [session, router]);
 
   const fetchStats = async () => {
     try {

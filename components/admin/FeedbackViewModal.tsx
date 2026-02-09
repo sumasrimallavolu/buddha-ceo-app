@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Star, MessageSquare, Image as ImageIcon, Calendar, User, Mail, Check, X, Loader2 } from 'lucide-react';
+import { Video, MessageSquare, Image as ImageIcon, Calendar, User, Mail, Check, X, Loader2, Play } from 'lucide-react';
 
 interface Feedback {
   _id: string;
@@ -23,9 +23,10 @@ interface Feedback {
   userId?: string;
   userName: string;
   userEmail: string;
-  type: 'rating' | 'comment' | 'photo';
+  type: 'video' | 'comment' | 'photo';
   status: 'pending' | 'approved' | 'rejected';
-  rating?: number;
+  videoUrl?: string;
+  videoCaption?: string;
   comment?: string;
   photoUrl?: string;
   photoCaption?: string;
@@ -74,46 +75,100 @@ export function FeedbackViewModal({
   };
 
   const renderContent = () => {
-    if (feedback.type === 'rating') {
+    if (feedback.type === 'video') {
       return (
-        <div className="flex items-center justify-center gap-2 py-8">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              className={`h-12 w-12 ${
-                star <= (feedback.rating || 0)
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'text-slate-600'
-              }`}
-            />
-          ))}
+        <div className="space-y-4">
+          {feedback.videoUrl && (
+            <div className="relative w-full rounded-xl overflow-hidden border-2 border-white/20 bg-black group">
+              {/* Video element */}
+              <div className="relative aspect-video w-full bg-gradient-to-br from-slate-900 to-slate-800">
+                <video
+                  src={feedback.videoUrl}
+                  controls
+                  controlsList="nodownload"
+                  className="w-full h-full object-contain"
+                  preload="metadata"
+                  poster=""
+                >
+                  <source src={feedback.videoUrl} />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+
+              {/* Video type indicator */}
+              <div className="absolute top-3 right-3 z-10">
+                <div className="flex items-center gap-2 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <Video className="h-4 w-4 text-blue-400" />
+                  <span className="text-xs font-medium text-white">Video</span>
+                </div>
+              </div>
+
+              {/* Play button overlay - shows when paused */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/90 hover:bg-white backdrop-blur-sm transition-all">
+                  <Play className="w-6 h-6 text-blue-600 ml-0.5" fill="currentColor" />
+                </div>
+              </div>
+            </div>
+          )}
+          {feedback.videoCaption && (
+            <div className="bg-gradient-to-r from-blue-500/10 to-violet-500/10 rounded-xl p-5 border border-blue-500/20">
+              <div className="flex items-start gap-3">
+                <MessageSquare className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-blue-300 uppercase font-semibold mb-1">Caption</p>
+                  <p className="text-white italic leading-relaxed">"{feedback.videoCaption}"</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       );
     } else if (feedback.type === 'comment') {
       return (
-        <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-          <MessageSquare className="h-8 w-8 text-blue-400 mb-4" />
-          <p className="text-slate-200 whitespace-pre-wrap text-lg leading-relaxed">
-            {feedback.comment}
-          </p>
+        <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl p-6 border border-emerald-500/20">
+          <div className="flex items-start gap-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20 flex-shrink-0">
+              <MessageSquare className="h-5 w-5 text-emerald-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-xs text-emerald-300 uppercase font-semibold mb-2">Comment</p>
+              <p className="text-white whitespace-pre-wrap text-lg leading-relaxed">
+                {feedback.comment}
+              </p>
+            </div>
+          </div>
         </div>
       );
     } else if (feedback.type === 'photo') {
       return (
         <div className="space-y-4">
           {feedback.photoUrl && (
-            <div className="relative h-64 w-full rounded-lg overflow-hidden border border-white/10">
+            <div className="relative h-80 w-full rounded-xl overflow-hidden border-2 border-white/20 bg-gradient-to-br from-slate-900 to-slate-800">
               <Image
                 src={feedback.photoUrl}
                 alt="Event photo"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 768px"
               />
+              <div className="absolute top-3 right-3">
+                <div className="flex items-center gap-2 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <ImageIcon className="h-4 w-4 text-violet-400" />
+                  <span className="text-xs font-medium text-white">Photo</span>
+                </div>
+              </div>
             </div>
           )}
           {feedback.photoCaption && (
-            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-              <p className="text-slate-200 italic">"{feedback.photoCaption}"</p>
+            <div className="bg-gradient-to-r from-violet-500/10 to-purple-500/10 rounded-xl p-5 border border-violet-500/20">
+              <div className="flex items-start gap-3">
+                <ImageIcon className="h-5 w-5 text-violet-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs text-violet-300 uppercase font-semibold mb-1">Caption</p>
+                  <p className="text-white italic leading-relaxed">"{feedback.photoCaption}"</p>
+                </div>
+              </div>
             </div>
           )}
         </div>

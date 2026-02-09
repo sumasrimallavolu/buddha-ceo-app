@@ -5,9 +5,10 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Users, Filter, Loader2, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { Calendar, Users, Filter, MapPin, Clock, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Event {
   _id: string;
@@ -97,8 +98,54 @@ export default function EventsPage() {
     return (
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Header />
-        <main className="flex-1 flex items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-400" />
+        <main className="flex-1">
+          <section className="relative min-h-[35vh] flex items-center overflow-hidden bg-slate-950">
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+              <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
+            </div>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
+              <Skeleton className="h-10 w-48 mx-auto mb-6 rounded-full" />
+              <Skeleton className="h-16 w-64 mx-auto mb-4" />
+              <Skeleton className="h-6 w-96 mx-auto" />
+            </div>
+          </section>
+
+          <section className="py-8 bg-slate-900/50 border-y border-white/5">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-5 w-20" />
+              </div>
+            </div>
+          </section>
+
+          <section className="py-16 bg-slate-950">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+                    <Skeleton className="w-full aspect-[16/10]" />
+                    <div className="p-6 space-y-4">
+                      <Skeleton className="h-6 w-3/4" />
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-2/3" />
+                      <div className="space-y-2 pt-4">
+                        <Skeleton className="h-4 w-48" />
+                        <Skeleton className="h-4 w-40" />
+                        <Skeleton className="h-4 w-36" />
+                      </div>
+                      <div className="space-y-2 pt-4">
+                        <Skeleton className="h-10 w-full rounded-xl" />
+                        <Skeleton className="h-10 w-full rounded-xl" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         </main>
         <Footer />
       </div>
@@ -273,7 +320,7 @@ export default function EventsPage() {
                               <span className="text-slate-300">{event.location.city}</span>
                             </div>
                           )}
-                          {event.maxParticipants && (
+                          {/* {event.maxParticipants && (
                             <div className="flex items-start gap-3 text-sm">
                               <Users className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
                               <div>
@@ -287,7 +334,7 @@ export default function EventsPage() {
                                 )}
                               </div>
                             </div>
-                          )}
+                          )} */}
                         </div>
 
                         {/* Action Buttons */}
@@ -306,7 +353,7 @@ export default function EventsPage() {
                               Event Completed
                             </Button>
                           ) : isRegistrationClosed ? (
-                            <Button variant="outline" className="w-full border-blue-500/50 text-blue-400" disabled>
+                            <Button variant="outline" className="w-full border-white/10 text-white" disabled>
                               Registration Closed
                             </Button>
                           ) : isFullyBooked ? (

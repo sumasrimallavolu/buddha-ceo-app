@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -24,6 +23,23 @@ interface VideoUploadProps {
   maxSize?: number; // in bytes
   className?: string;
 }
+
+const DARK_THEME = {
+  cardBg: 'bg-white/5 backdrop-blur-sm border border-white/10',
+  textPrimary: 'text-white',
+  textSecondary: 'text-slate-400',
+  textTertiary: 'text-slate-500',
+  inputBg: 'bg-white/5 border-white/10 text-white placeholder:text-slate-500',
+  button: 'bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white',
+  tabsList: 'bg-white/5 border border-white/10',
+  tabActive: 'data-[state=active]:bg-white/10 data-[state=active]:text-white',
+  tabInactive: 'text-slate-400 hover:text-white hover:bg-white/5',
+  uploadAreaDefault: 'border-white/20 hover:border-white/30 bg-white/5',
+  uploadAreaActive: 'border-blue-500 bg-blue-500/10',
+  successCard: 'bg-blue-500/10 border-blue-500/30',
+  error: 'bg-red-500/10 border-red-500/30 text-red-400',
+  tipCard: 'bg-white/5 border border-white/10',
+};
 
 export default function VideoUpload({
   onVideoChange,
@@ -170,70 +186,70 @@ export default function VideoUpload({
     <div className={`space-y-4 ${className}`}>
       {!video && (
         <Tabs defaultValue="upload" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="upload" className="flex items-center gap-2">
+          <TabsList className={`grid w-full grid-cols-2 ${DARK_THEME.tabsList}`}>
+            <TabsTrigger value="upload" className={`flex items-center gap-2 ${DARK_THEME.tabInactive} ${DARK_THEME.tabActive}`}>
               <Upload className="h-4 w-4" />
               Upload File
             </TabsTrigger>
-            <TabsTrigger value="url" className="flex items-center gap-2">
+            <TabsTrigger value="url" className={`flex items-center gap-2 ${DARK_THEME.tabInactive} ${DARK_THEME.tabActive}`}>
               <LinkIcon className="h-4 w-4" />
               From URL
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="upload">
-            <Card
+            <div
               {...getRootProps()}
-              className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
+              className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors rounded-2xl ${
                 isDragActive
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
-                  : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600'
+                  ? DARK_THEME.uploadAreaActive
+                  : DARK_THEME.uploadAreaDefault
               } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <input {...getInputProps()} />
               <div className="flex flex-col items-center gap-3">
                 {uploading ? (
                   <div className="relative">
-                    <Loader2 className="h-10 w-10 text-blue-700 dark:text-blue-500 animate-spin" />
+                    <Loader2 className="h-10 w-10 text-blue-400 animate-spin" />
                   </div>
                 ) : (
-                  <VideoIcon className="h-10 w-10 text-gray-400 dark:text-gray-600" />
+                  <VideoIcon className="h-10 w-10 text-slate-500" />
                 )}
                 <div>
-                  <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
+                  <p className={`text-lg font-medium ${DARK_THEME.textPrimary}`}>
                     {uploading ? 'Uploading...' : isDragActive ? 'Drop video here' : 'Drag & drop video here'}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  <p className={`text-sm ${DARK_THEME.textSecondary} mt-1`}>
                     or click to browse
                   </p>
                 </div>
                 {uploading && (
                   <div className="w-full max-w-xs">
-                    <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div className="bg-slate-700 rounded-full h-2">
                       <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{uploadProgress}%</p>
+                    <p className={`text-xs ${DARK_THEME.textTertiary} mt-1`}>{uploadProgress}%</p>
                   </div>
                 )}
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className={`text-xs ${DARK_THEME.textTertiary}`}>
                   Supports: MP4, WebM, MOV (max {(maxSize / (1024 * 1024)).toFixed(0)}MB)
                 </p>
               </div>
-            </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="url">
-            <Card className="p-4">
+            <div className={`p-4 rounded-2xl ${DARK_THEME.cardBg}`}>
               <div className="space-y-3">
                 <div>
-                  <Label htmlFor="video-url" className="flex items-center gap-2">
+                  <Label htmlFor="video-url" className={`flex items-center gap-2 ${DARK_THEME.textPrimary}`}>
                     <LinkIcon className="h-4 w-4" />
                     Video URL
                   </Label>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p className={`text-xs ${DARK_THEME.textSecondary} mt-1`}>
                     Paste a YouTube, Vimeo, or direct video link
                   </p>
                 </div>
@@ -246,11 +262,13 @@ export default function VideoUpload({
                     onChange={(e) => setUrlInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddFromUrl()}
                     disabled={validatingUrl}
+                    className={DARK_THEME.inputBg}
                   />
                   <Button
                     onClick={handleAddFromUrl}
                     disabled={validatingUrl || !urlInput.trim()}
                     type="button"
+                    className={DARK_THEME.button}
                   >
                     {validatingUrl ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -263,10 +281,10 @@ export default function VideoUpload({
                   </Button>
                 </div>
                 {urlError && (
-                  <p className="text-sm text-red-500 dark:text-red-400">{urlError}</p>
+                  <p className="text-sm text-red-400">{urlError}</p>
                 )}
-                <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
-                  <p>💡 <strong>Supported platforms:</strong></p>
+                <div className={`text-xs ${DARK_THEME.textSecondary} space-y-1 p-3 ${DARK_THEME.tipCard} rounded-lg`}>
+                  <p>💡 <strong className={DARK_THEME.textPrimary}>Supported platforms:</strong></p>
                   <ul className="list-disc list-inside ml-2 space-y-0.5">
                     <li>YouTube (youtube.com, youtu.be)</li>
                     <li>Vimeo (vimeo.com)</li>
@@ -274,27 +292,27 @@ export default function VideoUpload({
                   </ul>
                 </div>
               </div>
-            </Card>
+            </div>
           </TabsContent>
         </Tabs>
       )}
 
       {error && (
-        <div className="p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <div className={`p-3 ${DARK_THEME.error} rounded-lg`}>
+          <p className={`text-sm`}>{error}</p>
         </div>
       )}
 
       {/* Uploaded Video Preview */}
       {video && (
-        <Card className="p-4">
+        <div className={`p-4 rounded-2xl ${DARK_THEME.successCard}`}>
           <div className="flex items-start gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 {isExternalVideo ? (
                   <>
-                    <LinkIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <LinkIcon className="h-5 w-5 text-blue-400" />
+                    <p className={`text-sm font-medium ${DARK_THEME.textPrimary}`}>
                       {videoMetadata?.provider || 'External Video'}
                     </p>
                     {videoMetadata?.thumbnail && (
@@ -307,20 +325,20 @@ export default function VideoUpload({
                   </>
                 ) : (
                   <>
-                    <VideoIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <VideoIcon className="h-5 w-5 text-blue-400" />
+                    <p className={`text-sm font-medium ${DARK_THEME.textPrimary}`}>
                       Video uploaded successfully
                     </p>
                   </>
                 )}
               </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+              <p className={`text-xs ${DARK_THEME.textSecondary} mb-1`}>
                 <span className="font-medium">Filename:</span> {video.filename}
               </p>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+              <p className={`text-xs ${DARK_THEME.textSecondary} mb-1`}>
                 <span className="font-medium">Size:</span> {isExternalVideo ? 'External URL' : formatFileSize(video.size)}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 break-all flex items-center gap-1">
+              <p className={`text-xs ${DARK_THEME.textTertiary} break-all flex items-center gap-1`}>
                 <span className="font-medium">URL:</span>
                 {video.url}
                 {isExternalVideo && (
@@ -328,19 +346,19 @@ export default function VideoUpload({
                     href={video.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-600"
+                    className="text-blue-400 hover:text-blue-300"
                   >
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 )}
               </p>
               {videoMetadata?.type === 'youtube' && (
-                <p className="text-xs text-red-500 dark:text-red-400 mt-1">
+                <p className="text-xs text-red-400 mt-1">
                   ✓ YouTube video detected
                 </p>
               )}
               {videoMetadata?.type === 'vimeo' && (
-                <p className="text-xs text-blue-500 dark:text-blue-400 mt-1">
+                <p className="text-xs text-blue-400 mt-1">
                   ✓ Vimeo video detected
                 </p>
               )}
@@ -356,7 +374,7 @@ export default function VideoUpload({
               Remove
             </Button>
           </div>
-        </Card>
+        </div>
       )}
 
       {/* Hidden input to store URL for form submission */}

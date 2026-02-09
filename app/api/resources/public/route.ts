@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
     const category = searchParams.get('category');
+    const id = searchParams.get('id');
 
     // Build query for resources
     const query: any = {
@@ -26,10 +27,36 @@ export async function GET(request: NextRequest) {
       query.category = category;
     }
 
+    // If ID is provided, fetch single resource
+    if (id) {
+      query._id = id;
+    }
+
     // Fetch all resources (books, videos, articles, links, testimonials)
     const resources = await Resource.find(query)
       .sort({ order: 1, createdAt: -1 })
       .lean();
+
+    // If fetching single blog by ID, return it directly
+    if (id && type === 'blog' && resources.length > 0) {
+      const blog = resources[0];
+      return NextResponse.json({
+        success: true,
+        resources: {
+          blogs: [{
+            _id: blog._id,
+            title: blog.title,
+            description: blog.description,
+            content: blog.content,
+            thumbnailUrl: blog.thumbnailUrl,
+            category: blog.category,
+            order: blog.order,
+            createdAt: blog.createdAt,
+            updatedAt: blog.updatedAt,
+          }]
+        }
+      });
+    }
 
     // Group by resource type
     const groupedResources = {
@@ -107,10 +134,12 @@ export async function GET(request: NextRequest) {
           _id: r._id,
           title: r.title,
           description: r.description,
-          linkUrl: r.linkUrl,
+          content: r.content,
           thumbnailUrl: r.thumbnailUrl,
           category: r.category,
           order: r.order,
+          createdAt: r.createdAt,
+          updatedAt: r.updatedAt,
         })),
         testimonials: groupedResources.testimonials.map(r => ({
           _id: r._id,

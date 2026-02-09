@@ -13,8 +13,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if user is admin
-    if (session.user.role !== 'admin' && session.user.role !== 'content_manager') {
+    // Allow admin, content_manager, and content_reviewer to view feedback
+    if (
+      session.user.role !== 'admin' &&
+      session.user.role !== 'content_manager' &&
+      session.user.role !== 'content_reviewer'
+    ) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

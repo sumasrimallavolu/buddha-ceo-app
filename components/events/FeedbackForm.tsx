@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
-  Star,
+  Video,
   MessageSquare,
   Image as ImageIcon,
   Send,
@@ -24,7 +24,7 @@ interface FeedbackFormProps {
   onCancel?: () => void;
 }
 
-type FeedbackType = 'rating' | 'comment' | 'photo';
+type FeedbackType = 'video' | 'comment' | 'photo';
 
 export function FeedbackForm({
   eventId,
@@ -34,14 +34,14 @@ export function FeedbackForm({
   onCancel,
 }: FeedbackFormProps) {
   const { data: session } = useSession();
-  const [activeTab, setActiveTab] = useState<FeedbackType>('rating');
+  const [activeTab, setActiveTab] = useState<FeedbackType>('video');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Rating state
-  const [rating, setRating] = useState(0);
-  const [hoveredRating, setHoveredRating] = useState(0);
+  // Video state
+  const [videoUrl, setVideoUrl] = useState('');
+  const [videoCaption, setVideoCaption] = useState('');
 
   // Comment state
   const [comment, setComment] = useState('');
@@ -63,13 +63,16 @@ export function FeedbackForm({
     try {
       let body: any = { type };
 
-      if (type === 'rating') {
-        if (rating === 0) {
-          setError('Please select a rating');
+      if (type === 'video') {
+        if (!videoUrl.trim()) {
+          setError('Please provide a video URL');
           setLoading(false);
           return;
         }
-        body.rating = rating;
+        body.videoUrl = videoUrl.trim();
+        if (videoCaption.trim()) {
+          body.videoCaption = videoCaption.trim();
+        }
       } else if (type === 'comment') {
         if (!comment.trim()) {
           setError('Please enter a comment');
@@ -109,7 +112,8 @@ export function FeedbackForm({
       setLoading(false);
 
       // Reset form
-      setRating(0);
+      setVideoUrl('');
+      setVideoCaption('');
       setComment('');
       setPhotoUrl('');
       setPhotoCaption('');
@@ -127,7 +131,7 @@ export function FeedbackForm({
   };
 
   const tabs = [
-    { id: 'rating' as FeedbackType, label: 'Rating', icon: Star },
+    { id: 'video' as FeedbackType, label: 'Video', icon: Video },
     { id: 'comment' as FeedbackType, label: 'Comment', icon: MessageSquare },
     { id: 'photo' as FeedbackType, label: 'Photo', icon: ImageIcon },
   ];
@@ -192,42 +196,43 @@ export function FeedbackForm({
           })}
         </div>
 
-        {/* Rating Form */}
-        {activeTab === 'rating' && (
+        {/* Video Form */}
+        {activeTab === 'video' && (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-3">
-                How would you rate this event?
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Video URL
               </label>
-              <div className="flex items-center gap-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    onClick={() => setRating(star)}
-                    onMouseEnter={() => setHoveredRating(star)}
-                    onMouseLeave={() => setHoveredRating(0)}
-                    className="transition-transform hover:scale-110"
-                  >
-                    <Star
-                      className={`h-10 w-10 ${
-                        star <= (hoveredRating || rating)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-slate-600'
-                      }`}
-                    />
-                  </button>
-                ))}
-                {rating > 0 && (
-                  <span className="ml-3 text-lg font-semibold text-white">
-                    {rating}/5
-                  </span>
-                )}
-              </div>
+              <input
+                type="url"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..."
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                disabled={loading || success}
+              />
+              <p className="text-xs text-slate-500 mt-2">
+                Enter a publicly accessible video URL (YouTube, Vimeo, etc.)
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Caption (optional)
+              </label>
+              <input
+                type="text"
+                value={videoCaption}
+                onChange={(e) => setVideoCaption(e.target.value)}
+                placeholder="Add a description for your video..."
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                disabled={loading || success}
+              />
             </div>
 
             <Button
-              onClick={() => handleSubmit('rating')}
-              disabled={loading || success || rating === 0}
+              onClick={() => handleSubmit('video')}
+              disabled={loading || success || !videoUrl.trim()}
               className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white"
             >
               {loading ? (
@@ -243,7 +248,7 @@ export function FeedbackForm({
               ) : (
                 <>
                   <Send className="h-4 w-4 mr-2" />
-                  Submit Rating
+                  Submit Video
                 </>
               )}
             </Button>

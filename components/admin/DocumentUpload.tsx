@@ -24,6 +24,22 @@ interface DocumentUploadProps {
   className?: string;
 }
 
+const DARK_THEME = {
+  cardBg: 'bg-white/5 backdrop-blur-sm border border-white/10',
+  textPrimary: 'text-white',
+  textSecondary: 'text-slate-400',
+  textTertiary: 'text-slate-500',
+  inputBg: 'bg-white/5 border-white/10 text-white placeholder:text-slate-500',
+  button: 'bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white',
+  tabsList: 'bg-white/5 border border-white/10',
+  tabActive: 'data-[state=active]:bg-white/10 data-[state=active]:text-white',
+  tabInactive: 'text-slate-400 hover:text-white hover:bg-white/5',
+  uploadAreaDefault: 'border-white/20 hover:border-white/30 bg-white/5',
+  uploadAreaActive: 'border-blue-500 bg-blue-500/10',
+  successCard: 'bg-blue-500/10 border-blue-500/30',
+  error: 'bg-red-500/10 border-red-500/30 text-red-400',
+};
+
 export default function DocumentUpload({
   onDocumentChange,
   document = null,
@@ -155,22 +171,22 @@ export default function DocumentUpload({
   return (
     <div className={`space-y-4 ${className}`}>
       {document && (
-        <Card className="p-4 border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/20">
+        <Card className={`p-4 ${DARK_THEME.successCard}`}>
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3 flex-1 min-w-0">
-              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex-shrink-0">
-                <FileText className="h-5 w-5 text-blue-700 dark:text-blue-400" />
+              <div className="p-2 rounded-lg bg-blue-500/20 flex-shrink-0">
+                <FileText className="h-5 w-5 text-blue-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                <p className={`text-sm font-medium ${DARK_THEME.textPrimary} truncate`}>
                   {document.filename}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className={`text-xs ${DARK_THEME.textTertiary} mt-1`}>
                   {formatFileSize(document.size)}
                 </p>
                 {isExternalDocument && (
                   <div className="flex items-center gap-1 mt-2">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-violet-500/20 text-violet-400">
                       <ExternalLink className="h-3 w-3 mr-1" />
                       External URL
                     </span>
@@ -184,7 +200,7 @@ export default function DocumentUpload({
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(document.url, '_blank')}
-                  className="h-8"
+                  className="h-8 bg-white/5 border-white/10 text-white hover:bg-white/10"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   View
@@ -195,7 +211,7 @@ export default function DocumentUpload({
                 size="sm"
                 onClick={handleRemove}
                 disabled={uploading}
-                className="h-8 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                className="h-8 text-red-400 hover:text-red-300 hover:bg-red-500/10"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -206,12 +222,12 @@ export default function DocumentUpload({
 
       {!document && (
         <Tabs defaultValue="upload" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="upload" className="flex items-center gap-2">
+          <TabsList className={`grid w-full grid-cols-2 ${DARK_THEME.tabsList}`}>
+            <TabsTrigger value="upload" className={`flex items-center gap-2 ${DARK_THEME.tabInactive} ${DARK_THEME.tabActive}`}>
               <Upload className="h-4 w-4" />
               Upload File
             </TabsTrigger>
-            <TabsTrigger value="url" className="flex items-center gap-2">
+            <TabsTrigger value="url" className={`flex items-center gap-2 ${DARK_THEME.tabInactive} ${DARK_THEME.tabActive}`}>
               <LinkIcon className="h-4 w-4" />
               From URL
             </TabsTrigger>
@@ -222,39 +238,39 @@ export default function DocumentUpload({
               {...getRootProps()}
               className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
                 isDragActive
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
-                  : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600'
+                  ? DARK_THEME.uploadAreaActive
+                  : DARK_THEME.uploadAreaDefault
               } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <input {...getInputProps()} />
               <div className="flex flex-col items-center gap-3">
                 {uploading ? (
                   <div className="relative">
-                    <Loader2 className="h-10 w-10 text-blue-700 dark:text-blue-500 animate-spin" />
+                    <Loader2 className="h-10 w-10 text-blue-400 animate-spin" />
                   </div>
                 ) : (
-                  <FileText className="h-10 w-10 text-gray-400 dark:text-gray-600" />
+                  <FileText className="h-10 w-10 text-slate-500" />
                 )}
                 <div>
-                  <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
+                  <p className={`text-lg font-medium ${DARK_THEME.textPrimary}`}>
                     {uploading ? 'Uploading...' : isDragActive ? 'Drop document here' : 'Drag & drop document here'}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  <p className={`text-sm ${DARK_THEME.textSecondary} mt-1`}>
                     or click to browse
                   </p>
                 </div>
                 {uploading && (
                   <div className="w-full max-w-xs">
-                    <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div className="bg-slate-700 rounded-full h-2">
                       <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{uploadProgress}%</p>
+                    <p className={`text-xs ${DARK_THEME.textTertiary} mt-1`}>{uploadProgress}%</p>
                   </div>
                 )}
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className={`text-xs ${DARK_THEME.textTertiary}`}>
                   Supports: PDF files (max {(maxSize / (1024 * 1024)).toFixed(0)}MB)
                 </p>
               </div>
@@ -262,14 +278,14 @@ export default function DocumentUpload({
           </TabsContent>
 
           <TabsContent value="url">
-            <Card className="p-4">
+            <Card className={`p-4 ${DARK_THEME.cardBg}`}>
               <div className="space-y-3">
                 <div>
-                  <Label htmlFor="document-url" className="flex items-center gap-2">
+                  <Label htmlFor="document-url" className={`flex items-center gap-2 ${DARK_THEME.textPrimary}`}>
                     <LinkIcon className="h-4 w-4" />
                     Document URL
                   </Label>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p className={`text-xs ${DARK_THEME.textSecondary} mt-1`}>
                     Paste a direct link to a PDF document
                   </p>
                 </div>
@@ -282,17 +298,18 @@ export default function DocumentUpload({
                     onChange={(e) => setUrlInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddFromUrl()}
                     disabled={uploading}
+                    className={DARK_THEME.inputBg}
                   />
                   <Button
                     onClick={handleAddFromUrl}
                     disabled={uploading || !urlInput.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap"
+                    className={DARK_THEME.button}
                   >
                     Add
                   </Button>
                 </div>
                 {urlError && (
-                  <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+                  <p className={`text-sm ${DARK_THEME.error.replace('text-', '')} flex items-center gap-1`}>
                     <X className="h-4 w-4" />
                     {urlError}
                   </p>
@@ -304,9 +321,9 @@ export default function DocumentUpload({
       )}
 
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-          <X className="h-4 w-4 text-red-600 dark:text-red-400 flex-shrink-0" />
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <div className={`flex items-center gap-2 p-3 rounded-lg ${DARK_THEME.error}`}>
+          <X className="h-4 w-4 flex-shrink-0" />
+          <p className={`text-sm`}>{error}</p>
         </div>
       )}
     </div>

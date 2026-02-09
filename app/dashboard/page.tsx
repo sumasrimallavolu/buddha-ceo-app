@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { FeedbackModal } from '@/components/events/FeedbackModal';
 import {
-  Loader2,
   Calendar,
   Clock,
   MapPin,
@@ -22,6 +21,7 @@ import {
   AlertCircle,
   MessageSquare,
 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Registration {
   registration: {
@@ -75,8 +75,9 @@ export default function DashboardPage() {
     if (status === 'unauthenticated') {
       router.push('/login');
     } else if (status === 'authenticated') {
-      // Check if user has 'user' role, if not redirect to admin
-      if (session?.user?.role && session.user.role !== 'user') {
+      // Allow 'user' and 'content_reviewer' roles to access user dashboard
+      // Redirect admin and content_manager roles to admin dashboard
+      if (session?.user?.role && session.user.role !== 'user' && session.user.role !== 'content_reviewer') {
         router.push('/admin');
         return;
       }
@@ -172,8 +173,15 @@ export default function DashboardPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center p-4">
+        <div className="w-full max-w-4xl space-y-6">
+          <Skeleton className="h-16 w-64" />
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <Skeleton key={i} className="h-40 w-full rounded-2xl" />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

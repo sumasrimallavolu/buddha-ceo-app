@@ -5,6 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/home/HeroSection';
 import { PhotosGrid } from '@/components/home/PhotosGrid';
 import { TransformationStories } from '@/components/home/TransformationStories';
+import { Testimonials } from '@/components/home/Testimonials';
 import { ProgramsServices } from '@/components/home/ProgramsServices';
 import { TeacherEnrollment } from '@/components/home/TeacherEnrollment';
 import { VolunteerSection } from '@/components/home/VolunteerSection';
@@ -18,6 +19,7 @@ export default function HomePage() {
         <HeroSection />
         <PhotosGrid />
         <TransformationStories />
+        <Testimonials />
         <ProgramsServices />
         <TeacherEnrollment />
         <VolunteerSection />

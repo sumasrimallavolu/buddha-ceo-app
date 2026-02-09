@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Heart, Eye, Loader2, ArrowRight } from 'lucide-react';
+import { Heart, Eye, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Photo {
   _id: string;
@@ -79,9 +80,15 @@ export function PhotosGrid() {
     return (
       <section className="py-20 bg-slate-950 relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-            <p className="text-slate-400">Loading photos...</p>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <Skeleton className="h-10 w-48 mx-auto mb-4 rounded-full" />
+            <Skeleton className="h-16 w-64 mx-auto mb-4" />
+            <Skeleton className="h-6 w-96 mx-auto" />
+          </div>
+          <div className="columns-1 md:columns-2 lg:columns-4 gap-6 space-y-6">
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} className="w-full h-64 rounded-2xl" />
+            ))}
           </div>
         </div>
       </section>

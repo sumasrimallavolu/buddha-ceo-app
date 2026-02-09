@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Heart, Eye, Loader2, Grid3x3, Filter } from 'lucide-react';
+import { Heart, Eye, Grid3x3, Filter } from 'lucide-react';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Photo {
   _id: string;
@@ -105,10 +106,29 @@ export default function PhotosPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-16 h-16 animate-spin text-blue-600 mx-auto mb-6" />
-          <p className="text-slate-400 text-lg">Loading beautiful moments...</p>
+      <div className="min-h-screen bg-slate-950">
+        <div className="bg-slate-900/50 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <Skeleton className="h-5 w-24 mb-2" />
+                <Skeleton className="h-10 w-48" />
+              </div>
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-10 w-32 rounded-full" />
+                <Skeleton className="h-10 w-32 rounded-full" />
+                <Skeleton className="h-10 w-32 rounded-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+            {[...Array(12)].map((_, i) => (
+              <Skeleton key={i} className="w-full h-64 rounded-2xl" />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -266,7 +286,7 @@ export default function PhotosPage() {
                 >
                   {loadingMore ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Skeleton className="w-5 h-5 rounded-full" />
                       Loading More Photos...
                     </>
                   ) : (

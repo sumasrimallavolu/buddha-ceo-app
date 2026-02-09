@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Brain, Heart, Target, Users, Award, Loader2, Calendar, Clock } from 'lucide-react';
+import { ArrowRight, Sparkles, Brain, Heart, Target, Users, Award, Calendar, Clock } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Event {
   _id: string;
@@ -99,9 +100,27 @@ export function ProgramsServices() {
     return (
       <section className="py-24 bg-slate-900 relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-            <p className="text-slate-400">Loading programs...</p>
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <Skeleton className="h-10 w-48 mx-auto mb-4 rounded-full" />
+            <Skeleton className="h-16 w-80 mx-auto mb-4" />
+            <Skeleton className="h-6 w-96 mx-auto" />
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-slate-800 rounded-3xl border border-slate-700 p-6">
+                <Skeleton className="w-14 h-14 rounded-xl mb-6" />
+                <Skeleton className="h-6 w-40 mb-3" />
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-3/4 mb-6" />
+                <Skeleton className="h-4 w-48 mb-2" />
+                <Skeleton className="h-4 w-40 mb-2" />
+                <Skeleton className="h-4 w-36 mb-6" />
+                <div className="pt-4 border-t border-slate-700 flex justify-between">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-10 w-24 rounded-xl" />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

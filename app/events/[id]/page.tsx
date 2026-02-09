@@ -11,8 +11,9 @@ import { FeedbackForm } from '@/components/events/FeedbackForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Calendar, Clock, MapPin, Users, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Event {
   _id: string;
@@ -76,16 +77,24 @@ export default function EventDetailsPage() {
   };
 
   const checkRegistration = async (eventId: string) => {
-    if (!session?.user?.email) return;
+    if (!session?.user?.email) {
+      setIsRegistered(false);
+      return;
+    }
 
     try {
       const response = await fetch(`/api/registrations?eventId=${eventId}`);
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
+
+      if (data.success) {
         setIsRegistered(data.registered || false);
+      } else {
+        console.error('Registration check failed:', data.error);
+        setIsRegistered(false);
       }
     } catch (err) {
       console.error('Error checking registration:', err);
+      setIsRegistered(false);
     }
   };
 
@@ -118,8 +127,30 @@ export default function EventDetailsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
         <Header />
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-500" />
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <Skeleton className="h-10 w-32 mb-6" />
+
+          <div className="rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+            <Skeleton className="w-full h-80" />
+            <div className="p-8 space-y-6">
+              <Skeleton className="h-10 w-48" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-3/4" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                <div className="space-y-4">
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+                <div className="space-y-4">
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              </div>
+              <Skeleton className="h-12 w-40 mt-8" />
+            </div>
+          </div>
         </div>
         <Footer />
       </div>
@@ -326,7 +357,7 @@ export default function EventDetailsPage() {
           {/* Feedback Form Modal */}
           {showFeedbackForm && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-              <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide hover:scrollbar-hide">
                 <FeedbackForm
                   eventId={event._id}
                   eventTitle={event.title}

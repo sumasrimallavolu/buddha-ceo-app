@@ -21,24 +21,19 @@ export async function GET(
     }).sort({ createdAt: -1 });
 
     // Group by type
-    const ratings = feedbacks.filter((f) => f.type === 'rating');
+    const videos = feedbacks.filter((f) => f.type === 'video');
     const comments = feedbacks.filter((f) => f.type === 'comment');
     const photos = feedbacks.filter((f) => f.type === 'photo');
-
-    // Calculate average rating
-    const averageRating =
-      ratings.length > 0
-        ? ratings.reduce((sum, r) => sum + (r.rating || 0), 0) / ratings.length
-        : 0;
 
     return NextResponse.json({
       success: true,
       feedback: {
-        ratings: ratings.map((r) => ({
-          id: r._id.toString(),
-          rating: r.rating,
-          userName: r.userName,
-          createdAt: r.createdAt,
+        videos: videos.map((v) => ({
+          id: v._id.toString(),
+          videoUrl: v.videoUrl,
+          videoCaption: v.videoCaption,
+          userName: v.userName,
+          createdAt: v.createdAt,
         })),
         comments: comments.map((c) => ({
           id: c._id.toString(),
@@ -54,8 +49,7 @@ export async function GET(
           createdAt: p.createdAt,
         })),
         stats: {
-          totalRatings: ratings.length,
-          averageRating: Math.round(averageRating * 10) / 10,
+          totalVideos: videos.length,
           totalComments: comments.length,
           totalPhotos: photos.length,
         },
@@ -124,20 +118,20 @@ export async function POST(
     }
 
     const body = await request.json();
-    const { type, rating, comment, photoUrl, photoCaption } = body;
+    const { type, videoUrl, videoCaption, comment, photoUrl, photoCaption } = body;
 
     // Validate type
-    if (!type || !['rating', 'comment', 'photo'].includes(type)) {
+    if (!type || !['video', 'comment', 'photo'].includes(type)) {
       return NextResponse.json(
-        { error: 'Invalid feedback type. Must be rating, comment, or photo' },
+        { error: 'Invalid feedback type. Must be video, comment, or photo' },
         { status: 400 }
       );
     }
 
     // Validate based on type
-    if (type === 'rating' && (!rating || rating < 1 || rating > 5)) {
+    if (type === 'video' && !videoUrl?.trim()) {
       return NextResponse.json(
-        { error: 'Rating must be between 1 and 5' },
+        { error: 'Video URL is required' },
         { status: 400 }
       );
     }
@@ -164,7 +158,8 @@ export async function POST(
       userEmail: session.user.email,
       type,
       status: 'pending', // Requires admin approval
-      rating: type === 'rating' ? rating : undefined,
+      videoUrl: type === 'video' ? videoUrl.trim() : undefined,
+      videoCaption: type === 'video' ? videoCaption?.trim() || undefined : undefined,
       comment: type === 'comment' ? comment.trim() : undefined,
       photoUrl: type === 'photo' ? photoUrl.trim() : undefined,
       photoCaption: type === 'photo' ? photoCaption?.trim() || undefined : undefined,

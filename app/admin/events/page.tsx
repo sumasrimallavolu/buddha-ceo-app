@@ -170,7 +170,7 @@ export default function EventsPage() {
                 <TableHead className="text-slate-400 font-medium">Type</TableHead>
                 <TableHead className="text-slate-400 font-medium">Dates</TableHead>
                 <TableHead className="text-slate-400 font-medium">Status</TableHead>
-                <TableHead className="text-slate-400 font-medium">Registrations</TableHead>
+                {/* <TableHead className="text-slate-400 font-medium">Registrations</TableHead> */}
                 <TableHead className="text-slate-400 font-medium text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -207,13 +207,13 @@ export default function EventsPage() {
                           {statusBadge.label}
                         </div>
                       </TableCell>
-                      <TableCell className="text-slate-400">
+                      {/* <TableCell className="text-slate-400">
                         <div className="flex items-center gap-2">
                           <Users className="h-4 w-4" />
                           {event.currentRegistrations}
                           {event.maxParticipants && ` / ${event.maxParticipants}`}
                         </div>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>

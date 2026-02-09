@@ -11,7 +11,7 @@ import { Mentors } from '@/components/about/Mentors';
 import { SteeringCommittee } from '@/components/about/SteeringCommittee';
 import { Services } from '@/components/about/Services';
 import { Partners } from '@/components/about/Partners';
-import { Loader2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface AboutData {
   whoWeAre: any;
@@ -86,10 +86,22 @@ export default function AboutPage() {
     return (
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <Loader2 className="w-16 h-16 animate-spin text-blue-600 mx-auto mb-4" />
-            <p className="text-slate-400 text-lg">Loading...</p>
+        <div className="flex-1">
+          <div className="container mx-auto px-4 py-16 space-y-24">
+            <Skeleton className="h-32 w-96 mx-auto" />
+            <div className="space-y-6">
+              <Skeleton className="h-24 w-full max-w-4xl mx-auto" />
+              <Skeleton className="h-24 w-full max-w-4xl mx-auto" />
+              <Skeleton className="h-24 w-full max-w-4xl mx-auto" />
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-16 w-64 mx-auto" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <Skeleton key={i} className="h-48 w-full rounded-2xl" />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
         <Footer />

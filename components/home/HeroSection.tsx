@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Play, Sparkles, Star, Loader2, Calendar, Clock } from 'lucide-react';
+import { ArrowRight, Play, Sparkles, Star, Calendar, Clock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface Event {
@@ -85,14 +85,14 @@ export function HeroSection() {
           loop
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920"
+          poster="https://i.pinimg.com/736x/1a/ae/25/1aae257b99319cf659fce88e9a50c265.jpg"
         >
           <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-blue-flowers-1173-large.mp4"
+            src="https://i.pinimg.com/736x/61/79/8a/61798a14ac09807a9e8e630c031f5c5c.jpg"
             type="video/mp4"
           />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-900/70 to-slate-950/80" />
+        <div className="absolute inset-0" />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20 lg:py-24">

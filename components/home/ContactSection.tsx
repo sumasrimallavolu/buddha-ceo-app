@@ -3,7 +3,8 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Mail, Phone, MapPin, Send, Clock, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Clock, CheckCircle, ExternalLink } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function ContactSectionContent() {
   const searchParams = useSearchParams();
@@ -122,14 +123,14 @@ function ContactSectionContent() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="text-white font-bold mb-1">Email Us</h4>
-                  <p className="text-slate-400 text-sm font-medium mb-0.5">info@meditation.org</p>
+                  <p className="text-slate-400 text-sm font-medium mb-0.5">help@buddhaceo.org</p>
                   <p className="text-slate-500 text-xs">We reply within 24 hours</p>
                 </div>
               </div>
             </motion.a>
 
             <motion.a
-              href="tel:+919876543210"
+              href="tel:+91 9606957285/84"
               whileHover={{ scale: 1.02, x: 5 }}
               className="block bg-slate-800 rounded-2xl p-5 border border-slate-700 hover:border-blue-600 transition-all duration-300"
             >
@@ -139,7 +140,7 @@ function ContactSectionContent() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="text-white font-bold mb-1">Call Us</h4>
-                  <p className="text-slate-400 text-sm font-medium mb-0.5">+91 98765 43210</p>
+                  <p className="text-slate-400 text-sm font-medium mb-0.5">+91 9606957285/84</p>
                   <p className="text-slate-500 text-xs">Mon-Sat, 9AM-6PM IST</p>
                 </div>
               </div>
@@ -149,20 +150,49 @@ function ContactSectionContent() {
               whileHover={{ scale: 1.02, x: 5 }}
               className="block bg-slate-800 rounded-2xl p-5 border border-slate-700 hover:border-blue-600 transition-all duration-300"
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 mb-3">
                 <div className="w-14 h-14 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="text-white font-bold mb-1">Visit Us</h4>
-                  <p className="text-slate-400 text-sm font-medium mb-0.5">Meditation Center, Bangalore</p>
-                  <p className="text-slate-500 text-xs">By appointment only</p>
+                  <p className="text-slate-400 text-sm font-medium mb-0.5">MAXVY Technologies Pvt Ltd</p>
+                  <p className="text-slate-500 text-xs">No. 1144, 2nd floor, 22nd A Main Rd, 2nd Sector, Parangi Palaya, Sector 2, HSR Layout, Bengaluru, Karnataka 560102</p>
                 </div>
               </div>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=No.+1144+2nd+floor+22nd+A+Main+Rd+2nd+Sector+Parangi+Palaya+Sector+2+HSR+Layout+Bengaluru+Karnataka+560102"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Open in Google Maps
+              </a>
+            </motion.div>
+
+            {/* Google Maps Embed */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="rounded-2xl overflow-hidden border border-slate-700"
+            >
+              <iframe
+                src="https://www.google.com/maps?q=No.+1144+2nd+floor+22nd+A+Main+Rd+2nd+Sector+Parangi+Palaya+Sector+2+HSR+Layout+Bengaluru+Karnataka+560102&output=embed"
+                width="100%"
+                height="250"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="grayscale hover:grayscale-0 transition-all duration-300"
+              />
             </motion.div>
 
             {/* Office Hours */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -176,7 +206,7 @@ function ContactSectionContent() {
               <p className="text-slate-400 text-sm mb-2">Monday - Saturday</p>
               <p className="text-white text-lg font-semibold">9:00 AM - 6:00 PM IST</p>
               <p className="text-slate-500 text-xs mt-3">Closed on Sundays and public holidays</p>
-            </motion.div>
+            </motion.div> */}
           </div>
 
           {/* Contact Form */}
@@ -318,8 +348,21 @@ export function ContactSection() {
     <Suspense fallback={
       <section className="py-16 bg-slate-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="text-slate-400">Loading...</div>
+          <div className="text-center max-w-4xl mx-auto mb-12">
+            <Skeleton className="h-10 w-64 mx-auto mb-4" />
+            <Skeleton className="h-6 w-96 mx-auto" />
+          </div>
+          <div className="grid lg:grid-cols-5 gap-8 max-w-7xl mx-auto">
+            <div className="lg:col-span-2 space-y-4">
+              <Skeleton className="h-7 w-40 mb-6" />
+              {[...Array(3)].map((_, i) => (
+                <Skeleton key={i} className="h-28 w-full rounded-2xl" />
+              ))}
+              <Skeleton className="h-56 w-full rounded-2xl" />
+            </div>
+            <div className="lg:col-span-3">
+              <Skeleton className="h-[600px] w-full rounded-3xl" />
+            </div>
           </div>
         </div>
       </section>

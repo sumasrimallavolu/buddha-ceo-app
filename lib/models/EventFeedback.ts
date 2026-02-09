@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-export type FeedbackType = 'rating' | 'comment' | 'photo';
+export type FeedbackType = 'video' | 'comment' | 'photo';
 export type FeedbackStatus = 'pending' | 'approved' | 'rejected';
 
 export interface IEventFeedback {
@@ -11,8 +11,9 @@ export interface IEventFeedback {
   type: FeedbackType;
   status: FeedbackStatus;
 
-  // For rating feedback
-  rating?: number; // 1-5 stars
+  // For video feedback
+  videoUrl?: string;
+  videoCaption?: string;
 
   // For comment feedback
   comment?: string;
@@ -57,7 +58,7 @@ const EventFeedbackSchema = new Schema<IEventFeedbackDocument>(
     },
     type: {
       type: String,
-      enum: ['rating', 'comment', 'photo'],
+      enum: ['video', 'comment', 'photo'],
       required: [true, 'Feedback type is required'],
     },
     status: {
@@ -67,12 +68,16 @@ const EventFeedbackSchema = new Schema<IEventFeedbackDocument>(
       required: true,
     },
 
-    // Rating fields
-    rating: {
-      type: Number,
-      min: 1,
-      max: 5,
+    // Video fields
+    videoUrl: {
+      type: String,
       default: null,
+      trim: true,
+    },
+    videoCaption: {
+      type: String,
+      default: null,
+      trim: true,
     },
 
     // Comment fields

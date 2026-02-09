@@ -7,8 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Book, Video, FileText, ExternalLink, Download, Loader2, Quote } from 'lucide-react';
+import { Book, Video, FileText, ExternalLink, Download, Quote } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Book {
   _id: string;
@@ -40,7 +42,7 @@ interface Magazine {
   order: number;
 }
 
-interface Link {
+interface ResourceLink {
   _id: string;
   title: string;
   description: string;
@@ -57,6 +59,9 @@ interface Blog {
   thumbnailUrl?: string;
   category: string;
   order: number;
+  content?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface Testimonial {
@@ -76,7 +81,7 @@ interface ResourcesResponse {
     books: Book[];
     videos: VideoResource[];
     magazines: Magazine[];
-    links: Link[];
+    links: ResourceLink[];
     blogs: any[];
     testimonials: Testimonial[];
   };
@@ -119,8 +124,50 @@ export default function ResourcesPage() {
     return (
       <div className="min-h-screen flex flex-col bg-slate-950">
         <Header />
-        <main className="flex-1 flex items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-400" />
+        <main className="flex-1">
+          <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-slate-950">
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+              <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+            </div>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-16">
+              <Skeleton className="h-10 w-48 mx-auto mb-6 rounded-full" />
+              <Skeleton className="h-16 w-64 mx-auto mb-6" />
+              <Skeleton className="h-6 w-96 mx-auto mb-4" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto mt-12">
+                {[...Array(6)].map((_, i) => (
+                  <Skeleton key={i} className="h-20 w-full rounded-xl" />
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="py-16 bg-slate-950">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12">
+                <Skeleton className="h-12 w-80 mx-auto" />
+              </div>
+              <div className="flex flex-wrap justify-center gap-2 mb-8">
+                {[...Array(6)].map((_, i) => (
+                  <Skeleton key={i} className="h-12 w-32 rounded-lg" />
+                ))}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="border border-white/10 bg-white/5 rounded-2xl overflow-hidden flex flex-col">
+                    <Skeleton className="aspect-[8/5] w-full" />
+                    <div className="p-4 space-y-2">
+                      <Skeleton className="h-6 w-3/4" />
+                      <Skeleton className="h-5 w-24" />
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-2/3" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         </main>
         <Footer />
       </div>
@@ -436,21 +483,21 @@ export default function ResourcesPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                       {resources.blogs.map((blog: Blog) => (
                         <Card key={blog._id} className="border border-white/10 bg-white/5 backdrop-blur-sm hover:border-blue-500/50 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/10 overflow-hidden flex flex-col">
+                          {blog.thumbnailUrl ? (
+                            <div className="relative aspect-[8/5] rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center mb-4 overflow-hidden group flex-shrink-0">
+                              <Image
+                                src={blog.thumbnailUrl}
+                                alt={blog.title}
+                                fill
+                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                              />
+                            </div>
+                          ) : (
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/20 mb-4 flex-shrink-0">
+                              <FileText className="h-7 w-7 text-blue-400" />
+                            </div>
+                          )}
                           <CardHeader className="p-4 pb-2">
-                            {blog.thumbnailUrl ? (
-                              <div className="relative aspect-[8/5] rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center mb-4 overflow-hidden group flex-shrink-0">
-                                <Image
-                                  src={blog.thumbnailUrl}
-                                  alt={blog.title}
-                                  fill
-                                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                />
-                              </div>
-                            ) : (
-                              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/20 mb-4 flex-shrink-0">
-                                <FileText className="h-7 w-7 text-blue-400" />
-                              </div>
-                            )}
                             <CardTitle className="text-lg text-white line-clamp-2 leading-tight">{blog.title}</CardTitle>
                             <Badge variant="secondary" className="bg-blue-500/20 text-blue-400 border-blue-400/30 w-fit mt-2">
                               {blog.category}
@@ -458,24 +505,16 @@ export default function ResourcesPage() {
                           </CardHeader>
                           <CardContent className="p-4 pt-2 flex-grow">
                             {blog.description && (
-                              <p className="text-slate-400 text-sm line-clamp-3">{blog.description}</p>
+                              <p className="text-slate-400 text-sm line-clamp-2 leading-relaxed">{blog.description}</p>
                             )}
                           </CardContent>
-                          {blog.linkUrl && (
-                            <CardFooter className="p-4 pt-0">
-                              <a
-                                href={blog.linkUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full"
-                              >
-                                <Button className="w-full bg-white/5 hover:bg-blue-600/20 border border-white/20 text-white hover:border-blue-500/50 transition-all" variant="outline">
-                                  <ExternalLink className="mr-2 h-4 w-4" />
-                                  Read Blog
-                                </Button>
-                              </a>
-                            </CardFooter>
-                          )}
+                          <CardFooter className="p-4 pt-0">
+                            <Link href={`/resources/blog/${blog._id}`} className="w-full">
+                              <Button className="w-full bg-white/5 hover:bg-blue-600/20 border border-white/20 text-white hover:border-blue-500/50 transition-all" variant="outline">
+                                Read Blog
+                              </Button>
+                            </Link>
+                          </CardFooter>
                         </Card>
                       ))}
                     </div>

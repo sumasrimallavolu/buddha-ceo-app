@@ -90,12 +90,12 @@ export function TransformationStories() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto mb-12"
         >
-          <span className="inline-block px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-semibold mb-4">
+          <span className="inline-block px-4 py-2 rounded-full bg-blue-500/20 text-blue-400 text-sm font-semibold mb-4">
             💬 Real Conversations
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
             Stories of{' '}
-            <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent">
               Transformation
             </span>
           </h2>
@@ -124,7 +124,7 @@ export function TransformationStories() {
                   whileTap={{ scale: 0.98 }}
                   className={`w-full text-left p-4 rounded-2xl transition-all duration-300 ${
                     activeStory === index
-                      ? 'bg-emerald-600 shadow-lg shadow-emerald-500/25'
+                      ? 'bg-blue-600 shadow-lg shadow-blue-500/25'
                       : 'bg-slate-800 hover:bg-slate-700 border border-slate-700'
                   }`}
                 >
@@ -154,7 +154,7 @@ export function TransformationStories() {
                       </p>
                       <div className="flex items-center gap-1 mt-1">
                         {[...Array(story.rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 text-blue-400 fill-blue-400" />
+                          <Star key={i} className="w-3 h-3 text-white fill-white" />
                         ))}
                       </div>
                     </div>
@@ -228,7 +228,7 @@ export function TransformationStories() {
                       <div
                         className={`px-4 py-3 rounded-2xl ${
                           message.sender === 'user'
-                            ? 'bg-emerald-600 text-white rounded-br-sm'
+                            ? 'bg-blue-600 text-white rounded-br-sm'
                             : 'bg-slate-700 text-slate-100 rounded-bl-sm'
                         }`}
                       >
@@ -245,7 +245,7 @@ export function TransformationStories() {
                     </div>
                     {message.sender === 'institute' && (
                       <div className="order-2 mr-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-900 flex items-center justify-center text-white text-xs font-bold">
                           MI
                         </div>
                       </div>
@@ -261,7 +261,7 @@ export function TransformationStories() {
                     onClick={() => setSelectedTab('chat')}
                     className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                       selectedTab === 'chat'
-                        ? 'bg-emerald-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
                     }`}
                   >
@@ -281,7 +281,7 @@ export function TransformationStories() {
                     onClick={() => setSelectedTab('after')}
                     className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                       selectedTab === 'after'
-                        ? 'bg-emerald-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
                     }`}
                   >
@@ -342,7 +342,7 @@ export function TransformationStories() {
                     )}
                     {activeStory === 2 && selectedTab === 'after' && (
                       <div>
-                        <div className="flex items-center gap-2 mb-2 text-emerald-400">
+                        <div className="flex items-center gap-2 mb-2 text-blue-400">
                           <span className="text-2xl">🌟</span>
                           <span className="font-semibold">After Transformation</span>
                         </div>
@@ -374,7 +374,7 @@ export function TransformationStories() {
               whileHover={{ scale: 1.05 }}
               className="text-center p-6 rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700"
             >
-              <div className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+              <div className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent">
                 {stat.value}
               </div>
               <div className="text-slate-400 text-sm mt-1">{stat.label}</div>

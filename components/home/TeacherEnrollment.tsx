@@ -95,7 +95,7 @@ export function TeacherEnrollment() {
                   onClick={() => setShowForm(true)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 rounded-full bg-gradient-to-r from-violet-600 to-emerald-600 text-white font-semibold shadow-lg hover:shadow-violet-500/25 transition-all duration-300 inline-flex items-center gap-2"
+                  className="px-8 py-3 rounded-full bg-gradient-to-r from-violet-600 to-blue-900 text-white font-semibold shadow-lg hover:shadow-violet-500/25 transition-all duration-300 inline-flex items-center gap-2"
                 >
                   <GraduationCap className="w-4 h-4" />
                   Apply to Teach

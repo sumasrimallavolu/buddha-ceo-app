@@ -350,3 +350,87 @@ html {
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background-color: rgba(59, 130, 246, 0.4);
 }
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+.scrollbar-hide:hover::-webkit-scrollbar {
+  display: none;  /* Still hidden on hover */
+}
+
+.scrollbar-hide:hover {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Blog Content Styles */
+.blog-content {
+  @apply text-slate-300 leading-relaxed;
+}
+
+.blog-content h2 {
+  @apply text-2xl font-bold text-white mt-8 mb-4;
+}
+
+.blog-content h3 {
+  @apply text-xl font-bold text-white mt-6 mb-3;
+} 
+
+.blog-content p {
+  @apply mb-4 leading-relaxed;
+}
+
+.blog-content a {
+  @apply text-blue-400 hover:text-blue-300 underline;
+}
+
+.blog-content strong {
+  @apply text-white font-semibold;
+}
+
+.blog-content em {
+  @apply italic;
+}
+
+.blog-content ul {
+  @apply list-disc list-inside mb-4 space-y-2;
+}
+
+.blog-content ol {
+  @apply list-decimal list-inside mb-4 space-y-2;
+}
+
+.blog-content li {
+  @apply text-slate-300;
+}
+
+.blog-content code {
+  @apply bg-slate-800 text-blue-300 px-2 py-1 rounded text-sm font-mono;
+}
+
+.blog-content pre {
+  @apply bg-slate-900 p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.blog-content pre code {
+  @apply bg-transparent p-0;
+}
+
+.blog-content blockquote {
+  @apply border-l-4 border-blue-500/30 pl-4 italic text-slate-400 mb-4;
+}
+
+.blog-content img {
+  @apply rounded-lg my-6;
+}
+
+.blog-content hr {
+  @apply border-white/10 my-8;
+}
