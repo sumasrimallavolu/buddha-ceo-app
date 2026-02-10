@@ -65,7 +65,7 @@ export function Header() {
                         disabled:pointer-events-none disabled:opacity-50
                         ${isActive
                           ? 'bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg shadow-blue-500/25 border border-blue-500/50'
-                          : 'bg-white/10 text-black-500 border-2 border-black/20 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white hover:shadow-lg hover:shadow-blue-500/25 hover:border-blue-500/50'
+                          : 'bg-white/10 text-black border-2 border-black/20 hover:bg-slate-200 hover:border-slate-300 hover:text-slate-900'
                         }
                       `}>
                         {item.name}
