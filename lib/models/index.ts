@@ -10,6 +10,7 @@ export { default as Subscriber } from './Subscriber';
 export { default as TeacherEnrollment } from './TeacherEnrollment';
 export { default as TeacherApplication } from './TeacherApplication';
 export { default as VolunteerApplication } from './VolunteerApplication';
+export { default as VolunteerOpportunity } from './VolunteerOpportunity';
 export { default as Photo } from './Photo';
 export { default as AboutPage } from './AboutPage';
 export { default as ActivityLog, logActivity } from './ActivityLog';
@@ -27,6 +28,7 @@ export type { ISubscriber, ISubscriberDocument, SubscriberStatus } from './Subsc
 export type { ITeacherEnrollment, ITeacherEnrollmentDocument, ApplicationStatus } from './TeacherEnrollment';
 export type { ITeacherApplication, ITeacherApplicationDocument } from './TeacherApplication';
 export type { IVolunteerApplication, IVolunteerApplicationDocument } from './VolunteerApplication';
+export type { IVolunteerOpportunity, IVolunteerOpportunityDocument, VolunteerType, VolunteerStatus, ICustomQuestion } from './VolunteerOpportunity';
 export type { IPhoto, IPhotoDocument } from './Photo';
 export type { IAboutPage, IAboutPageDocument } from './AboutPage';
 export type { IActivityLog, IActivityLogDocument } from './ActivityLog';

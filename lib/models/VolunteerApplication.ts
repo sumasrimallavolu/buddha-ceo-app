@@ -1,6 +1,8 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IVolunteerApplication {
+  opportunityId?: mongoose.Types.ObjectId;
+  opportunityTitle?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -15,6 +17,7 @@ export interface IVolunteerApplication {
   availability: string;
   whyVolunteer: string;
   skills: string;
+  customAnswers?: Map<string, string>;
   status: 'pending' | 'approved' | 'rejected' | 'contacted';
   createdAt: Date;
   updatedAt: Date;
@@ -24,6 +27,14 @@ export interface IVolunteerApplicationDocument extends IVolunteerApplication, Do
 
 const VolunteerApplicationSchema = new Schema<IVolunteerApplicationDocument>(
   {
+    opportunityId: {
+      type: Schema.Types.ObjectId,
+      ref: 'VolunteerOpportunity'
+    },
+    opportunityTitle: {
+      type: String,
+      default: null
+    },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true, sparse: true },
@@ -42,6 +53,11 @@ const VolunteerApplicationSchema = new Schema<IVolunteerApplicationDocument>(
     availability: { type: String, required: true },
     whyVolunteer: { type: String, required: true },
     skills: { type: String, required: true },
+    customAnswers: {
+      type: Map,
+      of: String,
+      default: new Map<string, string>()
+    },
     status: {
       type: String,
       enum: ['pending', 'approved', 'rejected', 'contacted'],
