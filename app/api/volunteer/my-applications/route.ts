@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
 
       // Get all applications and filter manually for case-insensitive email match
       const allApps = await VolunteerApplication.find({}).lean();
-      applications = allApps.filter((app: any) => {
+        applications = allApps.filter((app: any) => {
         // Match by userId OR case-insensitive email
         if (userId && app.userId?.toString() === userId) {
           return true;
@@ -71,12 +71,6 @@ export async function GET(request: NextRequest) {
 
       console.log('Found applications (case-insensitive):', applications.length);
     }
-
-    // Find all applications by this user
-    const applications = await VolunteerApplication
-      .find(query)
-      .sort({ createdAt: -1 })
-      .lean();
 
     console.log('Found applications:', applications.length);
     applications.forEach((app: any) => {
