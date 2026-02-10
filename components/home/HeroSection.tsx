@@ -110,7 +110,7 @@ export function HeroSection() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-white">
               Discover Inner Peace &{' '}
               <span className="relative">
-                <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent font-bold">
+                <span className="bg-gradient-to-r from-blue-600 via-blue-400 to-violet-400 bg-clip-text text-transparent font-bold">
                   Radiant Health
                 </span>
                 <svg className="absolute -bottom-2 left-0 w-full" height="10" viewBox="0 0 200 10">
@@ -121,11 +121,11 @@ export function HeroSection() {
                     fill="none"
                     className="opacity-50"
                   />
-                  <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <defs> 
+                     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#60a5fa" />
-                      <stop offset="50%" stopColor="#a78bfa" />
-                      <stop offset="100%" stopColor="#34d399" />
+                      <stop offset="100%" stopColor="#a78bfa" />
+
                     </linearGradient>
                   </defs>
                 </svg>
