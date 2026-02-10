@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { OtpInput } from '@/components/ui/OtpInput';
 import {
   Form,
   FormControl,
@@ -79,6 +80,10 @@ export default function EventRegisterPage() {
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
+  const [step, setStep] = useState<'details' | 'otp'>('details');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),
@@ -133,7 +138,67 @@ export default function EventRegisterPage() {
     }
   };
 
+  const handleSendOtp = async () => {
+    const data = form.getValues();
+    setSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const response = await fetch(`/api/events/${params.id}/register/send-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: data.email }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send verification code');
+      }
+
+      setOtpSent(true);
+      setStep('otp');
+      setSubmitStatus({
+        type: 'success',
+        message: 'Verification code sent to your email! Please check your inbox.',
+      });
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Failed to send verification code',
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setResending(true);
+    try {
+      await handleSendOtp();
+    } finally {
+      setResending(false);
+    }
+  };
+
   const onSubmit = async (data: RegistrationFormValues) => {
+    if (step === 'details') {
+      // First step: validate form and send OTP
+      await handleSendOtp();
+      return;
+    }
+
+    // Second step: verify OTP and submit registration
+    if (!otpCode || otpCode.length !== 6) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Please enter the 6-digit verification code',
+      });
+      return;
+    }
+
     setSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
@@ -143,7 +208,10 @@ export default function EventRegisterPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          otpCode,
+        }),
       });
 
       const result = await response.json();
@@ -167,6 +235,9 @@ export default function EventRegisterPage() {
       setAlreadyRegistered(true);
 
       form.reset();
+      setOtpCode('');
+      setStep('details');
+      setOtpSent(false);
     } catch (error) {
       setSubmitStatus({
         type: 'error',
@@ -683,16 +754,39 @@ export default function EventRegisterPage() {
                         </div>
                       </div>
 
+                      {/* OTP Input - Only show after OTP is sent */}
+                      {step === 'otp' && (
+                        <div className="pt-4">
+                          <OtpInput
+                            email={form.getValues('email')}
+                            otpCode={otpCode}
+                            onOtpChange={setOtpCode}
+                            onResendOtp={handleResendOtp}
+                            error={submitStatus.type === 'error' && otpCode.length === 6 ? submitStatus.message : undefined}
+                            resending={resending}
+                          />
+                        </div>
+                      )}
+
                       {/* Action Buttons */}
                       <div className="flex gap-3 pt-4">
                         <Button
                           type="button"
                           variant="outline"
                           className="flex-1 border-white/10 text-slate-300 hover:bg-white/5 hover:text-white"
-                          onClick={() => router.back()}
+                          onClick={() => {
+                            if (step === 'otp') {
+                              setStep('details');
+                              setOtpCode('');
+                              setOtpSent(false);
+                              setSubmitStatus({ type: null, message: '' });
+                            } else {
+                              router.back();
+                            }
+                          }}
                           disabled={submitting}
                         >
-                          Cancel
+                          {step === 'otp' ? 'Back' : 'Cancel'}
                         </Button>
                         <Button
                           type="submit"
@@ -702,10 +796,10 @@ export default function EventRegisterPage() {
                           {submitting ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Registering...
+                              {step === 'otp' ? 'Verifying...' : 'Sending Code...'}
                             </>
                           ) : (
-                            'Register Now'
+                            step === 'otp' ? 'Verify & Register' : 'Send Verification Code'
                           )}
                         </Button>
                       </div>

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import TeacherEnrollment from '@/lib/models/TeacherEnrollment';
+import { verifyOtp } from '@/lib/otp';
+import { sendTeacherApplicationConfirmation } from '@/lib/email-helpers';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,9 +28,10 @@ export async function POST(request: NextRequest) {
       teachingExperience,
       whyTeach,
       availability,
+      otpCode,
     } = body;
 
-    // Validate required fields
+    // Validate required fields (including OTP)
     if (
       !name ||
       !firstName ||
@@ -43,10 +46,25 @@ export async function POST(request: NextRequest) {
       !education ||
       !meditationExperience ||
       !whyTeach ||
-      !availability
+      !availability ||
+      !otpCode
     ) {
       return NextResponse.json(
-        { error: 'All required fields must be filled' },
+        { error: 'All required fields must be filled, including verification code' },
+        { status: 400 }
+      );
+    }
+
+    // Verify OTP before creating enrollment
+    const otpVerification = await verifyOtp({
+      email,
+      code: otpCode,
+      purpose: 'teacher_enrollment',
+    });
+
+    if (!otpVerification.valid) {
+      return NextResponse.json(
+        { error: otpVerification.error || 'Invalid or expired verification code' },
         { status: 400 }
       );
     }
@@ -131,6 +149,26 @@ export async function POST(request: NextRequest) {
       availability,
       status: 'pending',
     });
+
+    // Send confirmation email
+    try {
+      await sendTeacherApplicationConfirmation({
+        firstName: application.firstName,
+        lastName: application.lastName,
+        email: application.email,
+        submittedAt: new Date().toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      });
+      console.log('✅ Teacher enrollment confirmation email sent');
+    } catch (emailError) {
+      console.error('❌ Failed to send teacher enrollment confirmation email:', emailError);
+      // Don't fail the enrollment if email fails
+    }
 
     // Return success response
     return NextResponse.json(

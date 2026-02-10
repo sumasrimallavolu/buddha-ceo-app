@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { OtpInput } from '@/components/ui/OtpInput';
 import { Loader2, CheckCircle2, GraduationCap, User, Mail, Phone, MapPin, Briefcase, Clock } from 'lucide-react';
 import {
   Select,
@@ -46,6 +47,10 @@ export default function TeachPage() {
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
+  const [step, setStep] = useState<'details' | 'otp'>('details');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const form = useForm<TeacherEnrollmentFormValues>({
     resolver: zodResolver(teacherEnrollmentSchema),
@@ -67,7 +72,68 @@ export default function TeachPage() {
     },
   });
 
+  const handleSendOtp = async () => {
+    const data = form.getValues();
+    
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const response = await fetch('/api/teacher-enrollment/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: data.email }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send verification code');
+      }
+
+      setOtpSent(true);
+      setStep('otp');
+      setSubmitStatus({
+        type: 'success',
+        message: 'Verification code sent to your email! Please check your inbox.',
+      });
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Failed to send verification code',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setResending(true);
+    try {
+      await handleSendOtp();
+    } finally {
+      setResending(false);
+    }
+  };
+
   const onSubmit = async (data: TeacherEnrollmentFormValues) => {
+    if (step === 'details') {
+      // First step: validate form and send OTP
+      await handleSendOtp();
+      return;
+    }
+
+    // Second step: verify OTP and submit enrollment
+    if (!otpCode || otpCode.length !== 6) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Please enter the 6-digit verification code',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
@@ -80,6 +146,7 @@ export default function TeachPage() {
         body: JSON.stringify({
           ...data,
           name: `${data.firstName} ${data.lastName}`,
+          otpCode,
         }),
       });
 
@@ -95,6 +162,9 @@ export default function TeachPage() {
       });
 
       form.reset();
+      setOtpCode('');
+      setStep('details');
+      setOtpSent(false);
     } catch (error) {
       setSubmitStatus({
         type: 'error',
@@ -391,20 +461,53 @@ export default function TeachPage() {
                     </div>
                   </div>
 
-                  <Button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg hover:shadow-xl hover:shadow-primary/25 transition-all"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Submitting Application...
-                      </>
-                    ) : (
-                      'Submit Application'
+                  {/* OTP Input - Only show after OTP is sent */}
+                  {step === 'otp' && (
+                    <div>
+                      <OtpInput
+                        email={form.getValues('email')}
+                        otpCode={otpCode}
+                        onOtpChange={setOtpCode}
+                        onResendOtp={handleResendOtp}
+                        error={submitStatus.type === 'error' && otpCode.length === 6 ? submitStatus.message : undefined}
+                        resending={resending}
+                      />
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-4">
+                    {step === 'otp' && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setStep('details');
+                          setOtpCode('');
+                          setOtpSent(false);
+                          setSubmitStatus({ type: null, message: '' });
+                        }}
+                        disabled={isSubmitting}
+                        className="flex-1"
+                      >
+                        Back
+                      </Button>
                     )}
-                  </Button>
+                    <Button
+                      type="submit"
+                      className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-lg hover:shadow-xl hover:shadow-primary/25 transition-all"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          {step === 'otp' ? 'Verifying...' : 'Sending Code...'}
+                        </>
+                      ) : (
+                        step === 'otp' ? 'Verify & Submit' : 'Send Verification Code'
+                      )}
+                    </Button>
+                  </div>
 
                   <p className="text-xs text-muted-foreground text-center">
                     By submitting this application, you agree to our review process. We will contact you within 5-7 business days.

@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import Event from '@/lib/models/Event';
 import Registration from '@/lib/models/Registration';
 
+import { verifyOtp } from '@/lib/otp';
+import { sendEventRegistrationConfirmation } from '@/lib/email-helpers';
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -17,12 +20,12 @@ export async function POST(
 
     const { id: eventId } = await params;
     const body = await request.json();
-    const { name, email, phone, city, profession } = body;
+    const { name, email, phone, city, profession, otpCode } = body;
 
     // Validate required fields
-    if (!name || !email || !phone) {
+    if (!name || !email || !phone || !otpCode) {
       return NextResponse.json(
-        { error: 'Name, email, and phone are required' },
+        { error: 'Name, email, phone, and verification code are required' },
         { status: 400 }
       );
     }
@@ -32,6 +35,20 @@ export async function POST(
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
+        { status: 400 }
+      );
+    }
+
+    // Verify OTP before creating registration
+    const otpVerification = await verifyOtp({
+      email,
+      code: otpCode,
+      purpose: 'event_registration',
+    });
+
+    if (!otpVerification.valid) {
+      return NextResponse.json(
+        { error: otpVerification.error || 'Invalid or expired verification code' },
         { status: 400 }
       );
     }
@@ -91,6 +108,44 @@ export async function POST(
     await Event.findByIdAndUpdate(eventId, {
       $inc: { currentRegistrations: 1 },
     });
+
+    // Send confirmation email
+    try {
+      const startDate = new Date(event.startDate);
+      const endDate = new Date(event.endDate);
+      
+      await sendEventRegistrationConfirmation({
+        name: registration.name,
+        email: registration.email,
+        eventTitle: event.title,
+        eventDate: startDate.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        eventTime: startDate.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }) + ' - ' + endDate.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+        eventLocation: event.location?.online 
+          ? 'Online Event (Link will be sent 24 hours before)' 
+          : `${event.location?.venue || 'TBA'}${event.location?.city ? ', ' + event.location.city : ''}`,
+        isOnline: event.location?.online || false,
+        registeredAt: new Date().toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        }),
+      });
+      console.log('✅ Event registration confirmation email sent');
+    } catch (emailError) {
+      console.error('❌ Failed to send event confirmation email:', emailError);
+      // Don't fail the registration if email fails
+    }
 
     // Return success response
     return NextResponse.json(

@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Loader2, ArrowLeft, CheckCircle2, UserPlus, Shield, Eye } from 'lucide-react';
 import Link from 'next/link';
 
 export default function NewUserPage() {
@@ -94,30 +94,38 @@ export default function NewUserPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-2xl px-6">
+    <div className="space-y-6 max-w-4xl mx-auto px-4 py-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/admin/users">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
+          <Button variant="ghost" size="icon" className="rounded-full">
+            <ArrowLeft className="h-5 w-5" />
           </Button>
         </Link>
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Create New User</h1>
-          <p className="mt-2 text-gray-600">
-            Add a new user to the meditation institute
-          </p>
+        <div className="flex-1">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-blue-500/10">
+              <UserPlus className="h-6 w-6 text-blue-500" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Create New User</h1>
+              <p className="text-sm text-slate-400">
+                Add a new user to the admin panel
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
+      {/* Alerts */}
       {error && (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="bg-red-500/10 border-red-500/30 text-red-400">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
       {success && (
-        <Alert className="border-green-500 bg-green-50 text-green-700">
+        <Alert className="bg-green-500/10 border-green-500/30 text-green-400">
           <CheckCircle2 className="h-4 w-4" />
           <AlertDescription>
             User created successfully! Redirecting...
@@ -125,176 +133,259 @@ export default function NewUserPage() {
         </Alert>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>User Information</CardTitle>
-          <CardDescription>
-            Fill in the details for the new user account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Name */}
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name *</Label>
-              <Input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="John Doe"
-                required
-              />
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* User Information Card */}
+        <Card className="bg-white/5 border-white/10">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <UserPlus className="h-5 w-5 text-blue-400" />
+              <CardTitle className="text-white">User Information</CardTitle>
+            </div>
+            <CardDescription className="text-slate-400">
+              Basic user details and credentials
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Name */}
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-white">
+                  Full Name <span className="text-red-400">*</span>
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="John Doe"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                  required
+                />
+              </div>
+
+              {/* Email */}
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-white">
+                  Email Address <span className="text-red-400">*</span>
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="john.doe@example.com"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                  required
+                />
+              </div>
             </div>
 
-            {/* Email */}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address *</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="john.doe@example.com"
-                required
-              />
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Password */}
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-white">
+                  Password <span className="text-red-400">*</span>
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="••••••••"
+                  className="bg-white/5 border-white/10 text-white"
+                  required
+                  minLength={6}
+                />
+                <p className="text-xs text-slate-500">
+                  Must be at least 6 characters
+                </p>
+              </div>
 
-            {/* Role */}
+              {/* Confirm Password */}
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-white">
+                  Confirm Password <span className="text-red-400">*</span>
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  placeholder="••••••••"
+                  className="bg-white/5 border-white/10 text-white"
+                  required
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Role & Permissions Card */}
+        <Card className="bg-white/5 border-white/10">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-purple-400" />
+              <CardTitle className="text-white">Role & Permissions</CardTitle>
+            </div>
+            <CardDescription className="text-slate-400">
+              Assign user role and access level
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Role Selection */}
             <div className="space-y-2">
-              <Label htmlFor="role">Role *</Label>
+              <Label htmlFor="role" className="text-white">
+                Role <span className="text-red-400">*</span>
+              </Label>
               <Select
                 value={formData.role}
                 onValueChange={(value) => setFormData({ ...formData, role: value })}
               >
-                <SelectTrigger id="role">
+                <SelectTrigger id="role" className="bg-white/5 border-white/10 text-white">
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="admin">
-                    <div className="flex flex-col">
-                      <span className="font-medium">Admin</span>
-                      <span className="text-xs text-muted-foreground">
-                        Full access to all features
-                      </span>
+                    <div className="flex items-center gap-2">
+                      <Shield className="h-4 w-4 text-red-500" />
+                      <div className="flex flex-col">
+                        <span className="font-medium">Admin</span>
+                        <span className="text-xs text-muted-foreground">
+                          Full access to all features
+                        </span>
+                      </div>
                     </div>
                   </SelectItem>
                   <SelectItem value="content_manager">
-                    <div className="flex flex-col">
-                      <span className="font-medium">Content Manager</span>
-                      <span className="text-xs text-muted-foreground">
-                        Create and edit content
-                      </span>
+                    <div className="flex items-center gap-2">
+                      <Eye className="h-4 w-4 text-blue-500" />
+                      <div className="flex flex-col">
+                        <span className="font-medium">Content Manager</span>
+                        <span className="text-xs text-muted-foreground">
+                          Create and edit content
+                        </span>
+                      </div>
                     </div>
                   </SelectItem>
                   <SelectItem value="content_reviewer">
-                    <div className="flex flex-col">
-                      <span className="font-medium">Content Reviewer</span>
-                      <span className="text-xs text-muted-foreground">
-                        Review and approve content
-                      </span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      <div className="flex flex-col">
+                        <span className="font-medium">Content Reviewer</span>
+                        <span className="text-xs text-muted-foreground">
+                          Review and approve content
+                        </span>
+                      </div>
                     </div>
                   </SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-muted-foreground">
-                {formData.role === 'admin' && 'Can create users, manage all content, and access all features.'}
-                {formData.role === 'content_manager' && 'Can create and edit content, submit for review.'}
-                {formData.role === 'content_reviewer' && 'Can review, approve, or reject submitted content.'}
-              </p>
             </div>
 
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password *</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                placeholder="••••••••"
-                required
-                minLength={6}
-              />
-              <p className="text-xs text-muted-foreground">
-                Must be at least 6 characters
-              </p>
-            </div>
-
-            {/* Confirm Password */}
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password *</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                placeholder="••••••••"
-                required
-              />
-            </div>
-
-            {/* Actions */}
-            <div className="flex gap-4 pt-4">
-              <Link href="/admin/users">
-                <Button type="button" variant="outline" disabled={loading}>
-                  Cancel
-                </Button>
-              </Link>
-              <Button
-                type="submit"
-                className="bg-blue-600"
-                disabled={loading}
-              >
-                {loading ? (
+            {/* Role Description */}
+            <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+              <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                {formData.role === 'admin' && <><Shield className="h-4 w-4 text-red-400" /> Admin Permissions</>}
+                {formData.role === 'content_manager' && <><Eye className="h-4 w-4 text-blue-400" /> Content Manager Permissions</>}
+                {formData.role === 'content_reviewer' && <><CheckCircle2 className="h-4 w-4 text-green-400" /> Content Reviewer Permissions</>}
+              </h4>
+              <ul className="space-y-2 text-sm text-slate-400">
+                {formData.role === 'admin' && (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating User...
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Create and manage user accounts
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Full access to all admin features
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Approve or reject any content
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Manage events, resources, and all content
+                    </li>
                   </>
-                ) : (
-                  'Create User'
                 )}
-              </Button>
+                {formData.role === 'content_manager' && (
+                  <>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Create and edit content
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Submit content for review
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      View own content
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-yellow-400 mt-0.5">!</span>
+                      Cannot publish without reviewer approval
+                    </li>
+                  </>
+                )}
+                {formData.role === 'content_reviewer' && (
+                  <>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Review submitted content
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Approve or reject content
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      View all content
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-400 mt-0.5">✓</span>
+                      Access to most admin features
+                    </li>
+                  </>
+                )}
+              </ul>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Role Information Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Role Permissions</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h4 className="font-semibold text-red-700">Admin</h4>
-            <ul className="mt-2 space-y-1 text-sm text-gray-600">
-              <li>• Create and manage user accounts</li>
-              <li>• Full access to all admin features</li>
-              <li>• Approve or reject any content</li>
-              <li>• Manage events, resources, and all content</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold text-emerald-700">Content Manager</h4>
-            <ul className="mt-2 space-y-1 text-sm text-gray-600">
-              <li>• Create and edit content</li>
-              <li>• Submit content for review</li>
-              <li>• View own content</li>
-              <li>• Cannot publish without reviewer approval</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold text-green-700">Content Reviewer</h4>
-            <ul className="mt-2 space-y-1 text-sm text-gray-600">
-              <li>• Review submitted content</li>
-              <li>• Approve or reject content</li>
-              <li>• View all content</li>
-              <li>• Access to most admin features</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
+        {/* Actions */}
+        <div className="flex gap-4 justify-end">
+          <Link href="/admin/users">
+            <Button 
+              type="button" 
+              variant="outline" 
+              disabled={loading}
+              className="border-white/10 text-white hover:bg-white/5"
+            >
+              Cancel
+            </Button>
+          </Link>
+          <Button
+            type="submit"
+            className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Creating User...
+              </>
+            ) : (
+              <>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Create User
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

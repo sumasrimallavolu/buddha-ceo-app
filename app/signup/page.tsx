@@ -21,6 +21,9 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isOtpStep, setIsOtpStep] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -33,8 +36,9 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setInfoMessage('');
 
-    // Validation
+    // Basic validation shared across steps
     if (!formData.name.trim() || !formData.email.trim() || !formData.password) {
       setError('All fields are required');
       return;
@@ -50,45 +54,76 @@ export default function SignUpPage() {
       return;
     }
 
+    // When on OTP step, require code
+    if (isOtpStep && !otpCode.trim()) {
+      setError('Please enter the verification code sent to your email');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // Create account
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create account');
-      }
-
-      setSuccess(true);
-
-      // Automatically sign in after successful signup
-      setTimeout(async () => {
-        const result = await signIn('credentials', {
-          email: formData.email.trim(),
-          password: formData.password,
-          redirect: false,
+      if (!isOtpStep) {
+        // Step 1: send OTP to email
+        const response = await fetch('/api/auth/signup/send-otp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email.trim(),
+          }),
         });
 
-        if (result?.ok) {
-          router.push('/dashboard');
-          router.refresh();
-        } else {
-          router.push('/login');
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to send verification code');
         }
-      }, 1500);
+
+        setIsOtpStep(true);
+        setInfoMessage(
+          'We sent a 6-digit verification code to your email. Please enter it below to complete signup.'
+        );
+      } else {
+        // Step 2: verify OTP and create account
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            password: formData.password,
+            otpCode: otpCode.trim(),
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to create account');
+        }
+
+        setSuccess(true);
+
+        // Automatically sign in after successful signup
+        setTimeout(async () => {
+          const result = await signIn('credentials', {
+            email: formData.email.trim(),
+            password: formData.password,
+            redirect: false,
+          });
+
+          if (result?.ok) {
+            router.push('/dashboard');
+            router.refresh();
+          } else {
+            router.push('/login');
+          }
+        }, 1500);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create account');
     } finally {
@@ -149,6 +184,13 @@ export default function SignUpPage() {
               {error && (
                 <Alert className="bg-red-500/10 border-red-500/30 text-red-400">
                   <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              {/* Info Alert for OTP step */}
+              {!error && infoMessage && (
+                <Alert className="bg-blue-500/10 border-blue-500/30 text-blue-300">
+                  <AlertDescription>{infoMessage}</AlertDescription>
                 </Alert>
               )}
 
@@ -235,6 +277,73 @@ export default function SignUpPage() {
                 </div>
               </div>
 
+              {/* OTP Field (shown after sending code) */}
+              {isOtpStep && (
+                <div className="space-y-2">
+                  <Label htmlFor="otpCode" className="text-white text-sm font-medium">
+                    Email Verification Code
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+                    <Input
+                      id="otpCode"
+                      name="otpCode"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="\d*"
+                      maxLength={6}
+                      placeholder="Enter 6-digit code"
+                      value={otpCode}
+                      onChange={(e) => {
+                        setOtpCode(e.target.value);
+                        setError('');
+                      }}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-blue-500 pl-10 tracking-[0.35em]"
+                      disabled={loading}
+                    />
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    We sent a code to <span className="font-medium text-slate-200">{formData.email || 'your email'}</span>. It is valid for 10 minutes.
+                  </p>
+                  <button
+                    type="button"
+                    className="text-xs text-blue-300 hover:text-blue-200 underline underline-offset-2"
+                    disabled={loading}
+                    onClick={async () => {
+                      setError('');
+                      setInfoMessage('');
+                      setLoading(true);
+                      try {
+                        const response = await fetch('/api/auth/signup/send-otp', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            email: formData.email.trim(),
+                          }),
+                        });
+                        const data = await response.json();
+                        if (!response.ok) {
+                          throw new Error(data.error || 'Failed to resend verification code');
+                        }
+                        setInfoMessage('We resent the verification code to your email.');
+                      } catch (err) {
+                        setError(
+                          err instanceof Error
+                            ? err.message
+                            : 'Failed to resend verification code'
+                        );
+                      } finally {
+                        setLoading(false);
+                      }
+                    }}
+                  >
+                    Resend code
+                  </button>
+                </div>
+              )}
+
               {/* Submit Button */}
               <Button
                 type="submit"
@@ -244,11 +353,11 @@ export default function SignUpPage() {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing Up...
+                    {isOtpStep ? 'Verifying...' : 'Sending Code...'}
                   </>
                 ) : (
                   <>
-                    Sign Up
+                    {isOtpStep ? 'Verify & Create Account' : 'Send Verification Code'}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 )}

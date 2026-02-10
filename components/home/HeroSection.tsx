@@ -133,7 +133,7 @@ export function HeroSection() {
             </h1>
 
             {/* Description */}
-            <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed pl-5  py-3 rounded-r-lg">
+            <p className="text-base sm:text-lg text-white max-w-2xl mx-auto leading-relaxed pl-5  py-3 rounded-r-lg">
             Join our meditation programs designed using science and ancient wisdom.
             Perfect for anyone seeking peace, clarity, and self-growth.
             </p>

@@ -15,6 +15,7 @@ export { default as Photo } from './Photo';
 export { default as AboutPage } from './AboutPage';
 export { default as ActivityLog, logActivity } from './ActivityLog';
 export { default as VisitorLog, logVisitor } from './VisitorLog';
+export { default as EmailOtp } from './EmailOtp';
 
 // Export types
 export type { IUser, IUserDocument } from './User';
@@ -33,3 +34,4 @@ export type { IPhoto, IPhotoDocument } from './Photo';
 export type { IAboutPage, IAboutPageDocument } from './AboutPage';
 export type { IActivityLog, IActivityLogDocument } from './ActivityLog';
 export type { IVisitorLog, IVisitorLogDocument } from './VisitorLog';
+export type { IEmailOtp, IEmailOtpDocument, OtpPurpose } from './EmailOtp';

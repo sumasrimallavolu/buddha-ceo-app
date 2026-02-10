@@ -13,7 +13,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, CheckCircle2, UserPlus } from 'lucide-react';
+import { Loader2, CheckCircle2, UserPlus, Shield, Eye } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import {
   Sheet,
   SheetContent,
@@ -136,13 +137,13 @@ export function UserCreateModal({
 
         <div className="flex-1 overflow-y-auto py-6 space-y-6">
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="bg-red-500/10 border-red-500/30 text-red-400">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
           {success && (
-            <Alert className="border-green-500 bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400">
+            <Alert className="bg-green-500/10 border-green-500/30 text-green-400">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
                 User created successfully!
@@ -150,121 +151,162 @@ export function UserCreateModal({
             </Alert>
           )}
 
-          {/* User Information */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
-              User Information
-            </h3>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name <span className="text-red-600">*</span></Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="John Doe"
-                />
+          {/* User Information Card */}
+          <Card className="bg-white/5 border-white/10">
+            <div className="p-4 space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b border-white/10">
+                <UserPlus className="h-4 w-4 text-blue-400" />
+                <h3 className="text-sm font-semibold text-white">User Information</h3>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address <span className="text-red-600">*</span></Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="john@example.com"
-                />
-              </div>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-white">
+                    Full Name <span className="text-red-400">*</span>
+                  </Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="John Doe"
+                    className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password <span className="text-red-600">*</span></Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="Minimum 6 characters"
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Password must be at least 6 characters
-                </p>
-              </div>
-            </div>
-          </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-white">
+                    Email Address <span className="text-red-400">*</span>
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="john@example.com"
+                    className="bg-white/5 border-white/10 text-white placeholder:text-slate-500"
+                  />
+                </div>
 
-          {/* Role & Permissions */}
-          <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
-              Role & Permissions
-            </h3>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="role">Role <span className="text-red-600">*</span></Label>
-                <Select
-                  value={formData.role}
-                  onValueChange={(value) => setFormData({ ...formData, role: value })}
-                >
-                  <SelectTrigger id="role">
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="content_manager">
-                      <div className="flex flex-col">
-                        <span className="font-medium">Content Manager</span>
-                        <span className="text-xs text-gray-500">
-                          Can create and edit content
-                        </span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="content_reviewer">
-                      <div className="flex flex-col">
-                        <span className="font-medium">Content Reviewer</span>
-                        <span className="text-xs text-gray-500">
-                          Can review and approve content
-                        </span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="admin">
-                      <div className="flex flex-col">
-                        <span className="font-medium">Admin</span>
-                        <span className="text-xs text-gray-500">
-                          Full system access
-                        </span>
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 space-y-2">
-                <p className="text-xs font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                  Role Permissions:
-                </p>
-                <div className="space-y-1 text-xs text-slate-400">
-                  <p>• <strong className="text-gray-900 dark:text-gray-200">Content Manager:</strong> Can create and edit content</p>
-                  <p>• <strong className="text-gray-900 dark:text-gray-200">Content Reviewer:</strong> Can review and approve/reject content</p>
-                  <p>• <strong className="text-gray-900 dark:text-gray-200">Admin:</strong> Full system access</p>
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-white">
+                    Password <span className="text-red-400">*</span>
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    placeholder="Minimum 6 characters"
+                    className="bg-white/5 border-white/10 text-white"
+                  />
+                  <p className="text-xs text-slate-500">
+                    Password must be at least 6 characters
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
+          </Card>
+
+          {/* Role & Permissions Card */}
+          <Card className="bg-white/5 border-white/10">
+            <div className="p-4 space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b border-white/10">
+                <Shield className="h-4 w-4 text-purple-400" />
+                <h3 className="text-sm font-semibold text-white">Role & Permissions</h3>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="role" className="text-white">
+                    Role <span className="text-red-400">*</span>
+                  </Label>
+                  <Select
+                    value={formData.role}
+                    onValueChange={(value) => setFormData({ ...formData, role: value })}
+                  >
+                    <SelectTrigger id="role" className="bg-white/5 border-white/10 text-white">
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="admin">
+                        <div className="flex items-center gap-2">
+                          <Shield className="h-4 w-4 text-red-500" />
+                          <div className="flex flex-col">
+                            <span className="font-medium">Admin</span>
+                            <span className="text-xs text-gray-500">Full system access</span>
+                          </div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="content_manager">
+                        <div className="flex items-center gap-2">
+                          <Eye className="h-4 w-4 text-blue-500" />
+                          <div className="flex flex-col">
+                            <span className="font-medium">Content Manager</span>
+                            <span className="text-xs text-gray-500">Can create and edit content</span>
+                          </div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="content_reviewer">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <div className="flex flex-col">
+                            <span className="font-medium">Content Reviewer</span>
+                            <span className="text-xs text-gray-500">Can review and approve content</span>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                  <p className="text-xs font-semibold text-white mb-2">
+                    {formData.role === 'admin' && 'Admin Permissions:'}
+                    {formData.role === 'content_manager' && 'Content Manager Permissions:'}
+                    {formData.role === 'content_reviewer' && 'Content Reviewer Permissions:'}
+                  </p>
+                  <div className="space-y-1 text-xs text-slate-400">
+                    {formData.role === 'admin' && (
+                      <>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> Full system access</p>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> Manage all users</p>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> Approve/reject content</p>
+                      </>
+                    )}
+                    {formData.role === 'content_manager' && (
+                      <>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> Create and edit content</p>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> Submit for review</p>
+                        <p className="flex items-start gap-1"><span className="text-yellow-400">!</span> Needs reviewer approval</p>
+                      </>
+                    )}
+                    {formData.role === 'content_reviewer' && (
+                      <>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> Review content</p>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> Approve/reject content</p>
+                        <p className="flex items-start gap-1"><span className="text-green-400">✓</span> View all content</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
         </div>
 
-        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-gray-200 dark:border-gray-700 pt-6">
+        <SheetFooter className="flex-col gap-3 sm:flex-row border-t border-white/10 pt-6">
           <Button
             type="button"
             variant="outline"
             onClick={() => setIsOpen(false)}
             disabled={loading || success}
+            className="border-white/10 text-white hover:bg-white/5"
           >
             Cancel
           </Button>
           <Button
             type="button"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white"
             onClick={handleSubmit}
             disabled={loading || success}
           >

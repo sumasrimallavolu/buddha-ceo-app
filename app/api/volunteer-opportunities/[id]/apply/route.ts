@@ -5,6 +5,8 @@ import VolunteerOpportunity from '@/lib/models/VolunteerOpportunity';
 import VolunteerApplication from '@/lib/models/VolunteerApplication';
 import connectDB from '@/lib/mongodb';
 import mongoose from 'mongoose';
+import { verifyOtp } from '@/lib/otp';
+import { sendVolunteerApplicationConfirmation } from '@/lib/email-helpers';
 
 // Helper function to validate MongoDB ObjectId
 function isValidObjectId(id: string): boolean {
@@ -61,7 +63,7 @@ export async function POST(
       );
     }
 
-    // Validate required fields
+    // Validate required fields (including OTP)
     const requiredFields = [
       'firstName',
       'lastName',
@@ -75,7 +77,8 @@ export async function POST(
       'experience',
       'availability',
       'whyVolunteer',
-      'skills'
+      'skills',
+      'otpCode'
     ];
 
     for (const field of requiredFields) {
@@ -85,6 +88,20 @@ export async function POST(
           { status: 400 }
         );
       }
+    }
+
+    // Verify OTP before creating application
+    const otpVerification = await verifyOtp({
+      email: String(body.email),
+      code: String(body.otpCode),
+      purpose: 'volunteer_application',
+    });
+
+    if (!otpVerification.valid) {
+      return NextResponse.json(
+        { error: otpVerification.error || 'Invalid or expired verification code' },
+        { status: 400 }
+      );
     }
 
     // Validate email format
@@ -212,6 +229,27 @@ export async function POST(
     console.log('Application created with ID:', application._id);
     console.log('Stored userId:', application.userId);
     console.log('Stored email:', application.email);
+
+    // Send confirmation email
+    try {
+      await sendVolunteerApplicationConfirmation({
+        firstName: application.firstName,
+        lastName: application.lastName,
+        email: application.email,
+        opportunityTitle: opportunity.title,
+        submittedAt: new Date().toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      });
+      console.log('✅ Volunteer application confirmation email sent');
+    } catch (emailError) {
+      console.error('❌ Failed to send volunteer confirmation email:', emailError);
+      // Don't fail the application if email fails
+    }
 
     return NextResponse.json(
       {

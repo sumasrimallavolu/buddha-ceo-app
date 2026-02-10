@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import mongoose from 'mongoose';
 import connectDB from '@/lib/mongodb';
 import { User, logActivity } from '@/lib/models';
+import { verifyOtp } from '@/lib/otp';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, password } = body;
+    const { name, email, password, otpCode } = body as {
+      name?: string;
+      email?: string;
+      password?: string;
+      otpCode?: string;
+    };
 
     // Validate input
     if (!name || !email || !password) {
@@ -17,9 +22,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!otpCode) {
+      return NextResponse.json(
+        { error: 'Verification code is required' },
+        { status: 400 }
+      );
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(normalizedEmail)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
@@ -34,16 +48,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Connect to database
+    // Ensure database connection
     await connectDB();
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
     if (existingUser) {
       return NextResponse.json(
         { error: 'Email already registered' },
         { status: 409 }
+      );
+    }
+
+    // Verify OTP before creating account
+    const { valid, error: otpError } = await verifyOtp({
+      email: normalizedEmail,
+      code: otpCode,
+      purpose: 'signup',
+    });
+
+    if (!valid) {
+      return NextResponse.json(
+        { error: otpError || 'Invalid verification code' },
+        { status: 400 }
       );
     }
 
@@ -55,7 +83,7 @@ export async function POST(request: NextRequest) {
     try {
       user = await User.create({
         name: name.trim(),
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         password: hashedPassword,
         role: 'user',
       });

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CheckCircle, Loader2, User, Mail, Phone, Heart } from 'lucide-react';
 import { CustomQuestion } from '@/types/volunteer';
+import { OtpInput } from '@/components/ui/OtpInput';
 
 interface FormData {
   firstName: string;
@@ -55,6 +56,11 @@ export function VolunteerApplicationForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData | string, string>>>({});
+  const [step, setStep] = useState<'details' | 'otp'>('details');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [otpError, setOtpError] = useState('');
 
   // Initialize custom answers when questions change
   useEffect(() => {
@@ -152,12 +158,60 @@ export function VolunteerApplicationForm({
     handleCustomAnswerChange(questionId, JSON.stringify(newOptions));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSendOtp = async () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setOtpError('');
+
+    try {
+      const response = await fetch(`/api/volunteer-opportunities/${opportunityId}/apply/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send verification code');
+      }
+
+      setOtpSent(true);
+      setStep('otp');
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      setOtpError(error instanceof Error ? error.message : 'Failed to send verification code');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setResending(true);
+    try {
+      await handleSendOtp();
+    } finally {
+      setResending(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (step === 'details') {
+      await handleSendOtp();
+      return;
+    }
+
+    // Verify OTP
+    if (!otpCode || otpCode.length !== 6) {
+      setOtpError('Please enter the 6-digit verification code');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setOtpError('');
 
     try {
       const response = await fetch(`/api/volunteer-opportunities/${opportunityId}/apply`, {
@@ -165,7 +219,8 @@ export function VolunteerApplicationForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          age: parseInt(formData.age)
+          age: parseInt(formData.age),
+          otpCode
         })
       });
 
@@ -178,11 +233,11 @@ export function VolunteerApplicationForm({
           router.push('/');
         }, 3000);
       } else {
-        alert(data.error || 'Failed to submit application. Please try again.');
+        setOtpError(data.error || 'Failed to submit application. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting application:', error);
-      alert('Failed to submit application. Please try again.');
+      setOtpError('Failed to submit application. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -545,26 +600,59 @@ export function VolunteerApplicationForm({
         </div>
       )}
 
-      {/* Submit Button */}
-      <motion.button
-        type="submit"
-        disabled={isSubmitting}
-        whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-        whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-        className="w-full px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-      >
-        {isSubmitting ? (
-          <>
-            <Loader2 className="w-5 h-5 animate-spin" />
-            Submitting...
-          </>
-        ) : (
-          <>
-            <Heart className="w-5 h-5" />
-            Submit Application
-          </>
+      {/* OTP Input - Only show after OTP is sent */}
+      {step === 'otp' && (
+        <div className="pb-6">
+          <OtpInput
+            email={formData.email}
+            otpCode={otpCode}
+            onOtpChange={setOtpCode}
+            onResendOtp={handleResendOtp}
+            error={otpError}
+            resending={resending}
+          />
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex gap-4">
+        {step === 'otp' && (
+          <motion.button
+            type="button"
+            onClick={() => {
+              setStep('details');
+              setOtpCode('');
+              setOtpSent(false);
+              setOtpError('');
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            disabled={isSubmitting}
+            className="px-8 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Back
+          </motion.button>
         )}
-      </motion.button>
+        <motion.button
+          type="submit"
+          disabled={isSubmitting}
+          whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+          whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+          className="flex-1 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              {step === 'otp' ? 'Verifying...' : 'Sending Code...'}
+            </>
+          ) : (
+            <>
+              <Heart className="w-5 h-5" />
+              {step === 'otp' ? 'Verify & Submit' : 'Send Verification Code'}
+            </>
+          )}
+        </motion.button>
+      </div>
     </form>
   );
 }
