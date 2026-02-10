@@ -32,8 +32,8 @@ export interface VolunteerOpportunity {
 
 export interface VolunteerApplication {
   _id: string;
-  opportunityId: string;
-  opportunityTitle: string;
+  opportunityId?: string; // ObjectId stored as string
+  opportunityTitle?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -48,7 +48,8 @@ export interface VolunteerApplication {
   availability: string;
   whyVolunteer: string;
   skills: string;
-  customAnswers?: Record<string, string>;
-  status: 'pending' | 'approved' | 'rejected';
+  customAnswers?: Map<string, string>; // Changed from Record to Map
+  status: 'pending' | 'approved' | 'rejected' | 'contacted'; // Added 'contacted'
   createdAt: string;
+  updatedAt?: string; // Added missing field
 }
