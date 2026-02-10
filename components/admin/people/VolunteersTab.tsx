@@ -51,7 +51,7 @@ export function VolunteersTab({ canEdit }: VolunteersTabProps) {
       const response = await fetch('/api/admin/volunteer-applications');
       if (response.ok) {
         const data = await response.json();
-        setApplications(data);
+        setApplications(Array.isArray(data.applications) ? data.applications : []);
       } else {
         setError('Failed to fetch applications');
       }
