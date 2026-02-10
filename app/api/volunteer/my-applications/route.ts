@@ -25,25 +25,52 @@ export async function GET(request: NextRequest) {
     console.log('User Email:', userEmail);
     console.log('User Role:', session.user.role);
 
-    // Build the query - match by userId OR email
+    // Build the query - match by userId OR email (case-insensitive)
     // This handles both cases:
     // 1. User was logged in when applying (has userId)
     // 2. User applied as guest, then logged in later (only has email)
-    const query: any = {
+
+    // First, try exact match with userId OR email
+    const exactMatchQuery: any = {
       $or: []
     };
 
-    // Only add userId condition if it exists
     if (userId) {
-      query.$or.push({ userId: userId });
+      exactMatchQuery.$or.push({ userId: userId });
     }
 
-    // Always add email condition (for backwards compatibility)
     if (userEmail) {
-      query.$or.push({ email: userEmail });
+      exactMatchQuery.$or.push({ email: userEmail });
     }
 
-    console.log('MongoDB Query:', JSON.stringify(query, null, 2));
+    console.log('MongoDB Query (exact match):', JSON.stringify(exactMatchQuery, null, 2));
+
+    let applications = await VolunteerApplication
+      .find(exactMatchQuery)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    console.log('Found applications (exact match):', applications.length);
+
+    // If no applications found with exact match, try case-insensitive email search
+    if (applications.length === 0 && userEmail) {
+      console.log('No exact matches found, trying case-insensitive email search...');
+
+      // Get all applications and filter manually for case-insensitive email match
+      const allApps = await VolunteerApplication.find({}).lean();
+      applications = allApps.filter((app: any) => {
+        // Match by userId OR case-insensitive email
+        if (userId && app.userId?.toString() === userId) {
+          return true;
+        }
+        if (app.email && app.email.toLowerCase() === userEmail.toLowerCase()) {
+          return true;
+        }
+        return false;
+      });
+
+      console.log('Found applications (case-insensitive):', applications.length);
+    }
 
     // Find all applications by this user
     const applications = await VolunteerApplication
