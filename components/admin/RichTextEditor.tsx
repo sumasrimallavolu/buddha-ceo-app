@@ -221,7 +221,7 @@ export default function RichTextEditor({
       </div>
 
       {/* Editor Content */}
-      <div className="p-4 bg-white">
+      <div className="p-4 bg-slate-800 border border-white/10 rounded-lg">
         <EditorContent editor={editor} placeholder={placeholder} />
       </div>
 

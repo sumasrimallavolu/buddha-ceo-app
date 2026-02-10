@@ -162,7 +162,7 @@ export function EventEditModal({
     return (
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-        <SheetContent side="right" className="w-full sm:max-w-2xl bg-white dark:bg-gray-900">
+        <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-900 border-white/10">
           <div className="flex items-center justify-center py-8">
             <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
           </div>
@@ -174,10 +174,10 @@ export function EventEditModal({
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent side="right" className="w-full sm:max-w-2xl bg-white dark:bg-gray-900 overflow-y-auto">
+      <SheetContent side="right" className="w-full sm:max-w-2xl bg-slate-900 border-white/10 overflow-y-auto">
         <SheetHeader>
-          <SheetTitle className="text-gray-900 dark:text-white">Edit Event</SheetTitle>
-          <SheetDescription className="text-gray-600 dark:text-gray-400">
+          <SheetTitle className="text-white">Edit Event</SheetTitle>
+          <SheetDescription className="text-slate-400">
             Update event details
           </SheetDescription>
         </SheetHeader>
@@ -202,7 +202,7 @@ export function EventEditModal({
             <>
               {/* Basic Information */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+                <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
                   Basic Information
                 </h3>
 
@@ -280,7 +280,7 @@ export function EventEditModal({
 
           {/* Event Details */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Event Details
             </h3>
 
@@ -317,7 +317,7 @@ export function EventEditModal({
 
           {/* Registration */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Registration
             </h3>
 
@@ -347,7 +347,7 @@ export function EventEditModal({
 
           {/* Location Details */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Location Details
             </h3>
 

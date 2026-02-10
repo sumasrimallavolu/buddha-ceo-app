@@ -275,10 +275,10 @@ export function EventCreateModal({
       if (!value) resetForm();
     }}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent side="right" className="w-full sm:max-w-3xl bg-white dark:bg-gray-900 overflow-y-auto">
+      <SheetContent side="right" className="w-full sm:max-w-3xl bg-slate-900 border-white/10 overflow-y-auto">
         <SheetHeader>
-          <SheetTitle className="text-gray-900 dark:text-white">Create New Event</SheetTitle>
-          <SheetDescription className="text-gray-600 dark:text-gray-400">
+          <SheetTitle className="text-white">Create New Event</SheetTitle>
+          <SheetDescription className="text-slate-400">
             Add a new meditation program or event with detailed information
           </SheetDescription>
         </SheetHeader>
@@ -301,7 +301,7 @@ export function EventCreateModal({
 
           {/* Basic Information */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Basic Information
             </h3>
 
@@ -394,7 +394,7 @@ export function EventCreateModal({
 
           {/* Teacher Selection */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               <User className="inline h-4 w-4 mr-2" />
               Event Teacher
             </h3>
@@ -428,7 +428,7 @@ export function EventCreateModal({
 
           {/* Event Details */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Event Details
             </h3>
 
@@ -486,7 +486,7 @@ export function EventCreateModal({
           {/* Benefits Section - Dynamic List */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
                 Benefits
               </h3>
               <Button
@@ -529,7 +529,7 @@ export function EventCreateModal({
           {/* Requirements Section - Dynamic List */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
                 <GraduationCap className="inline h-4 w-4 mr-2" />
                 Requirements / Prerequisites
               </h3>
@@ -573,7 +573,7 @@ export function EventCreateModal({
           {/* What to Bring Section - Dynamic List */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
                 What to Bring
               </h3>
               <Button
@@ -616,7 +616,7 @@ export function EventCreateModal({
           {/* Photo Gallery */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
                 <Upload className="inline h-4 w-4 mr-2" />
                 Photo Gallery
               </h3>
@@ -632,7 +632,7 @@ export function EventCreateModal({
 
           {/* Registration */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Registration
             </h3>
 
@@ -662,7 +662,7 @@ export function EventCreateModal({
 
           {/* Location Details */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Location Details
             </h3>
 

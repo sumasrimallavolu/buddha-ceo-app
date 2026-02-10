@@ -104,7 +104,7 @@ export default function AdminLayout({
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
         <div className="flex grow flex-col border-r border-white/10 bg-slate-950/50 backdrop-blur-xl">
           {/* Logo */}
-          <div className="flex h-20 items-center justify-center bg-white p-3 rounded-lg px-6 border-b border-white/10">
+          <div className="flex h-20 items-center justify-center bg-white/5 p-3 rounded-lg px-6 border-b border-white/10">
           <Link href="/" className="flex items-center group ">
                                 <img src="https://static.wixstatic.com/media/ea3b9d_245553e655454481beb6d6201be19c80~mv2.png/v1/fill/w_357,h_94,al_c,lg_1,q_85,enc_avif,quality_auto/255x69%20%20Pixel%20Header%20Logo.png" alt="Meditation Institute" className="h-14 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-sm"/>
                             </Link>

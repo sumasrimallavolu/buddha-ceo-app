@@ -126,10 +126,10 @@ export function UserCreateModal({
       if (!value) resetForm();
     }}>
       {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-      <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-gray-900">
+      <SheetContent side="right" className="w-full sm:max-w-md bg-slate-900 border-white/10">
         <SheetHeader>
-          <SheetTitle className="text-gray-900 dark:text-white">Create New User</SheetTitle>
-          <SheetDescription className="text-gray-600 dark:text-gray-400">
+          <SheetTitle className="text-white">Create New User</SheetTitle>
+          <SheetDescription className="text-slate-400">
             Add a new admin user to the system
           </SheetDescription>
         </SheetHeader>
@@ -152,7 +152,7 @@ export function UserCreateModal({
 
           {/* User Information */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               User Information
             </h3>
 
@@ -196,7 +196,7 @@ export function UserCreateModal({
 
           {/* Role & Permissions */}
           <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
               Role & Permissions
             </h3>
 
@@ -243,7 +243,7 @@ export function UserCreateModal({
                 <p className="text-xs font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   Role Permissions:
                 </p>
-                <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                <div className="space-y-1 text-xs text-slate-400">
                   <p>• <strong className="text-gray-900 dark:text-gray-200">Content Manager:</strong> Can create and edit content</p>
                   <p>• <strong className="text-gray-900 dark:text-gray-200">Content Reviewer:</strong> Can review and approve/reject content</p>
                   <p>• <strong className="text-gray-900 dark:text-gray-200">Admin:</strong> Full system access</p>
