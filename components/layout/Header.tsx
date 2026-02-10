@@ -80,14 +80,14 @@ export function Header() {
           <div className="hidden lg:flex items-center space-x-3">
             {session ? (
               <>
-                <Link href={session.user?.role === 'user' || session.user?.role === 'content_reviewer' ? '/dashboard' : '/admin'}>
+                <Link href="/profile">
                   <Button
                     variant="outline"
                     size="sm"
                     className="rounded-full text-black border-2 border-black/20 hover:border-blue-500 hover:text-white hover:bg-blue-500 hover:scale-105 transition-all duration-300"
                   >
                     <User className="mr-2 h-4 w-4" />
-                    Dashboard
+                    Profile
                   </Button>
                 </Link>
                 <Button
@@ -164,13 +164,13 @@ export function Header() {
                 <div className="pt-4 border-t border-border">
                   {session ? (
                     <>
-                      <Link href={session.user?.role === 'user' || session.user?.role === 'content_reviewer' ? '/dashboard' : '/admin'} className="block mb-4">
+                      <Link href="/profile" className="block mb-4">
                         <Button
                           variant="outline"
                           className="w-full rounded-full border-2 border-border hover:border-primary hover:bg-primary/20 transition-all duration-300"
                         >
                           <User className="mr-2 h-4 w-4" />
-                          Dashboard
+                          Profile
                         </Button>
                       </Link>
                       <Button
