@@ -28,8 +28,8 @@ export async function GET(
 
     const opportunity = await VolunteerOpportunity.findById(id);
 
-    // Only return open opportunities to the public
-    if (!opportunity || opportunity.status !== 'open') {
+    // Return open and closed opportunities, but not draft
+    if (!opportunity || opportunity.status === 'draft') {
       return NextResponse.json(
         { error: 'Volunteer opportunity not found' },
         { status: 404 }
