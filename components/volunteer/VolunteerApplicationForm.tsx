@@ -160,12 +160,10 @@ export function VolunteerApplicationForm({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/volunteer-application', {
+      const response = await fetch(`/api/volunteer-opportunities/${opportunityId}/apply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          opportunityId,
-          opportunityTitle,
           ...formData,
           age: parseInt(formData.age)
         })

@@ -49,7 +49,7 @@ const VolunteerApplicationSchema = new Schema<IVolunteerApplicationDocument>(
     interestArea: {
       type: String,
       enum: ['Community Support', 'Content Creation', 'Event Coordination', 'Outreach & Partnerships', 'Other'],
-      required: true
+      required: false // Deprecated field, kept for backward compatibility
     },
     experience: { type: String, required: true, trim: true },
     availability: { type: String, required: true, trim: true },
