@@ -74,15 +74,21 @@ export default function ProfilePage() {
 
   const fetchApplications = async () => {
     try {
+      console.log('Fetching applications...');
       const response = await fetch('/api/volunteer/my-applications');
       const data = await response.json();
 
+      console.log('API Response:', data);
+
       if (response.ok) {
         setApplications(data.applications || []);
+        console.log('Applications loaded:', data.applications?.length || 0);
       } else {
+        console.error('API Error:', data.error);
         setError(data.error || 'Failed to fetch applications');
       }
     } catch (err) {
+      console.error('Fetch error:', err);
       setError('Failed to load applications');
     } finally {
       setLoading(false);

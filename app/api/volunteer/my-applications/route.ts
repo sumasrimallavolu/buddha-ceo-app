@@ -17,6 +17,11 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
+    console.log('Fetching applications for user:', {
+      userId: session.user.id,
+      email: session.user.email
+    });
+
     // Find all applications by this user (by userId or by email if not linked)
     const applications = await VolunteerApplication
       .find({
@@ -28,12 +33,17 @@ export async function GET(request: NextRequest) {
       .sort({ createdAt: -1 })
       .lean();
 
+    console.log('Found applications:', applications.length);
+
     // Enrich with opportunity details
     const enrichedApplications = await Promise.all(
-      applications.map(async (app) => {
+      applications.map(async (app: any) => {
         const opportunity = await VolunteerOpportunity.findById(app.opportunityId).lean();
         return {
           ...app,
+          _id: app._id.toString(),
+          userId: app.userId?.toString(),
+          opportunityId: app.opportunityId?.toString(),
           opportunity: opportunity ? {
             _id: opportunity._id.toString(),
             title: opportunity.title,
@@ -44,7 +54,12 @@ export async function GET(request: NextRequest) {
             requiredSkills: opportunity.requiredSkills,
             startDate: opportunity.startDate,
             endDate: opportunity.endDate,
-          } : null
+          } : null,
+          customAnswers: app.customAnswers ? Object.fromEntries(app.customAnswers) : {},
+          statusHistory: app.statusHistory?.map((h: any) => ({
+            ...h,
+            changedAt: new Date(h.changedAt).toISOString()
+          })) || []
         };
       })
     );
@@ -53,7 +68,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching volunteer applications:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch applications' },
+      { error: 'Failed to fetch applications', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
