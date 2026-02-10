@@ -66,7 +66,6 @@ export async function POST(
       'country',
       'age',
       'profession',
-      'interestArea',
       'experience',
       'availability',
       'whyVolunteer',
@@ -95,22 +94,6 @@ export async function POST(
     if (isNaN(age) || age < 1) {
       return NextResponse.json(
         { error: 'Age must be a valid number' },
-        { status: 400 }
-      );
-    }
-
-    // Validate interestArea enum
-    const validInterestAreas = [
-      'Community Support',
-      'Content Creation',
-      'Event Coordination',
-      'Outreach & Partnerships',
-      'Other'
-    ];
-
-    if (typeof body.interestArea === 'string' && !validInterestAreas.includes(body.interestArea)) {
-      return NextResponse.json(
-        { error: 'Invalid interest area. Must be one of: ' + validInterestAreas.join(', ') },
         { status: 400 }
       );
     }
@@ -194,7 +177,7 @@ export async function POST(
       country: (body.country as string).trim(),
       age,
       profession: (body.profession as string).trim(),
-      interestArea: body.interestArea,
+      interestArea: (body.interestArea as string) || 'Other', // Default to 'Other' if not provided
       experience: (body.experience as string).trim(),
       availability: (body.availability as string).trim(),
       whyVolunteer: (body.whyVolunteer as string).trim(),
