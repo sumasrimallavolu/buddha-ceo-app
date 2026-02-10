@@ -20,6 +20,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Menu, User, LogOut } from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export function Header() {
   const { data: session } = useSession();
@@ -80,15 +81,15 @@ export function Header() {
           <div className="hidden lg:flex items-center space-x-3">
             {session ? (
               <>
-                <Link href="/profile">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full text-black border-2 border-black/20 hover:border-blue-500 hover:text-white hover:bg-blue-500 hover:scale-105 transition-all duration-300"
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </Button>
+                <Link href="/profile" className="flex items-center space-x-2 group">
+                  <Avatar className="h-10 w-10 border-2 border-black/20 group-hover:border-blue-500 transition-all duration-300">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-violet-500 text-white font-semibold text-sm">
+                      {session.user?.name?.charAt(0).toUpperCase() || session.user?.email?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium text-black group-hover:text-blue-500 transition-colors duration-300">
+                    {session.user?.name || session.user?.email?.split('@')[0] || 'User'}
+                  </span>
                 </Link>
                 <Button
                   variant="ghost"
@@ -164,15 +165,6 @@ export function Header() {
                 <div className="pt-4 border-t border-border">
                   {session ? (
                     <>
-                      <Link href="/profile" className="block mb-4">
-                        <Button
-                          variant="outline"
-                          className="w-full rounded-full border-2 border-border hover:border-primary hover:bg-primary/20 transition-all duration-300"
-                        >
-                          <User className="mr-2 h-4 w-4" />
-                          Profile
-                        </Button>
-                      </Link>
                       <Button
                         variant="ghost"
                         className="w-full rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-300"
@@ -181,6 +173,21 @@ export function Header() {
                         <LogOut className="mr-2 h-4 w-4" />
                         Logout
                       </Button>
+                      <Link href="/profile" className="block mb-4">
+                        <div className="flex items-center space-x-3 p-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/20 transition-all duration-300">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-violet-500 text-white font-semibold">
+                              {session.user?.name?.charAt(0).toUpperCase() || session.user?.email?.charAt(0).toUpperCase() || 'U'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-foreground">
+                              {session.user?.name || session.user?.email?.split('@')[0] || 'User'}
+                            </p>
+                            <p className="text-xs text-muted-foreground">View Profile</p>
+                          </div>
+                        </div>
+                      </Link>
                     </>
                   ) : (
                     <>
