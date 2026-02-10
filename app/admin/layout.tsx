@@ -15,6 +15,8 @@ import {
   LogOut,
   Menu,
   X,
+  User2,
+  Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,12 +29,15 @@ import {
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
 
+
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, roles: ['admin', 'content_manager', "content_reviewer"] },
   { name: 'Content', href: '/admin/content', icon: FileText, roles: ['admin', 'content_manager', 'content_reviewer'] },
   { name: 'Events', href: '/admin/events', icon: Calendar, roles: ['admin', 'content_manager',"content_reviewer"] },
+  { name: 'Volunteer Opps', href: '/admin/volunteer-opportunities', icon: Users, roles: ['admin', 'content_manager'] },
   { name: 'Event Feedback', href: '/admin/event-feedback', icon: MessageSquare, roles: ['admin', 'content_manager', 'content_reviewer'] },
   { name: 'Resources', href: '/admin/resources', icon: BookOpen, roles: ['admin', 'content_manager', "content_reviewer"] },
+  {name:"people",href:"/admin/people", icon:User2, roles:["admin"]}
 ];
 
 export default function AdminLayout({
