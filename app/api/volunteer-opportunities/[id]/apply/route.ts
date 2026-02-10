@@ -44,14 +44,6 @@ export async function POST(
       );
     }
 
-    // Check if opportunity is full
-    if (opportunity.maxVolunteers > 0 && opportunity.currentApplications >= opportunity.maxVolunteers) {
-      return NextResponse.json(
-        { error: 'This opportunity is full' },
-        { status: 400 }
-      );
-    }
-
     // Parse request body
     let body: Record<string, unknown>;
     try {
@@ -123,6 +115,35 @@ export async function POST(
       );
     }
 
+    // Validate customAnswers against opportunity's customQuestions
+    if (opportunity.customQuestions && opportunity.customQuestions.length > 0) {
+      const customAnswers = (body.customAnswers as Record<string, string>) || {};
+
+      for (const question of opportunity.customQuestions) {
+        if (question.required && !customAnswers[question.id]?.trim()) {
+          return NextResponse.json(
+            { error: `Custom question "${question.title}" is required` },
+            { status: 400 }
+          );
+        }
+
+        // For select/checkbox types, validate answer is in options
+        if ((question.type === 'select' || question.type === 'checkbox') && question.options) {
+          const answer = customAnswers[question.id];
+          if (answer) {
+            const selectedOptions = answer.split(',').map(s => s.trim());
+            const validOptions = selectedOptions.filter(opt => question.options!.includes(opt));
+            if (validOptions.length === 0) {
+              return NextResponse.json(
+                { error: `Invalid option selected for "${question.title}"` },
+                { status: 400 }
+              );
+            }
+          }
+        }
+      }
+    }
+
     // Check for duplicate application by email for this opportunity
     const existing = await VolunteerApplication.findOne({
       email: String(body.email),
@@ -132,6 +153,30 @@ export async function POST(
     if (existing) {
       return NextResponse.json(
         { error: 'You have already applied for this opportunity' },
+        { status: 400 }
+      );
+    }
+
+    // Atomically increment application count and check capacity
+    const updatedOpportunity = await VolunteerOpportunity.findByIdAndUpdate(
+      id,
+      { $inc: { currentApplications: 1 } },
+      { new: true }
+    );
+
+    // Double-check capacity after atomic increment
+    if (!updatedOpportunity || updatedOpportunity.status !== 'open') {
+      return NextResponse.json(
+        { error: 'Volunteer opportunity not found or closed' },
+        { status: 404 }
+      );
+    }
+
+    if (updatedOpportunity.maxVolunteers > 0 && updatedOpportunity.currentApplications > updatedOpportunity.maxVolunteers) {
+      // Decrement back since we're over capacity
+      await VolunteerOpportunity.findByIdAndUpdate(id, { $inc: { currentApplications: -1 } });
+      return NextResponse.json(
+        { error: 'This opportunity is full' },
         { status: 400 }
       );
     }
@@ -157,17 +202,12 @@ export async function POST(
       status: 'pending'
     };
 
-    // Add custom answers if provided
+    // Add custom answers if provided (already validated above)
     if (body.customAnswers && typeof body.customAnswers === 'object') {
       applicationData.customAnswers = body.customAnswers;
     }
 
     const application = await VolunteerApplication.create(applicationData);
-
-    // Increment application count on the opportunity
-    await VolunteerOpportunity.findByIdAndUpdate(id, {
-      $inc: { currentApplications: 1 }
-    });
 
     return NextResponse.json(
       {

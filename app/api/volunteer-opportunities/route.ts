@@ -13,6 +13,11 @@ function isValidVolunteerType(value: string): value is VolunteerType {
   return ['Remote', 'On-site', 'Hybrid'].includes(value);
 }
 
+// Helper function to escape special regex characters to prevent ReDoS
+function escapeRegex(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // GET all volunteer opportunities (public - no authentication required)
 export async function GET(request: NextRequest) {
   try {
@@ -36,9 +41,9 @@ export async function GET(request: NextRequest) {
       filter.type = type;
     }
 
-    // Add location filter if provided (case-insensitive regex)
+    // Add location filter if provided (case-insensitive regex, escaped to prevent ReDoS)
     if (location) {
-      filter.location = new RegExp(location, 'i');
+      filter.location = new RegExp(escapeRegex(location), 'i');
     }
 
     const opportunities = await VolunteerOpportunity.find(filter)
