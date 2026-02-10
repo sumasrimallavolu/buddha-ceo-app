@@ -202,7 +202,16 @@ export async function POST(
       applicationData.customAnswers = body.customAnswers;
     }
 
+    console.log('=== Creating Volunteer Application ===');
+    console.log('Session userId:', userId);
+    console.log('Application email:', applicationData.email);
+    console.log('Application Data:', JSON.stringify(applicationData, null, 2));
+
     const application = await VolunteerApplication.create(applicationData);
+
+    console.log('Application created with ID:', application._id);
+    console.log('Stored userId:', application.userId);
+    console.log('Stored email:', application.email);
 
     return NextResponse.json(
       {

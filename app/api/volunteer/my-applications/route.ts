@@ -17,23 +17,50 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
-    console.log('Fetching applications for user:', {
-      userId: session.user.id,
-      email: session.user.email
-    });
+    const userId = session.user.id;
+    const userEmail = session.user.email;
 
-    // Find all applications by this user (by userId or by email if not linked)
+    console.log('=== Fetching Volunteer Applications ===');
+    console.log('User ID:', userId);
+    console.log('User Email:', userEmail);
+    console.log('User Role:', session.user.role);
+
+    // Build the query - match by userId OR email
+    // This handles both cases:
+    // 1. User was logged in when applying (has userId)
+    // 2. User applied as guest, then logged in later (only has email)
+    const query: any = {
+      $or: []
+    };
+
+    // Only add userId condition if it exists
+    if (userId) {
+      query.$or.push({ userId: userId });
+    }
+
+    // Always add email condition (for backwards compatibility)
+    if (userEmail) {
+      query.$or.push({ email: userEmail });
+    }
+
+    console.log('MongoDB Query:', JSON.stringify(query, null, 2));
+
+    // Find all applications by this user
     const applications = await VolunteerApplication
-      .find({
-        $or: [
-          { userId: session.user.id },
-          { email: session.user.email }
-        ]
-      })
+      .find(query)
       .sort({ createdAt: -1 })
       .lean();
 
     console.log('Found applications:', applications.length);
+    applications.forEach((app: any) => {
+      console.log('- Application:', {
+        id: app._id,
+        userId: app.userId,
+        email: app.email,
+        status: app.status,
+        opportunityId: app.opportunityId
+      });
+    });
 
     // Enrich with opportunity details
     const enrichedApplications = await Promise.all(
@@ -63,6 +90,8 @@ export async function GET(request: NextRequest) {
         };
       })
     );
+
+    console.log('Returning enriched applications:', enrichedApplications.length);
 
     return NextResponse.json({ applications: enrichedApplications });
   } catch (error) {
