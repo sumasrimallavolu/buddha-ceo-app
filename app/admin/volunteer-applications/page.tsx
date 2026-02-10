@@ -95,7 +95,7 @@ export default function VolunteerApplicationsPage() {
         throw new Error(data.error || 'Failed to fetch applications');
       }
 
-      setApplications(data.applications || data);
+      setApplications(Array.isArray(data.applications) ? data.applications : []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch applications');
     } finally {
