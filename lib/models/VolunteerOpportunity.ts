@@ -54,7 +54,8 @@ const VolunteerOpportunitySchema = new Schema<IVolunteerOpportunityDocument>(
     },
     description: {
       type: String,
-      required: [true, 'Description is required']
+      required: [true, 'Description is required'],
+      trim: true
     },
     location: {
       type: String,
@@ -83,11 +84,13 @@ const VolunteerOpportunitySchema = new Schema<IVolunteerOpportunityDocument>(
     },
     maxVolunteers: {
       type: Number,
-      required: [true, 'Maximum volunteers is required']
+      required: [true, 'Maximum volunteers is required'],
+      min: [1, 'Maximum volunteers must be at least 1']
     },
     currentApplications: {
       type: Number,
-      default: 0
+      default: 0,
+      min: [0, 'Current applications cannot be negative']
     },
     status: {
       type: String,

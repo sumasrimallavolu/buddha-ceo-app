@@ -29,30 +29,32 @@ const VolunteerApplicationSchema = new Schema<IVolunteerApplicationDocument>(
   {
     opportunityId: {
       type: Schema.Types.ObjectId,
-      ref: 'VolunteerOpportunity'
+      ref: 'VolunteerOpportunity',
+      index: true
     },
     opportunityTitle: {
       type: String,
-      default: null
+      default: null,
+      trim: true
     },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true, sparse: true },
-    phone: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    country: { type: String, required: true },
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, sparse: true, trim: true },
+    phone: { type: String, required: true, trim: true },
+    city: { type: String, required: true, trim: true },
+    state: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
     age: { type: Number, required: true },
-    profession: { type: String, required: true },
+    profession: { type: String, required: true, trim: true },
     interestArea: {
       type: String,
       enum: ['Community Support', 'Content Creation', 'Event Coordination', 'Outreach & Partnerships', 'Other'],
       required: true
     },
-    experience: { type: String, required: true },
-    availability: { type: String, required: true },
-    whyVolunteer: { type: String, required: true },
-    skills: { type: String, required: true },
+    experience: { type: String, required: true, trim: true },
+    availability: { type: String, required: true, trim: true },
+    whyVolunteer: { type: String, required: true, trim: true },
+    skills: { type: String, required: true, trim: true },
     customAnswers: {
       type: Map,
       of: String,
@@ -66,6 +68,11 @@ const VolunteerApplicationSchema = new Schema<IVolunteerApplicationDocument>(
   },
   { timestamps: true }
 );
+
+// Indexes for common queries
+VolunteerApplicationSchema.index({ opportunityId: 1, createdAt: -1 });
+VolunteerApplicationSchema.index({ status: 1 });
+VolunteerApplicationSchema.index({ email: 1 });
 
 const VolunteerApplication: Model<IVolunteerApplicationDocument> =
   mongoose.models.VolunteerApplication ||
