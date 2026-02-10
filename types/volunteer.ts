@@ -32,8 +32,20 @@ export interface VolunteerOpportunity {
 
 export interface VolunteerApplication {
   _id: string;
+  userId?: string; // Optional link to user account
   opportunityId?: string; // ObjectId stored as string
   opportunityTitle?: string;
+  opportunity?: {
+    _id: string;
+    title: string;
+    description: string;
+    location: string;
+    type: 'Remote' | 'On-site' | 'Hybrid';
+    timeCommitment: string;
+    requiredSkills: string[];
+    startDate: string;
+    endDate: string;
+  };
   firstName: string;
   lastName: string;
   email: string;
@@ -48,8 +60,14 @@ export interface VolunteerApplication {
   availability: string;
   whyVolunteer: string;
   skills: string;
-  customAnswers?: Map<string, string>; // Changed from Record to Map
-  status: 'pending' | 'approved' | 'rejected' | 'contacted'; // Added 'contacted'
+  customAnswers?: Map<string, string>;
+  status: 'pending' | 'approved' | 'rejected' | 'contacted';
+  statusHistory?: {
+    status: string;
+    changedAt: string;
+    changedBy?: string;
+    notes?: string;
+  }[];
   createdAt: string;
-  updatedAt?: string; // Added missing field
+  updatedAt?: string;
 }

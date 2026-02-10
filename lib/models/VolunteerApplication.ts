@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IVolunteerApplication {
+  userId?: mongoose.Types.ObjectId; // Optional link to user account
   opportunityId?: mongoose.Types.ObjectId;
   opportunityTitle?: string;
   firstName: string;
@@ -19,6 +20,12 @@ export interface IVolunteerApplication {
   skills: string;
   customAnswers?: Map<string, string>;
   status: 'pending' | 'approved' | 'rejected' | 'contacted';
+  statusHistory?: {
+    status: string;
+    changedAt: Date;
+    changedBy?: string;
+    notes?: string;
+  }[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +34,12 @@ export interface IVolunteerApplicationDocument extends IVolunteerApplication, Do
 
 const VolunteerApplicationSchema = new Schema<IVolunteerApplicationDocument>(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      index: true,
+      default: null
+    },
     opportunityId: {
       type: Schema.Types.ObjectId,
       ref: 'VolunteerOpportunity',
@@ -64,7 +77,25 @@ const VolunteerApplicationSchema = new Schema<IVolunteerApplicationDocument>(
       type: String,
       enum: ['pending', 'approved', 'rejected', 'contacted'],
       default: 'pending'
-    }
+    },
+    statusHistory: [{
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'contacted']
+      },
+      changedAt: {
+        type: Date,
+        default: Date.now
+      },
+      changedBy: {
+        type: String,
+        default: null
+      },
+      notes: {
+        type: String,
+        default: null
+      }
+    }]
   },
   { timestamps: true }
 );

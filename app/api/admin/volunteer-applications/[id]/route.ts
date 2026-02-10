@@ -120,9 +120,27 @@ export async function PATCH(
       );
     }
 
+    // Get the current application first
+    const currentApplication = await VolunteerApplication.findById(id);
+
+    if (!currentApplication) {
+      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+    }
+
+    // Add status history entry
+    const statusHistoryEntry = {
+      status,
+      changedAt: new Date(),
+      changedBy: session.user.email,
+      notes: body.notes || null
+    };
+
     const application = await VolunteerApplication.findByIdAndUpdate(
       id,
-      { $set: { status } },
+      {
+        $set: { status },
+        $push: { statusHistory: statusHistoryEntry }
+      },
       { new: true, runValidators: true }
     );
 

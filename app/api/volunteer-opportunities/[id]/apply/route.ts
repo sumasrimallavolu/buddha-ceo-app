@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import VolunteerOpportunity from '@/lib/models/VolunteerOpportunity';
 import VolunteerApplication from '@/lib/models/VolunteerApplication';
 import connectDB from '@/lib/mongodb';
@@ -32,6 +34,10 @@ export async function POST(
     }
 
     await connectDB();
+
+    // Check if user is logged in (optional - public can still apply)
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
 
     // Find the opportunity
     const opportunity = await VolunteerOpportunity.findById(id);
@@ -166,6 +172,7 @@ export async function POST(
 
     // Create the application
     const applicationData: Record<string, unknown> = {
+      userId: userId || undefined,
       opportunityId: id,
       opportunityTitle: opportunity.title,
       firstName: (body.firstName as string).trim(),
@@ -182,7 +189,12 @@ export async function POST(
       availability: (body.availability as string).trim(),
       whyVolunteer: (body.whyVolunteer as string).trim(),
       skills: (body.skills as string).trim(),
-      status: 'pending'
+      status: 'pending',
+      statusHistory: [{
+        status: 'pending',
+        changedAt: new Date(),
+        changedBy: session?.user?.email || 'Applicant'
+      }]
     };
 
     // Add custom answers if provided (already validated above)
