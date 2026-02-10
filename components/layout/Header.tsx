@@ -81,7 +81,7 @@ export function Header() {
           <div className="hidden lg:flex items-center space-x-3">
             {session ? (
               <>
-                <Link href="/profile" className="flex items-center space-x-2 group">
+                <Link href="/profile" className="flex items-center space-x-2 group hover:scale-105 transition-all duration-300">
                   <Avatar className="h-10 w-10 border-2 border-black/20 group-hover:border-blue-500 transition-all duration-300">
                     <AvatarFallback className="bg-gradient-to-br from-blue-500 to-violet-500 text-white font-semibold text-sm">
                       {session.user?.name?.charAt(0).toUpperCase() || session.user?.email?.charAt(0).toUpperCase() || 'U'}
@@ -95,7 +95,7 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={() => signOut({ callbackUrl: '/' })}
-                  className="rounded-full hover:bg-black/10 muted text-black hover:text-foreground hover:scale-105 transition-all duration-300"
+                  className="rounded-full border-2 border-transparent hover:border-red-500 hover:bg-red-500 hover:text-white hover:scale-105 transition-all duration-300"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
@@ -107,7 +107,7 @@ export function Header() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="rounded-full hover:bg-white/10 text-slate-900 hover:text-white hover:scale-105  hover:bg-blue-500 transition-all duration-300"
+                    className="rounded-full border-2 border-black/20 text-slate-900 hover:border-blue-500 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
                   >
                     Sign Up
                   </Button>
@@ -116,7 +116,7 @@ export function Header() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-full border-2 text-black border-white/20  hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+                    className="rounded-full border-2 border-black/20 text-black hover:border-violet-500 hover:bg-gradient-to-r hover:from-violet-500 hover:to-blue-500 hover:text-white hover:scale-105 hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
                   >
                     Login
                   </Button>
@@ -131,7 +131,7 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full hover:bg-white/10 text-slate-300 hover:text-white hover:scale-110 transition-all duration-300"
+                className="rounded-full border-2 border-black/20 hover:border-blue-500 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white hover:scale-110 transition-all duration-300"
               >
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle menu</span>
@@ -150,11 +150,11 @@ export function Header() {
                       href={item.href}
                       className={`
                         text-lg font-medium transition-all duration-300
-                        hover:pl-4
-                        py-3 px-4 rounded-xl border
+                        hover:pl-4 hover:scale-105
+                        py-3 px-4 rounded-xl border-2
                         ${isActive
-                          ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-primary border-primary/30'
-                          : 'text-muted-foreground hover:text-primary hover:bg-muted border-transparent hover:border-border'
+                          ? 'bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg shadow-blue-500/25 border-blue-500/50'
+                          : 'text-muted-foreground border-transparent hover:border-blue-500/30 hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-violet-500/10 hover:text-blue-500'
                         }
                       `}
                     >
@@ -167,14 +167,14 @@ export function Header() {
                     <>
                       <Button
                         variant="ghost"
-                        className="w-full rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-300"
+                        className="w-full rounded-xl border-2 border-transparent hover:border-red-500 hover:bg-red-500 hover:text-white transition-all duration-300"
                         onClick={() => signOut({ callbackUrl: '/' })}
                       >
                         <LogOut className="mr-2 h-4 w-4" />
                         Logout
                       </Button>
                       <Link href="/profile" className="block mb-4">
-                        <div className="flex items-center space-x-3 p-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/20 transition-all duration-300">
+                        <div className="flex items-center space-x-3 p-3 rounded-xl border-2 border-border hover:border-blue-500 hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-violet-500/10 hover:scale-105 transition-all duration-300">
                           <Avatar className="h-10 w-10">
                             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-violet-500 text-white font-semibold">
                               {session.user?.name?.charAt(0).toUpperCase() || session.user?.email?.charAt(0).toUpperCase() || 'U'}
@@ -194,7 +194,7 @@ export function Header() {
                       <Link href="/login">
                         <Button
                           variant="outline"
-                          className="w-full rounded-full border-2 border-white/20 text-white hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-500 hover:to-violet-500 hover:text-white transition-all duration-300"
+                          className="w-full rounded-full border-2 border-black/20 text-black hover:border-violet-500 hover:bg-gradient-to-r hover:from-violet-500 hover:to-blue-500 hover:text-white hover:scale-105 transition-all duration-300"
                         >
                           Login
                         </Button>
